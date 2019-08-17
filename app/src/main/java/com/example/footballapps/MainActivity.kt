@@ -8,6 +8,7 @@ import android.util.TypedValue
 import com.example.footballapps.activity.LeagueDetailActivity
 import com.example.footballapps.adapter.LeagueRecyclerViewAdapter
 import com.example.footballapps.model.LeagueItem
+import com.example.footballapps.utils.GridSpacingItemDecoration
 import org.jetbrains.anko.intentFor
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         rvLeagueList.adapter = LeagueRecyclerViewAdapter(this, leagueItems){
             startActivity(intentFor<LeagueDetailActivity>("leagueItem" to it))
         }
+        rvLeagueList.addItemDecoration(GridSpacingItemDecoration(2, convertDpToPx(8f), true))
     }
 
     private fun initData(){
