@@ -11,6 +11,7 @@ import org.jetbrains.anko.*
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.MenuItem
+import android.widget.ScrollView
 import com.squareup.picasso.Picasso
 
 

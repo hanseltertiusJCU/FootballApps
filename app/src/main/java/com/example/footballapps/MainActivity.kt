@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.TypedValue
 import com.example.footballapps.activity.LeagueDetailActivity
 import com.example.footballapps.adapter.LeagueRecyclerViewAdapter
 import com.example.footballapps.model.LeagueItem
@@ -17,10 +18,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val leagueList = findViewById<RecyclerView>(R.id.rv_league_list)
+        val rvLeagueList = findViewById<RecyclerView>(R.id.rv_league_list)
         initData()
-        leagueList.layoutManager = GridLayoutManager(this, 2)
-        leagueList.adapter = LeagueRecyclerViewAdapter(this, leagueItems){
+        rvLeagueList.layoutManager = GridLayoutManager(this, 2)
+        rvLeagueList.adapter = LeagueRecyclerViewAdapter(this, leagueItems){
             startActivity(intentFor<LeagueDetailActivity>("leagueItem" to it))
         }
     }
@@ -40,5 +41,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         leagueImage.recycle()
+    }
+
+    private fun convertDpToPx(dp : Float) : Int {
+        val r = resources
+        val px = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            dp,
+            r.displayMetrics
+        )
+        return px.toInt()
     }
 }
