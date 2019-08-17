@@ -3,18 +3,18 @@ package com.example.footballapps.activity
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
-import android.widget.ImageView
-import android.widget.TextView
-import com.example.footballapps.model.LeagueItem
-import org.jetbrains.anko.*
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.MenuItem
+import android.widget.ImageView
 import android.widget.ScrollView
+import android.widget.TextView
+import com.example.footballapps.model.LeagueItem
 import com.example.footballapps.utils.PicassoCircleTransformation
 import com.squareup.picasso.Picasso
+import org.jetbrains.anko.*
+import org.jetbrains.anko.design.snackbar
 
 
 class LeagueDetailActivity : AppCompatActivity() {
@@ -38,24 +38,24 @@ class LeagueDetailActivity : AppCompatActivity() {
                     height = convertDpToPx(96f)
                     gravity = Gravity.CENTER
                 }
-                tvLeagueDetailName = textView{
+                tvLeagueDetailName = textView {
                     typeface = Typeface.DEFAULT_BOLD
                     textSize = 20f
                     textColor = Color.BLACK
-                }.lparams{
+                }.lparams {
                     gravity = Gravity.CENTER_HORIZONTAL
                     topMargin = dip(8)
                 }
-                textView("Description : "){
+                textView("Description : ") {
                     typeface = Typeface.DEFAULT_BOLD
                     textSize = 16f
                     textColor = Color.BLACK
-                }.lparams{
+                }.lparams {
                     topMargin = dip(8)
                 }
-                tvLeagueDetailDesc = textView{
+                tvLeagueDetailDesc = textView {
                     textColor = Color.BLACK
-                }.lparams{
+                }.lparams {
                     topMargin = dip(8)
                 }
             }
@@ -63,6 +63,8 @@ class LeagueDetailActivity : AppCompatActivity() {
 
         val intent = intent
         leagueItem = intent.getParcelableExtra("leagueItem")
+
+        leagueDetailScrollView.snackbar(leagueItem.leagueName as CharSequence)
 
         leagueItem.leagueImage?.let { Picasso
             .get()

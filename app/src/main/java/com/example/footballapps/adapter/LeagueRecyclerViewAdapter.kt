@@ -2,12 +2,9 @@ package com.example.footballapps.adapter
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import com.example.footballapps.R
 import com.example.footballapps.model.LeagueItem
 import com.squareup.picasso.Picasso
@@ -30,9 +27,9 @@ class LeagueRecyclerViewAdapter(private val context : Context, private val leagu
     class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer{
 
         fun bindItem(leagueItem: LeagueItem, clickListener: (LeagueItem) -> Unit){
-            itemView.league_name.text = leagueItem.leagueName
-            leagueItem.leagueImage?.let{Picasso.get().load(it).into(itemView.league_image)}
-            itemView.setOnClickListener {
+            containerView.league_name.text = leagueItem.leagueName
+            leagueItem.leagueImage?.let { Picasso.get().load(it).into(containerView.league_image) }
+            containerView.setOnClickListener {
                 clickListener(leagueItem)
             }
         }

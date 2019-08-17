@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">FootballApps</string>
 
+    <string name="league_image">League Image</string>
+
     <string-array name="league_name">
         <item>English Premier League</item>
         <item>French Ligue 1</item>

@@ -18,9 +18,10 @@
         <ImageView
                 android:id="@+id/league_image"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="256dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/english_premier_league"/>
+                android:src="@drawable/english_premier_league"
+                android:contentDescription="@string/league_image"/>
 
         <TextView
                 android:id="@+id/league_name"
