@@ -12,6 +12,7 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.MenuItem
 import android.widget.ScrollView
+import com.example.footballapps.utils.PicassoCircleTransformation
 import com.squareup.picasso.Picasso
 
 
@@ -60,8 +61,12 @@ class LeagueDetailActivity : AppCompatActivity() {
         val intent = intent
         leagueItem = intent.getParcelableExtra("leagueItem")
 
-        // todo: make the image into circle
-        leagueItem.leagueImage?.let { Picasso.get().load(it).into(ivLeagueDetailImage) }
+        leagueItem.leagueImage?.let { Picasso
+            .get()
+            .load(it)
+            .transform(PicassoCircleTransformation())
+            .into(ivLeagueDetailImage)
+        }
         tvLeagueDetailName.text = leagueItem.leagueName
         tvLeagueDetailDesc.text = leagueItem.leagueDesc
 
