@@ -11,6 +11,8 @@ import android.widget.TextView
 import com.example.footballapps.R
 import com.example.footballapps.model.LeagueItem
 import com.squareup.picasso.Picasso
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.item_league_list.view.*
 
 class LeagueRecyclerViewAdapter(private val context : Context, private val leagueItems : List<LeagueItem>, private val clickListener : (LeagueItem) -> Unit) :
     RecyclerView.Adapter<LeagueRecyclerViewAdapter.ViewHolder>(){
@@ -25,14 +27,11 @@ class LeagueRecyclerViewAdapter(private val context : Context, private val leagu
         holder.bindItem(leagueItems[position], clickListener)
     }
 
-    class ViewHolder(view : View) : RecyclerView.ViewHolder(view){
-
-        private val leagueName = view.findViewById<TextView>(R.id.league_name)
-        private val leagueImage = view.findViewById<ImageView>(R.id.league_image)
+    class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer{
 
         fun bindItem(leagueItem: LeagueItem, clickListener: (LeagueItem) -> Unit){
-            leagueName.text = leagueItem.leagueName
-            leagueItem.leagueImage?.let{Picasso.get().load(it).into(leagueImage)}
+            itemView.league_name.text = leagueItem.leagueName
+            leagueItem.leagueImage?.let{Picasso.get().load(it).into(itemView.league_image)}
             itemView.setOnClickListener {
                 clickListener(leagueItem)
             }

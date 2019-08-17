@@ -96,15 +96,15 @@ class LeagueDetailActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        outState?.putIntArray("scrollPosition", intArrayOf(leagueDetailScrollView.scrollX, leagueDetailScrollView.scrollY))
+        outState?.putIntArray("leagueDetailScrollPosition", intArrayOf(leagueDetailScrollView.scrollX, leagueDetailScrollView.scrollY))
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
         super.onRestoreInstanceState(savedInstanceState)
-        val position : IntArray? = savedInstanceState?.getIntArray("scrollPosition")
-        if(position != null){
+        val scrollPosition : IntArray? = savedInstanceState?.getIntArray("leagueDetailScrollPosition")
+        if(scrollPosition != null){
             leagueDetailScrollView.post {
-                leagueDetailScrollView.scrollTo(position[0], position[1])
+                leagueDetailScrollView.scrollTo(scrollPosition[0], scrollPosition[1])
             }
         }
     }

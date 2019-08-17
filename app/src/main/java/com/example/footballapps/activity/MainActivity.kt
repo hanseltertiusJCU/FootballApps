@@ -9,23 +9,26 @@ import com.example.footballapps.R
 import com.example.footballapps.adapter.LeagueRecyclerViewAdapter
 import com.example.footballapps.model.LeagueItem
 import com.example.footballapps.utils.GridSpacingItemDecoration
+import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.intentFor
 
 class MainActivity : AppCompatActivity() {
 
     private var leagueItems : MutableList<LeagueItem> = mutableListOf()
 
+    private val spanCount = 2
+    private val includeEdge = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val rvLeagueList = findViewById<RecyclerView>(R.id.rv_league_list)
         initData()
-        rvLeagueList.layoutManager = GridLayoutManager(this, 2)
-        rvLeagueList.adapter = LeagueRecyclerViewAdapter(this, leagueItems){
+        rv_league_list.layoutManager = GridLayoutManager(this, spanCount)
+        rv_league_list.adapter = LeagueRecyclerViewAdapter(this, leagueItems){
             startActivity(intentFor<LeagueDetailActivity>("leagueItem" to it))
         }
-        rvLeagueList.addItemDecoration(GridSpacingItemDecoration(2, convertDpToPx(8f), true))
+        rv_league_list.addItemDecoration(GridSpacingItemDecoration(spanCount = spanCount, space = convertDpToPx(8f), includeEdge = includeEdge))
     }
 
     private fun initData(){
