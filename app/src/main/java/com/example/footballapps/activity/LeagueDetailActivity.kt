@@ -3,6 +3,7 @@ package com.example.footballapps.activity
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.ImageView
 import android.widget.TextView
@@ -24,10 +25,12 @@ class LeagueDetailActivity : AppCompatActivity() {
     lateinit var ivLeagueDetailImage : ImageView
     lateinit var tvLeagueDetailDesc : TextView
 
+    lateinit var leagueDetailScrollView : ScrollView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        scrollView {
+        leagueDetailScrollView = scrollView {
             verticalLayout {
                 padding = dip(16)
                 ivLeagueDetailImage = imageView().lparams {
@@ -89,5 +92,20 @@ class LeagueDetailActivity : AppCompatActivity() {
             r.displayMetrics
         )
         return px.toInt()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putIntArray("scrollPosition", intArrayOf(leagueDetailScrollView.scrollX, leagueDetailScrollView.scrollY))
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+        val position : IntArray? = savedInstanceState?.getIntArray("scrollPosition")
+        if(position != null){
+            leagueDetailScrollView.post {
+                leagueDetailScrollView.scrollTo(position[0], position[1])
+            }
+        }
     }
 }

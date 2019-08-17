@@ -1,11 +1,11 @@
-package com.example.footballapps
+package com.example.footballapps.activity
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.TypedValue
-import com.example.footballapps.activity.LeagueDetailActivity
+import com.example.footballapps.R
 import com.example.footballapps.adapter.LeagueRecyclerViewAdapter
 import com.example.footballapps.model.LeagueItem
 import com.example.footballapps.utils.GridSpacingItemDecoration
