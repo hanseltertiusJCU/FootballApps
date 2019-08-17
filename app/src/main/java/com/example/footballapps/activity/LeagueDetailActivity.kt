@@ -1,5 +1,6 @@
 package com.example.footballapps.activity
 
+import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -9,6 +10,7 @@ import com.example.footballapps.model.LeagueItem
 import org.jetbrains.anko.*
 import android.util.TypedValue
 import android.view.Gravity
+import android.view.MenuItem
 import com.squareup.picasso.Picasso
 
 
@@ -33,10 +35,24 @@ class LeagueDetailActivity : AppCompatActivity() {
                 }
                 tvLeagueDetailName = textView{
                     typeface = Typeface.DEFAULT_BOLD
+                    textSize = 20f
+                    textColor = Color.BLACK
                 }.lparams{
                     gravity = Gravity.CENTER_HORIZONTAL
+                    topMargin = dip(8)
                 }
-                tvLeagueDetailDesc = textView()
+                textView("Description : "){
+                    typeface = Typeface.DEFAULT_BOLD
+                    textSize = 16f
+                    textColor = Color.BLACK
+                }.lparams{
+                    topMargin = dip(8)
+                }
+                tvLeagueDetailDesc = textView{
+                    textColor = Color.BLACK
+                }.lparams{
+                    topMargin = dip(8)
+                }
             }
         }
 
@@ -47,6 +63,16 @@ class LeagueDetailActivity : AppCompatActivity() {
         leagueItem.leagueImage?.let { Picasso.get().load(it).into(ivLeagueDetailImage) }
         tvLeagueDetailName.text = leagueItem.leagueName
         tvLeagueDetailDesc.text = leagueItem.leagueDesc
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = leagueItem.leagueName
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if(item?.itemId == android.R.id.home){
+            finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun convertDpToPx(dp : Float) : Int {
