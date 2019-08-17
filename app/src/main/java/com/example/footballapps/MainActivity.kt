@@ -4,8 +4,10 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import com.example.footballapps.activity.LeagueDetailActivity
 import com.example.footballapps.adapter.LeagueRecyclerViewAdapter
 import com.example.footballapps.model.LeagueItem
+import org.jetbrains.anko.intentFor
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,7 +20,9 @@ class MainActivity : AppCompatActivity() {
         val leagueList = findViewById<RecyclerView>(R.id.rv_league_list)
         initData()
         leagueList.layoutManager = GridLayoutManager(this, 2)
-        leagueList.adapter = LeagueRecyclerViewAdapter(this, leagueItems)
+        leagueList.adapter = LeagueRecyclerViewAdapter(this, leagueItems){
+            startActivity(intentFor<LeagueDetailActivity>("leagueItem" to it))
+        }
     }
 
     private fun initData(){

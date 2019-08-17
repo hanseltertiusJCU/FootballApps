@@ -12,7 +12,8 @@ import com.example.footballapps.R
 import com.example.footballapps.model.LeagueItem
 import com.squareup.picasso.Picasso
 
-class LeagueRecyclerViewAdapter(private val context : Context, private val leagueItems : List<LeagueItem>) : RecyclerView.Adapter<LeagueRecyclerViewAdapter.ViewHolder>(){
+class LeagueRecyclerViewAdapter(private val context : Context, private val leagueItems : List<LeagueItem>, private val clickListener : (LeagueItem) -> Unit) :
+    RecyclerView.Adapter<LeagueRecyclerViewAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_league_list, parent , false ))
@@ -21,7 +22,7 @@ class LeagueRecyclerViewAdapter(private val context : Context, private val leagu
     override fun getItemCount(): Int = leagueItems.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindItem(leagueItems[position])
+        holder.bindItem(leagueItems[position], clickListener)
     }
 
     class ViewHolder(view : View) : RecyclerView.ViewHolder(view){
@@ -29,11 +30,12 @@ class LeagueRecyclerViewAdapter(private val context : Context, private val leagu
         private val leagueName = view.findViewById<TextView>(R.id.league_name)
         private val leagueImage = view.findViewById<ImageView>(R.id.league_image)
 
-        fun bindItem(leagueItem: LeagueItem){
+        fun bindItem(leagueItem: LeagueItem, clickListener: (LeagueItem) -> Unit){
             leagueName.text = leagueItem.leagueName
-            Log.d("leagueImage", leagueItem.leagueImage?.toString())
             leagueItem.leagueImage?.let{Picasso.get().load(it).into(leagueImage)}
-            // todo: on click listener
+            itemView.setOnClickListener {
+                clickListener(leagueItem)
+            }
         }
     }
 }
