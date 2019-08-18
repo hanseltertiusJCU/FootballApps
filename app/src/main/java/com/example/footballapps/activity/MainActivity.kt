@@ -3,13 +3,16 @@ package com.example.footballapps.activity
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.TypedValue
+import android.view.View
 import com.example.footballapps.R
 import com.example.footballapps.adapter.LeagueRecyclerViewAdapter
 import com.example.footballapps.model.LeagueItem
 import com.example.footballapps.utils.GridSpacingItemDecoration
-import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.*
+import org.jetbrains.anko.constraint.layout.constraintLayout
+import org.jetbrains.anko.recyclerview.v7.recyclerView
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,24 +21,17 @@ class MainActivity : AppCompatActivity() {
     private val spanCount = 2
     private val includeEdge = true
 
+    lateinit var mainActivityUI: MainActivityUI
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        // todo: change into anko layout
+        mainActivityUI = MainActivityUI()
+        mainActivityUI.setContentView(this)
 
         initData()
-        rv_league_list.layoutManager = GridLayoutManager(this, spanCount)
-        rv_league_list.adapter = LeagueRecyclerViewAdapter(this, leagueItems) {
-            startActivity(intentFor<LeagueDetailActivity>("leagueItem" to it))
-        }
-        rv_league_list.addItemDecoration(
-            GridSpacingItemDecoration(
-                spanCount = spanCount,
-                space = convertDpToPx(8f),
-                includeEdge = includeEdge
-            )
-        )
+
+        installRecyclerViewContent()
     }
 
     private fun initData() {
@@ -58,6 +54,20 @@ class MainActivity : AppCompatActivity() {
         leagueImage.recycle()
     }
 
+    private fun installRecyclerViewContent() {
+        mainActivityUI.recyclerViewLeagueList.layoutManager = GridLayoutManager(this, spanCount)
+        mainActivityUI.recyclerViewLeagueList.adapter = LeagueRecyclerViewAdapter(leagueItems) {
+            startActivity(intentFor<LeagueDetailActivity>("leagueItem" to it))
+        }
+        mainActivityUI.recyclerViewLeagueList.addItemDecoration(
+            GridSpacingItemDecoration(
+                spanCount = spanCount,
+                space = convertDpToPx(8f),
+                includeEdge = includeEdge
+            )
+        )
+    }
+
     private fun convertDpToPx(dp: Float): Int {
         val r = resources
         val px = TypedValue.applyDimension(
@@ -66,5 +76,23 @@ class MainActivity : AppCompatActivity() {
             r.displayMetrics
         )
         return px.toInt()
+    }
+
+    class MainActivityUI : AnkoComponent<MainActivity> {
+        lateinit var recyclerViewLeagueList : RecyclerView
+
+        companion object {
+            const val recyclerViewLeagueListId = 101
+        }
+
+        override fun createView(ui: AnkoContext<MainActivity>): View = with(ui){
+            constraintLayout {
+                lparams(width = matchParent, height = matchParent)
+                recyclerViewLeagueList = recyclerView {
+                    id = recyclerViewLeagueListId
+                }.lparams(width = matchParent, height = matchParent)
+            }
+        }
+
     }
 }

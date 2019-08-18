@@ -18,7 +18,7 @@ import kotlinx.android.extensions.LayoutContainer
 import org.jetbrains.anko.*
 import org.jetbrains.anko.cardview.v7.cardView
 
-class LeagueRecyclerViewAdapter(private val context : Context, private val leagueItems : List<LeagueItem>, private val clickListener : (LeagueItem) -> Unit) :
+class LeagueRecyclerViewAdapter(private val leagueItems : List<LeagueItem>, private val clickListener : (LeagueItem) -> Unit) :
     RecyclerView.Adapter<LeagueRecyclerViewAdapter.ViewHolder>(){
 
 
@@ -34,13 +34,8 @@ class LeagueRecyclerViewAdapter(private val context : Context, private val leagu
 
     class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer{
 
-        var leagueName : TextView
-        var leagueImage : ImageView
-
-        init {
-            leagueName = containerView.findViewById(LeagueItemListUI.leagueNameTextViewId)
-            leagueImage = containerView.findViewById(LeagueItemListUI.leagueImageViewId)
-        }
+        var leagueName : TextView = containerView.find(LeagueItemListUI.leagueNameTextViewId)
+        var leagueImage : ImageView = containerView.find(LeagueItemListUI.leagueImageViewId)
 
         fun bindItem(leagueItem: LeagueItem, clickListener: (LeagueItem) -> Unit){
             leagueName.text = leagueItem.leagueName
@@ -60,11 +55,11 @@ class LeagueRecyclerViewAdapter(private val context : Context, private val leagu
 
         override fun createView(ui: AnkoContext<ViewGroup>): View = with(ui){
             cardView {
-                elevation = dip(4).toFloat()
                 background = GradientDrawable().apply {
                     shape = GradientDrawable.RECTANGLE
                     cornerRadius = dip(5).toFloat()
                     setStroke(1, ContextCompat.getColor(context, android.R.color.darker_gray))
+                    elevation = dip(4).toFloat()
                 }
                 lparams(width = matchParent, height = wrapContent)
 
