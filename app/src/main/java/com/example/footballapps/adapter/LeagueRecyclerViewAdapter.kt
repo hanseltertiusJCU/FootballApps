@@ -1,5 +1,6 @@
 package com.example.footballapps.adapter
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.support.v4.content.ContextCompat
@@ -15,6 +16,9 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.extensions.LayoutContainer
 import org.jetbrains.anko.*
 import org.jetbrains.anko.cardview.v7.cardView
+import android.util.TypedValue
+
+
 
 class LeagueRecyclerViewAdapter(private val leagueItems : List<LeagueItem>, private val clickListener : (LeagueItem) -> Unit) :
     RecyclerView.Adapter<LeagueRecyclerViewAdapter.ViewHolder>(){
@@ -66,7 +70,7 @@ class LeagueRecyclerViewAdapter(private val leagueItems : List<LeagueItem>, priv
 
                     imageView{
                         id = leagueImageViewId
-                        layoutParams = LinearLayout.LayoutParams(matchParent, wrapContent)
+                        layoutParams = LinearLayout.LayoutParams(matchParent, convertDpToPx(256f, context))
                         scaleType = ImageView.ScaleType.FIT_XY
                         contentDescription = R.string.league_image.toString()
                     }
@@ -81,6 +85,10 @@ class LeagueRecyclerViewAdapter(private val leagueItems : List<LeagueItem>, priv
 
                 }.lparams(width = matchParent, height = matchParent)
             }
+        }
+
+        private fun convertDpToPx(dp : Float, context : Context) : Int {
+            return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics).toInt()
         }
 
     }
