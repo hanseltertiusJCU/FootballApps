@@ -5,6 +5,8 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
+import android.util.TypedValue
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -16,8 +18,6 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.extensions.LayoutContainer
 import org.jetbrains.anko.*
 import org.jetbrains.anko.cardview.v7.cardView
-import android.util.TypedValue
-
 
 
 class LeagueRecyclerViewAdapter(private val leagueItems : List<LeagueItem>, private val clickListener : (LeagueItem) -> Unit) :
@@ -77,10 +77,13 @@ class LeagueRecyclerViewAdapter(private val leagueItems : List<LeagueItem>, priv
 
                     textView{
                         id = leagueNameTextViewId
+                        gravity = Gravity.CENTER
                         layoutParams = LinearLayout.LayoutParams(matchParent, wrapContent)
                         textColor = Color.BLACK
                     }.lparams{
                         margin = dip(8)
+                        width = matchParent
+                        height = matchParent
                     }
 
                 }.lparams(width = matchParent, height = matchParent)
