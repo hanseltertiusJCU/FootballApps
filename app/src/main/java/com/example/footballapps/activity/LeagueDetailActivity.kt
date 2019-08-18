@@ -30,6 +30,15 @@ class LeagueDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        initView()
+
+        initData()
+
+        initToolbarBehavior()
+
+    }
+
+    private fun initView() {
         leagueDetailScrollView = scrollView {
             verticalLayout {
                 padding = dip(16)
@@ -60,7 +69,9 @@ class LeagueDetailActivity : AppCompatActivity() {
                 }
             }
         }
+    }
 
+    private fun initData() {
         val intent = intent
         leagueItem = intent.getParcelableExtra("leagueItem")
 
@@ -75,6 +86,9 @@ class LeagueDetailActivity : AppCompatActivity() {
         tvLeagueDetailName.text = leagueItem.leagueName
         tvLeagueDetailDesc.text = leagueItem.leagueDesc
 
+    }
+
+    private fun initToolbarBehavior() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = leagueItem.leagueName
     }
