@@ -4,4 +4,4 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class LeagueItem (val leagueName : String?, val leagueDesc : String?, val leagueImage : Int?) : Parcelable
+data class LeagueItem (val leagueId : String?, val leagueName : String?, val leagueDesc : String?, val leagueImage : Int?) : Parcelable

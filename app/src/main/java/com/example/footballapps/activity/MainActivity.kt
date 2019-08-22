@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initData() {
+        val leagueId = resources.getStringArray(R.array.league_id)
         val leagueName = resources.getStringArray(R.array.league_name)
         val leagueDesc = resources.getStringArray(R.array.league_desc)
         val leagueImage = resources.obtainTypedArray(R.array.league_image)
@@ -44,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         for (i in leagueName.indices) {
             leagueItems.add(
                 LeagueItem(
+                    leagueId[i],
                     leagueName[i],
                     leagueDesc[i],
                     leagueImage.getResourceId(i, 0)
