@@ -48,6 +48,12 @@ dependencies {
     // anko recyclerview
     implementation "org.jetbrains.anko:anko-recyclerview-v7:$anko_version"
 
+    // retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.6.1'
+
+    // gson
+    implementation 'com.google.code.gson:gson:2.8.5'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
