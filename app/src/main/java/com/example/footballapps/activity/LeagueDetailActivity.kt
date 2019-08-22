@@ -3,7 +3,7 @@ package com.example.footballapps.activity
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.MenuItem
@@ -17,15 +17,16 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.design.snackbar
 
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class LeagueDetailActivity : AppCompatActivity() {
 
-    lateinit var leagueItem : LeagueItem
+    private lateinit var leagueItem : LeagueItem
 
-    lateinit var tvLeagueDetailName : TextView
-    lateinit var ivLeagueDetailImage : ImageView
-    lateinit var tvLeagueDetailDesc : TextView
+    private lateinit var tvLeagueDetailName : TextView
+    private lateinit var ivLeagueDetailImage : ImageView
+    private lateinit var tvLeagueDetailDesc : TextView
 
-    lateinit var leagueDetailScrollView : ScrollView
+    private lateinit var leagueDetailScrollView : ScrollView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

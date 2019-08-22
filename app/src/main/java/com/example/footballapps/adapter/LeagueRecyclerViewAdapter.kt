@@ -3,8 +3,8 @@ package com.example.footballapps.adapter
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.RecyclerView
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -36,8 +36,8 @@ class LeagueRecyclerViewAdapter(private val leagueItems : List<LeagueItem>, priv
 
     class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer{
 
-        var leagueName : TextView = containerView.find(LeagueItemListUI.leagueNameTextViewId)
-        var leagueImage : ImageView = containerView.find(LeagueItemListUI.leagueImageViewId)
+        private var leagueName : TextView = containerView.find(LeagueItemListUI.leagueNameTextViewId)
+        private var leagueImage : ImageView = containerView.find(LeagueItemListUI.leagueImageViewId)
 
         fun bindItem(leagueItem: LeagueItem, clickListener: (LeagueItem) -> Unit){
             leagueName.text = leagueItem.leagueName

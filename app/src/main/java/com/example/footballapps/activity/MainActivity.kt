@@ -1,9 +1,9 @@
 package com.example.footballapps.activity
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.TypedValue
 import android.view.View
 import com.example.footballapps.R
@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
     private val spanCount = 2
     private val includeEdge = true
 
-    lateinit var mainActivityUI: MainActivityUI
+    private lateinit var mainActivityUI: MainActivityUI
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,9 +55,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun installRecyclerViewContent() {
-        mainActivityUI.recyclerViewLeagueList.layoutManager = GridLayoutManager(this, spanCount)
+        mainActivityUI.recyclerViewLeagueList.layoutManager =
+            GridLayoutManager(this, spanCount)
         mainActivityUI.recyclerViewLeagueList.adapter = LeagueRecyclerViewAdapter(leagueItems) {
-            startActivity(intentFor<LeagueDetailActivity>("leagueItem" to it))
+            startActivity<LeagueDetailActivity>("leagueItem" to it)
         }
         mainActivityUI.recyclerViewLeagueList.addItemDecoration(
             GridSpacingItemDecoration(
