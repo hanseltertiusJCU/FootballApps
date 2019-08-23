@@ -16,10 +16,16 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.example.footballapps.R
 import com.example.footballapps.client.RetrofitClient
+import com.example.footballapps.model.LeagueDetailItem
 import com.example.footballapps.model.LeagueDetailResponse
 import com.example.footballapps.model.LeagueItem
+import com.example.footballapps.presenter.LeagueDetailPresenter
 import com.example.footballapps.service.LeagueDetailService
 import com.example.footballapps.utils.PicassoCircleTransformation
+import com.example.footballapps.utils.gone
+import com.example.footballapps.utils.invisible
+import com.example.footballapps.utils.visible
+import com.example.footballapps.view.LeagueDetailView
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.*
 import org.jetbrains.anko.design.snackbar
@@ -29,7 +35,7 @@ import retrofit2.Response
 
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-class LeagueDetailActivity : AppCompatActivity() {
+class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
 
     private lateinit var leagueItem : LeagueItem
 
@@ -40,6 +46,8 @@ class LeagueDetailActivity : AppCompatActivity() {
 
     private lateinit var progressBar : ProgressBar
 
+    private lateinit var leagueDetailPresenter : LeagueDetailPresenter
+
     private lateinit var leagueDetailScrollView : ScrollView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,8 +56,6 @@ class LeagueDetailActivity : AppCompatActivity() {
         initView()
 
         initData()
-
-        initToolbarBehavior()
 
     }
 
@@ -109,51 +115,44 @@ class LeagueDetailActivity : AppCompatActivity() {
         val intent = intent
         leagueItem = intent.getParcelableExtra("leagueItem")
 
-        val retrofitClient = RetrofitClient()
-        val retrofit = retrofitClient.getClient()
-        val leagueDetailService = retrofit?.create(LeagueDetailService::class.java)
-        val call : Call<LeagueDetailResponse> = leagueDetailService?.getLeagueDetailResponse(leagueItem.leagueId!!)!!
+        leagueDetailPresenter = LeagueDetailPresenter(this, leagueItem)
 
-        call.enqueue(object : Callback<LeagueDetailResponse>{
-            override fun onResponse(call: Call<LeagueDetailResponse>, response: Response<LeagueDetailResponse>) {
-                if(response.isSuccessful){
-                    val data = response.body()
+        leagueDetailPresenter.getLeagueDetailTitle()
 
-                    val leagues = data?.leagues
-
-                    for(i in leagues!!.indices) {
-                        if(i == 0) {
-                            tvLeagueDetailName.text = leagues[i].leagueName
-                            tvLeagueDetailDesc.text = leagues[i].leagueDescription
-
-                            Glide.with(applicationContext)
-                                .load(leagues[i].leagueBadge)
-                                .placeholder(R.drawable.empty_league_image_info)
-                                .into(ivLeagueDetailImage)
-
-                            break
-                        }
-                    }
-
-                    progressBar.visibility = View.GONE
-                    tvDescTitle.visibility = View.VISIBLE
-
-                    leagueDetailScrollView.snackbar(leagueItem.leagueName as CharSequence)
-
-                }
-            }
-
-            override fun onFailure(call: Call<LeagueDetailResponse>, error: Throwable) {
-                Log.e("errorTag", "Error : ${error.message}")
-            }
-
-        })
+        leagueDetailPresenter.getLeagueDetailInfo()
 
     }
 
-    private fun initToolbarBehavior() {
+    override fun dataIsLoading() {
+        progressBar.visible()
+        tvDescTitle.invisible()
+    }
+
+    override fun dataLoadingFinished() {
+        progressBar.gone()
+        tvDescTitle.visible()
+    }
+
+    override fun showLeagueDetailTitle(leagueItem: LeagueItem) {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = leagueItem.leagueName
+    }
+
+    override fun showLeagueDetailInfo(leagueDetailItemList: List<LeagueDetailItem>) {
+        for(i in leagueDetailItemList.indices) {
+            if(i == 0) {
+                tvLeagueDetailName.text = leagueDetailItemList[i].leagueName
+                tvLeagueDetailDesc.text = leagueDetailItemList[i].leagueDescription
+
+                Glide.with(applicationContext)
+                    .load(leagueDetailItemList[i].leagueBadge)
+                    .placeholder(R.drawable.empty_league_image_info)
+                    .into(ivLeagueDetailImage)
+
+                break
+            }
+        }
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
