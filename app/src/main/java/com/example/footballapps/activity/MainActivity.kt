@@ -6,12 +6,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.util.TypedValue
 import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.footballapps.R
 import com.example.footballapps.adapter.LeagueRecyclerViewAdapter
 import com.example.footballapps.model.LeagueItem
 import com.example.footballapps.utils.GridSpacingItemDecoration
 import org.jetbrains.anko.*
 import org.jetbrains.anko.constraint.layout.constraintLayout
+import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 
 class MainActivity : AppCompatActivity() {
@@ -59,8 +61,20 @@ class MainActivity : AppCompatActivity() {
     private fun installRecyclerViewContent() {
         mainActivityUI.recyclerViewLeagueList.layoutManager =
             GridLayoutManager(this, spanCount)
-        mainActivityUI.recyclerViewLeagueList.adapter = LeagueRecyclerViewAdapter(leagueItems) {
-            startActivity<LeagueDetailActivity>("leagueItem" to it)
+        mainActivityUI.recyclerViewLeagueList.adapter = LeagueRecyclerViewAdapter(leagueItems) {leagueItem ->
+
+            mainActivityUI.constraintLayoutView.snackbar(leagueItem.leagueName.toString(), "Option") {
+                val options = listOf("Go to League Detail Info", "Go to League Match Info")
+                selector("Where do you want to go to?", options) { _, i ->
+                    if(i == 0) {
+                        startActivity<LeagueDetailActivity>("leagueItem" to leagueItem)
+                    } else {
+                        toast(options[i])
+                    }
+
+                }
+            }
+
         }
         mainActivityUI.recyclerViewLeagueList.addItemDecoration(
             GridSpacingItemDecoration(
@@ -84,17 +98,21 @@ class MainActivity : AppCompatActivity() {
     class MainActivityUI : AnkoComponent<MainActivity> {
         lateinit var recyclerViewLeagueList : RecyclerView
 
+        lateinit var constraintLayoutView: View
+
         companion object {
             const val recyclerViewLeagueListId = 101
         }
 
         override fun createView(ui: AnkoContext<MainActivity>): View = with(ui){
-            constraintLayout {
+            constraintLayoutView = constraintLayout {
                 lparams(width = matchParent, height = matchParent)
                 recyclerViewLeagueList = recyclerView {
                     id = recyclerViewLeagueListId
                 }.lparams(width = matchParent, height = matchParent)
             }
+
+            return@with constraintLayoutView
         }
 
     }
