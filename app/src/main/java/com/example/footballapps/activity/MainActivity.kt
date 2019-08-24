@@ -1,6 +1,7 @@
 package com.example.footballapps.activity
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -10,13 +11,17 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.footballapps.R
 import com.example.footballapps.adapter.LeagueRecyclerViewAdapter
 import com.example.footballapps.model.LeagueItem
+import com.example.footballapps.presenter.MainPresenter
 import com.example.footballapps.utils.GridSpacingItemDecoration
+import com.example.footballapps.view.MainView
 import org.jetbrains.anko.*
 import org.jetbrains.anko.constraint.layout.constraintLayout
 import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MainView {
+
+    private lateinit var mainPresenter: MainPresenter
 
     private var leagueItems: MutableList<LeagueItem> = mutableListOf()
 
@@ -33,13 +38,11 @@ class MainActivity : AppCompatActivity() {
 
         initData()
 
-        installRecyclerViewContent()
     }
 
     private fun initData() {
         val leagueId = resources.getStringArray(R.array.league_id)
         val leagueName = resources.getStringArray(R.array.league_name)
-        val leagueDesc = resources.getStringArray(R.array.league_desc)
         val leagueImage = resources.obtainTypedArray(R.array.league_image)
 
         leagueItems.clear()
@@ -49,19 +52,25 @@ class MainActivity : AppCompatActivity() {
                 LeagueItem(
                     leagueId[i],
                     leagueName[i],
-                    leagueDesc[i],
                     leagueImage.getResourceId(i, 0)
                 )
             )
         }
 
         leagueImage.recycle()
+
+        mainPresenter = MainPresenter(this)
+
+        Log.d("leagueItems", leagueItems.size.toString())
+
+        mainPresenter.displayLeagueInfoListToRecyclerView(leagueItems)
+
     }
 
-    private fun installRecyclerViewContent() {
+    override fun displayRecyclerViewItem(leagueInfoList: MutableList<LeagueItem>) {
         mainActivityUI.recyclerViewLeagueList.layoutManager =
             GridLayoutManager(this, spanCount)
-        mainActivityUI.recyclerViewLeagueList.adapter = LeagueRecyclerViewAdapter(leagueItems) {leagueItem ->
+        mainActivityUI.recyclerViewLeagueList.adapter = LeagueRecyclerViewAdapter(leagueInfoList) {leagueItem ->
 
             mainActivityUI.constraintLayoutView.snackbar(leagueItem.leagueName.toString(), "Option") {
                 val options = listOf("Go to League Detail Info", "Go to League Match Info")
