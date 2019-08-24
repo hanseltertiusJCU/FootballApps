@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- League Detail -->
     <item name="iv_league_detail_image" type="id"/>
     <item name="tv_league_detail_name" type="id"/>
     <item name="tv_desc_title" type="id"/>
     <item name="tv_league_detail_desc" type="id"/>
     <item name="progress_bar" type="id"/>
+
+    <!-- Last match fragment -->
+    <item name="last_match_parent_layout" type="id"/>
+    <item name="last_match_league_spinner" type="id"/>
+
+    <!-- Next match fragment -->
+    <item name="next_match_parent_layout" type="id"/>
+    <item name="next_match_league_spinner" type="id"/>
+
 </resources>

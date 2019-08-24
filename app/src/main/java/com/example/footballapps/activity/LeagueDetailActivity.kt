@@ -60,6 +60,8 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
     }
 
     private fun initView() {
+
+        // todo: toolbar
         leagueDetailScrollView = scrollView {
             relativeLayout {
                 padding = dip(16)

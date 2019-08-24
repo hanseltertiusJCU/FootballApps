@@ -113,6 +113,9 @@ class MainActivity : AppCompatActivity(), MainView {
             const val recyclerViewLeagueListId = 101
         }
 
+        // todo: toolbar
+
+
         override fun createView(ui: AnkoContext<MainActivity>): View = with(ui){
             constraintLayoutView = constraintLayout {
                 lparams(width = matchParent, height = matchParent)
