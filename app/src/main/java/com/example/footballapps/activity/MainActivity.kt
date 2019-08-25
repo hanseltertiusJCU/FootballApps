@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.util.TypedValue
 import android.view.View
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import com.example.footballapps.R
 import com.example.footballapps.adapter.LeagueRecyclerViewAdapter
 import com.example.footballapps.model.LeagueItem
@@ -126,7 +127,7 @@ class MainActivity : AppCompatActivity(), MainView {
                     toolbarMain = toolbar {
                         lparams(width = matchParent, height = dimenAttr(R.attr.actionBarSize))
                         popupTheme = R.style.ThemeOverlay_AppCompat_Light
-                        setTitleTextColor(android.R.color.white)
+                        setTitleTextColor(ContextCompat.getColor(context, android.R.color.white))
                     }
                 }
 

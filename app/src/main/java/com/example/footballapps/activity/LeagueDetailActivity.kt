@@ -14,6 +14,7 @@ import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.example.footballapps.R
 import com.example.footballapps.client.RetrofitClient
@@ -74,6 +75,7 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
                 toolbarLeagueDetail = toolbar {
                     id = R.id.toolbar_league_detail
                     lparams(width = matchParent, height = dimenAttr(R.attr.actionBarSize))
+                    setTitleTextColor(ContextCompat.getColor(context, android.R.color.white))
                     popupTheme = R.style.ThemeOverlay_AppCompat_Light
                 }
             }
