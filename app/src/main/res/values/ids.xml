@@ -6,6 +6,7 @@
     <item name="tv_desc_title" type="id"/>
     <item name="tv_league_detail_desc" type="id"/>
     <item name="progress_bar" type="id"/>
+    <item name="toolbar_league_detail" type="id" />
 
     <!-- Last match fragment -->
     <item name="last_match_parent_layout" type="id"/>
@@ -14,5 +15,6 @@
     <!-- Next match fragment -->
     <item name="next_match_parent_layout" type="id"/>
     <item name="next_match_league_spinner" type="id"/>
+
 
 </resources>

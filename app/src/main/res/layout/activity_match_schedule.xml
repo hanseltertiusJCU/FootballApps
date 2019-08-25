@@ -21,7 +21,7 @@
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
         <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabs_match_schedule"
+                android:id="@+id/layout_tab_match_schedule"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:tabMode="fixed"
@@ -30,7 +30,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager.widget.ViewPager
-            android:id="@+id/match_pager"
+            android:id="@+id/view_pager_match_schedule"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 

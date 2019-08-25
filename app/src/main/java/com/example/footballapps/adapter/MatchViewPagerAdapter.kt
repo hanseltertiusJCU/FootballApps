@@ -8,13 +8,18 @@ import androidx.fragment.app.FragmentPagerAdapter
 
 class MatchViewPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
 
-    private val mFragmentList : List<Fragment> = ArrayList()
-    private val mFragmentTitleList : List<String> = ArrayList()
+    private val mFragmentList : MutableList<Fragment> = mutableListOf()
+    private val mFragmentTitleList : MutableList<String> = mutableListOf()
 
     override fun getItem(position: Int): Fragment = mFragmentList[position]
 
     override fun getCount(): Int = mFragmentList.size
 
     override fun getPageTitle(position: Int): CharSequence? = mFragmentTitleList[position]
+
+    fun addFragment(fragment : Fragment, title : String) {
+        mFragmentList.add(fragment)
+        mFragmentTitleList.add(title)
+    }
 
 }

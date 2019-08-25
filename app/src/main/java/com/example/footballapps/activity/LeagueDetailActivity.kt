@@ -13,6 +13,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
 import com.example.footballapps.R
 import com.example.footballapps.client.RetrofitClient
@@ -28,6 +29,9 @@ import com.example.footballapps.utils.visible
 import com.example.footballapps.view.LeagueDetailView
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.*
+import org.jetbrains.anko.appcompat.v7.toolbar
+import org.jetbrains.anko.design.appBarLayout
+import org.jetbrains.anko.design.coordinatorLayout
 import org.jetbrains.anko.design.snackbar
 import retrofit2.Call
 import retrofit2.Callback
@@ -50,6 +54,8 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
 
     private lateinit var leagueDetailScrollView : ScrollView
 
+    private lateinit var toolbarLeagueDetail : Toolbar
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -61,55 +67,70 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
 
     private fun initView() {
 
-        // todo: toolbar
-        leagueDetailScrollView = scrollView {
-            relativeLayout {
-                padding = dip(16)
-                ivLeagueDetailImage = imageView{
-                    id = R.id.iv_league_detail_image
-                }.lparams {
-                    width = convertDpToPx(96f)
-                    height = convertDpToPx(96f)
-                    centerHorizontally()
-                }
+        coordinatorLayout{
+            appBarLayout{
+                lparams(width = matchParent, height = wrapContent)
 
-                tvLeagueDetailName = textView {
-                    id = R.id.tv_league_detail_name
-                    typeface = Typeface.DEFAULT_BOLD
-                    textSize = 20f
-                    textColor = Color.BLACK
-                }.lparams {
-                    centerHorizontally()
-                    topMargin = dip(8)
-                    bottomOf(R.id.iv_league_detail_image)
+                toolbarLeagueDetail = toolbar {
+                    id = R.id.toolbar_league_detail
+                    lparams(width = matchParent, height = dimenAttr(R.attr.actionBarSize))
+                    popupTheme = R.style.ThemeOverlay_AppCompat_Light
                 }
+            }
 
-                tvDescTitle = textView("Description : ") {
-                    id = R.id.tv_desc_title
-                    typeface = Typeface.DEFAULT_BOLD
-                    textSize = 16f
-                    textColor = Color.BLACK
-                    visibility = View.INVISIBLE
-                }.lparams {
-                    topMargin = dip(8)
-                    bottomOf(R.id.tv_league_detail_name)
-                }
-                tvLeagueDetailDesc = textView {
-                    id = R.id.tv_league_detail_desc
-                    textColor = Color.BLACK
-                }.lparams {
-                    topMargin = dip(8)
-                    bottomOf(R.id.tv_desc_title)
-                }
+            leagueDetailScrollView = scrollView {
+                relativeLayout {
+                    padding = dip(16)
+                    ivLeagueDetailImage = imageView{
+                        id = R.id.iv_league_detail_image
+                    }.lparams {
+                        width = convertDpToPx(96f)
+                        height = convertDpToPx(96f)
+                        centerHorizontally()
+                    }
 
-                progressBar = progressBar{
-                    id = R.id.progress_bar
-                }.lparams{
-                    width = convertDpToPx(48f)
-                    height = convertDpToPx(48f)
-                    centerInParent()
+                    tvLeagueDetailName = textView {
+                        id = R.id.tv_league_detail_name
+                        typeface = Typeface.DEFAULT_BOLD
+                        textSize = 20f
+                        textColor = Color.BLACK
+                    }.lparams {
+                        centerHorizontally()
+                        topMargin = dip(8)
+                        bottomOf(R.id.iv_league_detail_image)
+                    }
+
+                    tvDescTitle = textView("Description : ") {
+                        id = R.id.tv_desc_title
+                        typeface = Typeface.DEFAULT_BOLD
+                        textSize = 16f
+                        textColor = Color.BLACK
+                        visibility = View.INVISIBLE
+                    }.lparams {
+                        topMargin = dip(8)
+                        bottomOf(R.id.tv_league_detail_name)
+                    }
+                    tvLeagueDetailDesc = textView {
+                        id = R.id.tv_league_detail_desc
+                        textColor = Color.BLACK
+                    }.lparams {
+                        topMargin = dip(8)
+                        bottomOf(R.id.tv_desc_title)
+                    }
+
+                    progressBar = progressBar{
+                        id = R.id.progress_bar
+                    }.lparams{
+                        width = convertDpToPx(48f)
+                        height = convertDpToPx(48f)
+                        centerInParent()
+                    }
                 }
-            }.lparams(width = matchParent, height = matchParent)
+            }.lparams{
+                width = matchParent
+                height = matchParent
+                topMargin = dimenAttr(R.attr.actionBarSize)
+            }
         }
     }
 
@@ -136,6 +157,7 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
     }
 
     override fun showLeagueDetailTitle(leagueItem: LeagueItem) {
+        setSupportActionBar(toolbarLeagueDetail)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = leagueItem.leagueName
     }

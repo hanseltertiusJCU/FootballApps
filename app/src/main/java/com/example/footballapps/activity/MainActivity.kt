@@ -1,13 +1,12 @@
 package com.example.footballapps.activity
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.util.TypedValue
 import android.view.View
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.appcompat.widget.Toolbar
 import com.example.footballapps.R
 import com.example.footballapps.adapter.LeagueRecyclerViewAdapter
 import com.example.footballapps.model.LeagueItem
@@ -15,7 +14,10 @@ import com.example.footballapps.presenter.MainPresenter
 import com.example.footballapps.utils.GridSpacingItemDecoration
 import com.example.footballapps.view.MainView
 import org.jetbrains.anko.*
+import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.constraint.layout.constraintLayout
+import org.jetbrains.anko.design.appBarLayout
+import org.jetbrains.anko.design.coordinatorLayout
 import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 
@@ -61,9 +63,9 @@ class MainActivity : AppCompatActivity(), MainView {
 
         mainPresenter = MainPresenter(this)
 
-        Log.d("leagueItems", leagueItems.size.toString())
-
         mainPresenter.displayLeagueInfoListToRecyclerView(leagueItems)
+
+        setSupportActionBar(mainActivityUI.toolbarMain)
 
     }
 
@@ -109,22 +111,35 @@ class MainActivity : AppCompatActivity(), MainView {
 
         lateinit var constraintLayoutView: View
 
+        lateinit var toolbarMain : Toolbar
+
         companion object {
             const val recyclerViewLeagueListId = 101
         }
 
-        // todo: toolbar
-
 
         override fun createView(ui: AnkoContext<MainActivity>): View = with(ui){
-            constraintLayoutView = constraintLayout {
-                lparams(width = matchParent, height = matchParent)
-                recyclerViewLeagueList = recyclerView {
-                    id = recyclerViewLeagueListId
-                }.lparams(width = matchParent, height = matchParent)
-            }
 
-            return@with constraintLayoutView
+            coordinatorLayout {
+                appBarLayout{
+                    lparams(width = matchParent, height = wrapContent)
+                    toolbarMain = toolbar {
+                        lparams(width = matchParent, height = dimenAttr(R.attr.actionBarSize))
+                        popupTheme = R.style.ThemeOverlay_AppCompat_Light
+                        setTitleTextColor(android.R.color.white)
+                    }
+                }
+
+                constraintLayoutView = constraintLayout {
+                    lparams(width = matchParent, height = wrapContent)
+                    recyclerViewLeagueList = recyclerView {
+                        id = recyclerViewLeagueListId
+                        isNestedScrollingEnabled = false
+                    }.lparams(width = matchParent, height = wrapContent)
+                }.lparams {
+                    topMargin = dimenAttr(R.attr.actionBarSize)
+                }
+            }
         }
 
     }

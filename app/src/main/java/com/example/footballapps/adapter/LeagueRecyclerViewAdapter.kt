@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.example.footballapps.R
 import com.example.footballapps.model.LeagueItem
 import com.squareup.picasso.Picasso
@@ -41,7 +42,7 @@ class LeagueRecyclerViewAdapter(private val leagueItems : List<LeagueItem>, priv
 
         fun bindItem(leagueItem: LeagueItem, clickListener: (LeagueItem) -> Unit){
             leagueName.text = leagueItem.leagueName
-            leagueItem.leagueImage?.let { Picasso.get().load(it).into(leagueImage) }
+            leagueItem.leagueImage?.let { Picasso.get().load(it).fit().into(leagueImage) }
             containerView.setOnClickListener {
                 clickListener(leagueItem)
             }
