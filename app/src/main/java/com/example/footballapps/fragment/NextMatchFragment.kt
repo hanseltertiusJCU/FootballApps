@@ -35,6 +35,10 @@ class NextMatchFragment : Fragment() {
 
                 nextMatchLeagueSpinner = spinner {
                     id = R.id.next_match_league_spinner
+                }.lparams{
+                    topToTop = R.id.next_match_parent_layout
+                    leftToLeft = R.id.next_match_parent_layout
+                    rightToRight = R.id.next_match_parent_layout
                 }
 
                 nextMatchSwipeRefreshLayout = swipeRefreshLayout{
@@ -61,6 +65,6 @@ class NextMatchFragment : Fragment() {
                     }
 
             }
-        }.view()
+        }.view
     }
 }

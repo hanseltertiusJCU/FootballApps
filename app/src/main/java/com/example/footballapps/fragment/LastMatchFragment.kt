@@ -69,7 +69,7 @@ class LastMatchFragment : Fragment() {
                     }
 
             }
-        }.view()
+        }.view
     }
 
 

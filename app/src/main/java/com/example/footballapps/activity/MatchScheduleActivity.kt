@@ -2,6 +2,7 @@ package com.example.footballapps.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.viewpager.widget.ViewPager
 import com.example.footballapps.R
 import com.example.footballapps.adapter.MatchViewPagerAdapter
@@ -30,5 +31,12 @@ class MatchScheduleActivity : AppCompatActivity() {
         matchViewPagerAdapter.addFragment(LastMatchFragment(), "Last Match")
         matchViewPagerAdapter.addFragment(NextMatchFragment(), "Next Match")
         viewPager.adapter = matchViewPagerAdapter
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if(item?.itemId == android.R.id.home){
+            finish()
+        }
+        return super.onOptionsItemSelected(item!!)
     }
 }
