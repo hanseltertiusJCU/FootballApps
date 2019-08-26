@@ -4,7 +4,7 @@ interface MatchView {
     // todo: data is loading, data is finished
     fun dataIsLoading()
     fun dataLoadingFinished()
-    // todo: show
+    // todo: show data
 }
 
 // todo: untuk presenter pake 1 presenter dengan beberapa function yang penting si reusable aja si ya

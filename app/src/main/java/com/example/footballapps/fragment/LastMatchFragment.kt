@@ -72,5 +72,7 @@ class LastMatchFragment : Fragment() {
         }.view
     }
 
+    // todo: onviewcreated trus isinya pake spinner gt
+
 
 }
