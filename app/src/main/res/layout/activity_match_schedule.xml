@@ -7,30 +7,38 @@
     android:orientation="vertical"
     tools:context=".activity.MatchScheduleActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_match_schedule"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/layout_tab_match_schedule"
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabGravity="fill"
-            app:tabMode="fixed" />
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_match_schedule"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/view_pager_match_schedule"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/layout_tab_match_schedule"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabGravity="fill"
+                app:tabMode="fixed"
+                app:tabIndicatorColor="@android:color/white"/>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/view_pager_match_schedule"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

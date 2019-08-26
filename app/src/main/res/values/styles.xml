@@ -1,13 +1,12 @@
 <resources>
 
     <!-- Base application theme. -->
-    <!--todo: mungkin themenya ganti kali biar ga repot or smth-->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorControlNormal">@android:color/white</item>
+        <item name="android:tint">@android:color/white</item>
     </style>
 
 </resources>

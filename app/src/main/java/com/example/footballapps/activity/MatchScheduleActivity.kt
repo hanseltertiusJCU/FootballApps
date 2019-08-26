@@ -16,7 +16,11 @@ import com.example.footballapps.fragment.NextMatchFragment
 import kotlinx.android.synthetic.main.activity_match_schedule.*
 import org.jetbrains.anko.startActivity
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class MatchScheduleActivity : AppCompatActivity() {
+
+    lateinit var leagueName : String
+    lateinit var leagueId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +29,11 @@ class MatchScheduleActivity : AppCompatActivity() {
         setSupportActionBar(toolbar_match_schedule)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        val intent = intent
+
+        leagueName = intent.getStringExtra("leagueName")
+        leagueId = intent.getStringExtra("leagueId")
 
         setupViewPager(view_pager_match_schedule)
 

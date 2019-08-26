@@ -40,13 +40,13 @@ class MatchRecyclerViewAdapter(private val context : Context, private val matchL
             itemView.league_item_event_date.text = formattedDateEvent
 
             // todo: time event
-            val timeFormat = SimpleDateFormat("HH:mm:ssZZZZZ")
-            timeFormat.timeZone = TimeZone.getTimeZone("UTC")
-            val timeInDate : Date = timeFormat.parse(matchItem.timeEvent)
-            timeFormat.timeZone = TimeZone.getDefault()
-            val formattedTimeEvent = timeFormat.format(timeInDate)
+//            val timeFormat = SimpleDateFormat("HH:mm:ssZZZZZ")
+//            timeFormat.timeZone = TimeZone.getTimeZone("UTC")
+//            val timeInDate : Date = timeFormat.parse(matchItem.timeEvent)
+//            timeFormat.timeZone = TimeZone.getDefault()
+//            val formattedTimeEvent = timeFormat.format(timeInDate)
 
-            itemView.league_item_event_time.text = formattedTimeEvent // todo: modify this into gmt + 7 / local time
+            itemView.league_item_event_time.text = matchItem.timeEvent // todo: modify this into gmt + 7 / local time
 
             itemView.league_item_home_team_name.text = matchItem.homeTeamName
 

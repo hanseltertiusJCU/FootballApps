@@ -81,8 +81,7 @@ class MainActivity : AppCompatActivity(), MainView {
                     if(i == 0) {
                         startActivity<LeagueDetailActivity>("leagueItem" to leagueItem)
                     } else {
-                        // todo: tinggal bawa league item atau idnya saja
-                        startActivity<MatchScheduleActivity>()
+                        startActivity<MatchScheduleActivity>("leagueName" to leagueItem.leagueName, "leagueId" to leagueItem.leagueId)
                     }
 
                 }
