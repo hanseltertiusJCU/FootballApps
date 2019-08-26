@@ -78,6 +78,8 @@ data class MatchItem(
     var strEvent : String?,
     @SerializedName("strLeague")
     var leagueName : String?,
+    @SerializedName("intRound")
+    var leagueMatchWeek : String?,
     @SerializedName("strHomeTeam")
     var homeTeamName : String?,
     @SerializedName("strAwayTeam")
