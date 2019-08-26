@@ -66,6 +66,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:gravity="start"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@id/layout_score"
                 android:text="Home Team Name" />
 
             <LinearLayout
@@ -111,6 +114,8 @@
                 android:id="@+id/league_item_away_team_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/layout_score"
+                android:gravity="end"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:text="Away Team Name" />
