@@ -1,10 +1,9 @@
 package com.example.footballapps.view
 
+import com.example.footballapps.model.MatchItem
+
 interface MatchView {
-    // todo: data is loading, data is finished
     fun dataIsLoading()
     fun dataLoadingFinished()
-    // todo: show data
+    fun showMatchData(matchList : List<MatchItem>)
 }
-
-// todo: untuk presenter pake 1 presenter dengan beberapa function yang penting si reusable aja si ya
