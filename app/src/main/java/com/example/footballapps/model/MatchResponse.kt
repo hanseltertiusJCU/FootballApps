@@ -68,7 +68,10 @@ import com.google.gson.annotations.SerializedName
  */
 data class MatchResponse(
     @SerializedName("events")
-    var events : List<MatchItem> = emptyList()
+    var events : List<MatchItem> = emptyList(),
+    // todo: tinggal pake event seriaized name
+    @SerializedName("event")
+    var searchResultEvents : List<MatchItem> = emptyList()
 )
 
 data class MatchItem(

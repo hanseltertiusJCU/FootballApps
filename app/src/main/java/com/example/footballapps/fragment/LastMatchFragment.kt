@@ -1,10 +1,6 @@
 package com.example.footballapps.fragment
 
 
-import android.graphics.BlendMode
-import android.graphics.BlendModeColorFilter
-import android.graphics.Color
-import android.graphics.ColorFilter
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,7 +10,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ProgressBar
 import android.widget.Spinner
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -34,14 +29,9 @@ import org.jetbrains.anko.constraint.layout.constraintLayout
 import org.jetbrains.anko.*
 import org.jetbrains.anko.constraint.layout.matchConstraint
 import org.jetbrains.anko.recyclerview.v7.recyclerView
-import org.jetbrains.anko.sdk27.coroutines.onItemSelectedListener
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
-import android.graphics.PorterDuff
-import android.R.color
-import android.os.Build
-import org.jetbrains.anko.custom.style
 
 
 class LastMatchFragment : Fragment(), MatchView {
@@ -54,8 +44,7 @@ class LastMatchFragment : Fragment(), MatchView {
     private lateinit var lastMatchPresenter: MatchPresenter
 
     private var lastMatches : MutableList<MatchItem> = mutableListOf()
-
-    private lateinit var lastMatchAdapter : MatchRecyclerViewAdapter
+    private lateinit var lastMatchRvAdapter : MatchRecyclerViewAdapter
 
     private lateinit var selectedLeagueId : String
 
@@ -126,28 +115,21 @@ class LastMatchFragment : Fragment(), MatchView {
         }
 
         val spinnerAdapter = ArrayAdapter(activity!!.applicationContext, android.R.layout.simple_spinner_dropdown_item, leagueOptions)
-
         lastMatchLeagueSpinner.adapter = spinnerAdapter
-        var selectedLeagueOption = LeagueOption((activity as MatchScheduleActivity).leagueId, (activity as MatchScheduleActivity).leagueName)
 
+        var selectedLeagueOption = LeagueOption((activity as MatchScheduleActivity).leagueId, (activity as MatchScheduleActivity).leagueName)
         lastMatchLeagueSpinner.setSelection(spinnerAdapter.getPosition(selectedLeagueOption))
 
-        lastMatchAdapter = MatchRecyclerViewAdapter(context!!, lastMatches)
-
-        lastMatchRecyclerView.adapter = lastMatchAdapter
+        lastMatchRvAdapter = MatchRecyclerViewAdapter(context!!, lastMatches)
+        lastMatchRecyclerView.adapter = lastMatchRvAdapter
 
         lastMatchPresenter = MatchPresenter(this)
-
-        selectedLeagueId = (activity as MatchScheduleActivity).leagueId
-
-        lastMatchPresenter.getPreviousMatchInfo(selectedLeagueId)
 
         lastMatchLeagueSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 selectedLeagueOption = parent!!.selectedItem as LeagueOption
-
                 selectedLeagueId = selectedLeagueOption.leagueId
 
                 lastMatchPresenter.getPreviousMatchInfo(selectedLeagueId)
@@ -174,7 +156,7 @@ class LastMatchFragment : Fragment(), MatchView {
         lastMatchSwipeRefreshLayout.isRefreshing = false
         lastMatches.clear()
         lastMatches.addAll(matchList)
-        lastMatchAdapter.notifyDataSetChanged()
+        lastMatchRvAdapter.notifyDataSetChanged()
 
     }
 

@@ -8,16 +8,42 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.footballapps.R
+import com.example.footballapps.adapter.MatchRecyclerViewAdapter
+import com.example.footballapps.model.MatchItem
+import com.example.footballapps.presenter.MatchPresenter
+import com.example.footballapps.utils.gone
+import com.example.footballapps.utils.invisible
+import com.example.footballapps.utils.visible
+import com.example.footballapps.view.MatchView
 import kotlinx.android.synthetic.main.activity_search_match_schedule.*
 
-class SearchMatchScheduleActivity : AppCompatActivity() {
+class SearchMatchScheduleActivity : AppCompatActivity(), MatchView {
+
+    private lateinit var searchResultMatchPresenter : MatchPresenter
+
+    private var searchResultMatches : MutableList<MatchItem> = mutableListOf()
+    private lateinit var searchResultMatchRvAdapter : MatchRecyclerViewAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_match_schedule)
 
         setSupportActionBar(toolbar_search_match_schedule)
+
+        // todo : init data
+        initData()
+    }
+
+    private fun initData() {
+
+        searchResultMatchRvAdapter = MatchRecyclerViewAdapter(this, searchResultMatches)
+        rv_search_match_schedule.adapter = searchResultMatchRvAdapter
+        rv_search_match_schedule.layoutManager = LinearLayoutManager(this)
+
+        searchResultMatchPresenter = MatchPresenter(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -52,10 +78,47 @@ class SearchMatchScheduleActivity : AppCompatActivity() {
                 }
 
             })
+
+            searchScheduleSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    // todo: tinggal panggil presenter
+                    searchResultMatchPresenter.getSearchMatchInfo(query!!)
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    return false
+                }
+
+            })
         }
 
         searchScheduleSearchView?.setSearchableInfo(searchScheduleSearchManager.getSearchableInfo(this@SearchMatchScheduleActivity.componentName))
 
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun dataIsLoading() {
+        search_match_progress_bar.visible()
+        error_data_text.gone()
+        rv_search_match_schedule.invisible()
+    }
+
+    override fun dataLoadingFinished() {
+        if(searchResultMatches.size == 0) {
+            rv_search_match_schedule.invisible()
+            error_data_text.visible()
+            search_match_progress_bar.gone()
+        } else {
+            rv_search_match_schedule.visible()
+            error_data_text.gone()
+            search_match_progress_bar.gone()
+        }
+    }
+
+    override fun showMatchData(matchList: List<MatchItem>) {
+        searchResultMatches.clear()
+        searchResultMatches.addAll(matchList)
+        searchResultMatchRvAdapter.notifyDataSetChanged()
     }
 }

@@ -25,13 +25,13 @@ class MatchPresenter(private val matchView: MatchView) {
             override fun onResponse(call: Call<MatchResponse>, response: Response<MatchResponse>) {
                 if(response.isSuccessful) {
 
-                    matchView.dataLoadingFinished()
-
                     val data = response.body()
 
                     val matches = data?.events
 
                     matchView.showMatchData(matches!!)
+
+                    matchView.dataLoadingFinished()
                 }
             }
 
@@ -58,13 +58,13 @@ class MatchPresenter(private val matchView: MatchView) {
             override fun onResponse(call: Call<MatchResponse>, response: Response<MatchResponse>) {
                 if(response.isSuccessful) {
 
-                    matchView.dataLoadingFinished()
-
                     val data = response.body()
 
                     val matches = data?.events
 
                     matchView.showMatchData(matches!!)
+
+                    matchView.dataLoadingFinished()
                 }
             }
 
@@ -91,21 +91,23 @@ class MatchPresenter(private val matchView: MatchView) {
             override fun onResponse(call: Call<MatchResponse>, response: Response<MatchResponse>) {
                 if(response.isSuccessful) {
 
-                    matchView.dataLoadingFinished()
-
                     val data = response.body()
 
-                    val matches = data?.events
+                    val matches = data?.searchResultEvents
 
                     val filteredMatches = mutableListOf<MatchItem>()
 
-                    for(match in matches!!) {
-                        if(match.sportType.equals("Soccer")) {
-                            filteredMatches.add(match)
+                    if(matches != null) {
+                        for(match in matches) {
+                            if(match.sportType.equals("Soccer")) {
+                                filteredMatches.add(match)
+                            }
                         }
                     }
 
                     matchView.showMatchData(filteredMatches)
+
+                    matchView.dataLoadingFinished()
                 }
             }
 
@@ -132,8 +134,6 @@ class MatchPresenter(private val matchView: MatchView) {
             override fun onResponse(call: Call<MatchResponse>, response: Response<MatchResponse>) {
                 if(response.isSuccessful) {
 
-                    matchView.dataLoadingFinished()
-
                     val data = response.body()
 
                     val matches = data?.events
@@ -149,6 +149,8 @@ class MatchPresenter(private val matchView: MatchView) {
                     }
 
                     matchView.showMatchData(detailMatchList)
+
+                    matchView.dataLoadingFinished()
                 }
             }
 

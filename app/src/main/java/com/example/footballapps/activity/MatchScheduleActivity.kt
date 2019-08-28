@@ -77,4 +77,6 @@ class MatchScheduleActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item!!)
     }
+
+    // todo: method set support action bar title
 }

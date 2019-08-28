@@ -42,6 +42,7 @@ import retrofit2.Response
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
 
+    // todo: i think we dont need league item to there, just league id and league name
     private lateinit var leagueItem : LeagueItem
 
     private lateinit var tvLeagueDetailName : TextView

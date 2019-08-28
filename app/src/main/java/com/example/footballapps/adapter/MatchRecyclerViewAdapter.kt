@@ -47,17 +47,9 @@ class MatchRecyclerViewAdapter(private val context : Context, private val matchL
 
             itemView.league_item_home_team_name.text = matchItem.homeTeamName
 
-            if(matchItem.homeTeamScore == null) {
-                itemView.league_item_home_team_score.text = "-"
-            } else {
-                itemView.league_item_home_team_score.text = matchItem.homeTeamScore
-            }
+            itemView.league_item_home_team_score.text = matchItem.homeTeamScore ?: "-"
 
-            if(matchItem.awayTeamScore == null) {
-                itemView.league_item_away_team_score.text = "-"
-            } else {
-                itemView.league_item_away_team_score.text = matchItem.awayTeamScore
-            }
+            itemView.league_item_away_team_score.text = matchItem.awayTeamScore ?: "-"
 
             itemView.league_item_away_team_name.text = matchItem.awayTeamName
         }
