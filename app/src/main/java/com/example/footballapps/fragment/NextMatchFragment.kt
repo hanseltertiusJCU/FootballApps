@@ -50,16 +50,13 @@ class NextMatchFragment : Fragment(), MatchView {
             constraintLayout {
                 id = R.id.next_match_parent_layout
                 lparams(width = matchParent, height = matchParent)
-                topPadding = dip(16)
-                leftPadding = dip(16)
-                rightPadding = dip(16)
 
                 nextMatchLeagueSpinner = spinner {
                     id = R.id.next_match_league_spinner
                 }.lparams{
-                    topToTop = R.id.next_match_parent_layout
-                    leftToLeft = R.id.next_match_parent_layout
-                    rightToRight = R.id.next_match_parent_layout
+                    width = matchParent
+                    height = wrapContent
+                    margin = dip(16)
                 }
 
                 nextMatchSwipeRefreshLayout = swipeRefreshLayout{
@@ -93,8 +90,6 @@ class NextMatchFragment : Fragment(), MatchView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        activity?.actionBar?.title = "Next Match"
 
         initData()
     }
@@ -141,6 +136,7 @@ class NextMatchFragment : Fragment(), MatchView {
     }
 
     override fun dataLoadingFinished() {
+        // todo: tinggal cek connectivity
         nextMatchProgressBar.gone()
         nextMatchRecyclerView.visible()
     }

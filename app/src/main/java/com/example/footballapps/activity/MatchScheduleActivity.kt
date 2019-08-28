@@ -15,11 +15,12 @@ import com.example.footballapps.fragment.LastMatchFragment
 import com.example.footballapps.fragment.NextMatchFragment
 import kotlinx.android.synthetic.main.activity_match_schedule.*
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.support.v4.onPageChangeListener
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class MatchScheduleActivity : AppCompatActivity() {
 
-    lateinit var leagueName : String
+    lateinit var leagueName: String
     lateinit var leagueId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +42,7 @@ class MatchScheduleActivity : AppCompatActivity() {
 
     }
 
-    private fun setupViewPager (viewPager : ViewPager) {
+    private fun setupViewPager(viewPager: ViewPager) {
         val matchViewPagerAdapter = MatchViewPagerAdapter(supportFragmentManager)
         matchViewPagerAdapter.addFragment(LastMatchFragment(), "Last Match")
         matchViewPagerAdapter.addFragment(NextMatchFragment(), "Next Match")
@@ -50,16 +51,17 @@ class MatchScheduleActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
-        val menuInflater : MenuInflater = menuInflater
+        val menuInflater: MenuInflater = menuInflater
         menuInflater.inflate(R.menu.menu_search, menu)
 
-        val scheduleSearchItem : MenuItem? = menu!!.findItem(R.id.action_search)
+        val scheduleSearchItem: MenuItem? = menu!!.findItem(R.id.action_search)
 
-        val scheduleSearchManager : SearchManager = this@MatchScheduleActivity.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val scheduleSearchManager: SearchManager =
+            this@MatchScheduleActivity.getSystemService(Context.SEARCH_SERVICE) as SearchManager
 
-        var scheduleSearchView : SearchView? = null
+        var scheduleSearchView: SearchView? = null
 
-        if(scheduleSearchItem != null) {
+        if (scheduleSearchItem != null) {
             scheduleSearchView = scheduleSearchItem.actionView as SearchView
         }
 
@@ -69,7 +71,7 @@ class MatchScheduleActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if(item?.itemId == android.R.id.home){
+        if (item?.itemId == android.R.id.home) {
             finish()
         } else if (item?.itemId == R.id.action_search) {
             invalidateOptionsMenu()
@@ -77,6 +79,4 @@ class MatchScheduleActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item!!)
     }
-
-    // todo: method set support action bar title
 }

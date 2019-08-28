@@ -33,7 +33,6 @@ class SearchMatchScheduleActivity : AppCompatActivity(), MatchView {
 
         setSupportActionBar(toolbar_search_match_schedule)
 
-        // todo : init data
         initData()
     }
 
@@ -63,6 +62,8 @@ class SearchMatchScheduleActivity : AppCompatActivity(), MatchView {
         if(searchScheduleSearchItem != null) {
             searchScheduleSearchView = searchScheduleSearchItem.actionView as SearchView
 
+            searchResultMatchPresenter.getSearchMatchInfo(searchScheduleSearchView.query.toString())
+
             searchScheduleSearchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
                 override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
                     isSearch = true
@@ -81,7 +82,6 @@ class SearchMatchScheduleActivity : AppCompatActivity(), MatchView {
 
             searchScheduleSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    // todo: tinggal panggil presenter
                     searchResultMatchPresenter.getSearchMatchInfo(query!!)
                     return true
                 }
@@ -100,18 +100,19 @@ class SearchMatchScheduleActivity : AppCompatActivity(), MatchView {
 
     override fun dataIsLoading() {
         search_match_progress_bar.visible()
-        error_data_text.gone()
+        search_match_error_data_text.gone()
         rv_search_match_schedule.invisible()
     }
 
     override fun dataLoadingFinished() {
+        // todo: tinggal cek connectivity thing
         if(searchResultMatches.size == 0) {
             rv_search_match_schedule.invisible()
-            error_data_text.visible()
+            search_match_error_data_text.visible()
             search_match_progress_bar.gone()
         } else {
             rv_search_match_schedule.visible()
-            error_data_text.gone()
+            search_match_error_data_text.gone()
             search_match_progress_bar.gone()
         }
     }

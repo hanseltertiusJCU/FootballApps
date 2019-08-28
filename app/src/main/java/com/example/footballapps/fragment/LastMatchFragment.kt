@@ -56,7 +56,7 @@ class LastMatchFragment : Fragment(), MatchView {
         return UI {
             constraintLayout {
                 id = R.id.last_match_parent_layout
-                lparams(width = matchParent, height = wrapContent)
+                lparams(width = matchParent, height = matchParent)
 
                 lastMatchLeagueSpinner = spinner {
                     id = R.id.last_match_league_spinner
@@ -97,8 +97,6 @@ class LastMatchFragment : Fragment(), MatchView {
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        activity?.actionBar?.title = "Last Match"
 
         initData()
     }
