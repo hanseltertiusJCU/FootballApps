@@ -153,4 +153,6 @@ class MatchPresenter(private val matchView: MatchView) {
 
         })
     }
+
+    // todo: tinggal pake home and away team badge function thing
 }

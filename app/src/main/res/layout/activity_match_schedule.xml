@@ -25,7 +25,7 @@
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
             <com.google.android.material.tabs.TabLayout
-                android:id="@+id/layout_tab_match_schedule"
+                android:id="@+id/tab_layout_match_schedule"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:tabGravity="fill"

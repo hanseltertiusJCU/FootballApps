@@ -13,15 +13,17 @@ import com.example.footballapps.R
 import com.example.footballapps.adapter.MatchViewPagerAdapter
 import com.example.footballapps.fragment.LastMatchFragment
 import com.example.footballapps.fragment.NextMatchFragment
+import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_match_schedule.*
 import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.support.v4.onPageChangeListener
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class MatchScheduleActivity : AppCompatActivity() {
 
     lateinit var leagueName: String
     lateinit var leagueId: String
+
+    private val matchViewPagerAdapter = MatchViewPagerAdapter(supportFragmentManager)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,15 +40,43 @@ class MatchScheduleActivity : AppCompatActivity() {
 
         setupViewPager(view_pager_match_schedule)
 
-        layout_tab_match_schedule.setupWithViewPager(view_pager_match_schedule)
+        tab_layout_match_schedule.setupWithViewPager(view_pager_match_schedule)
 
     }
 
     private fun setupViewPager(viewPager: ViewPager) {
-        val matchViewPagerAdapter = MatchViewPagerAdapter(supportFragmentManager)
         matchViewPagerAdapter.addFragment(LastMatchFragment(), "Last Match")
         matchViewPagerAdapter.addFragment(NextMatchFragment(), "Next Match")
         viewPager.adapter = matchViewPagerAdapter
+
+        setListener()
+    }
+
+    private fun setListener(){
+
+        view_pager_match_schedule.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tab_layout_match_schedule))
+
+        tab_layout_match_schedule.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when(tab?.position) {
+                    1 -> {
+                        view_pager_match_schedule.currentItem = 1
+                        supportActionBar?.title = matchViewPagerAdapter.getPageTitle(1)
+                    }
+                    else -> {
+                        view_pager_match_schedule.currentItem = 0
+                        supportActionBar?.title = matchViewPagerAdapter.getPageTitle(0)
+                    }
+
+                }
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
