@@ -111,6 +111,10 @@ data class MatchItem(
     var awayTeamYellowCards : String?,
     @SerializedName("strAwayRedCards")
     var awayTeamRedCards : String?,
+    @SerializedName("intHomeShots")
+    var homeTeamShots : String?,
+    @SerializedName("intAwayShots")
+    var awayTeamShots : String?,
     @SerializedName("strHomeFormation")
     var homeTeamFormation : String?,
     @SerializedName("strHomeLineupGoalkeeper")

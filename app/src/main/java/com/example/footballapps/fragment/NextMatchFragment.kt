@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.footballapps.R
+import com.example.footballapps.activity.MatchDetailActivity
 import com.example.footballapps.activity.MatchScheduleActivity
 import com.example.footballapps.adapter.MatchRecyclerViewAdapter
 import com.example.footballapps.model.LeagueOption
@@ -28,6 +29,7 @@ import org.jetbrains.anko.constraint.layout.matchConstraint
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.onRefresh
+import org.jetbrains.anko.support.v4.startActivity
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 
 class NextMatchFragment : Fragment(), MatchView {
@@ -108,7 +110,9 @@ class NextMatchFragment : Fragment(), MatchView {
         val spinnerAdapter = ArrayAdapter(activity!!.applicationContext, android.R.layout.simple_spinner_dropdown_item, leagueOptions)
         nextMatchLeagueSpinner.adapter = spinnerAdapter
 
-        nextMatchRvAdapter = MatchRecyclerViewAdapter(context!!, nextMatches)
+        nextMatchRvAdapter = MatchRecyclerViewAdapter(context!!, nextMatches){
+            startActivity<MatchDetailActivity>("eventId" to it.idEvent, "eventName" to it.strEvent)
+        }
         nextMatchRecyclerView.adapter = nextMatchRvAdapter
 
         nextMatchPresenter = MatchPresenter(this)

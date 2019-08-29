@@ -24,10 +24,8 @@ import org.jetbrains.anko.cardview.v7.cardView
 class LeagueRecyclerViewAdapter(private val leagueItems : List<LeagueItem>, private val clickListener : (LeagueItem) -> Unit) :
     RecyclerView.Adapter<LeagueRecyclerViewAdapter.ViewHolder>(){
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(LeagueItemListUI().createView(AnkoContext.Companion.create(parent.context, parent)))
-
 
     override fun getItemCount(): Int = leagueItems.size
 

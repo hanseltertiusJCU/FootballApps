@@ -87,4 +87,13 @@
     <string name="forwards">Forwards</string>
     <string name="away_team_forwards">Away Team Forwards</string>
 
+    <!-- Unknown data -->
+    <string name="match_week_unknown">Week Unknown</string>
+    <string name="spectators_unknown">Spectators : Unknown</string>
+    <string name="home_team_unknown">Unknown Home Team Name</string>
+    <string name="away_team_unknown">Unknown Away Team Name</string>
+    <string name="league_unknown">Unknown League</string>
+    <string name="date_unknown">Unknown Date</string>
+    <string name="time_unknown">Unknown Time</string>
+
 </resources>

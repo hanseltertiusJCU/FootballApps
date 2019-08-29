@@ -138,17 +138,7 @@ class MatchPresenter(private val matchView: MatchView) {
 
                     val matches = data?.events
 
-                    // todo: keep this or modify this
-                    val detailMatchList = mutableListOf<MatchItem>()
-
-                    for(i in matches!!.indices) {
-                        if(i == 0) {
-                            detailMatchList.add(matches[i])
-                            break
-                        }
-                    }
-
-                    matchView.showMatchData(detailMatchList)
+                    matchView.showMatchData(matches!!)
 
                     matchView.dataLoadingFinished()
                 }
