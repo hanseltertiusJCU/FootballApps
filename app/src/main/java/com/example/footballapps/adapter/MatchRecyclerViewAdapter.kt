@@ -2,7 +2,6 @@ package com.example.footballapps.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -80,6 +79,7 @@ class MatchRecyclerViewAdapter(private val context : Context, private val matchL
         }
 
         private fun formatTime(stringValue: String?) : String {
+            // 00:00:00 is the placeholder for unknown time
             return if(stringValue != null && stringValue.isNotEmpty() && stringValue != "00:00:00") {
                 val timeFormat = SimpleDateFormat("HH:mm")
                 val timeInDate : Date = timeFormat.parse(stringValue)
@@ -103,12 +103,10 @@ class MatchRecyclerViewAdapter(private val context : Context, private val matchL
                 val dateTime = dateTimeFormat.parse(dateTimeStr)
                 dateTimeFormat.timeZone = TimeZone.getDefault()
                 val localTimeDtFormat = dateTimeFormat.format(dateTime)
-                Log.d("local date time", localTimeDtFormat)
                 localTimeArray = localTimeDtFormat.split(",")
 
             } else {
                 val localTimeDtFormat = "$date,$time"
-                Log.d("local date time", localTimeDtFormat)
                 localTimeArray = localTimeDtFormat.split(",")
             }
 

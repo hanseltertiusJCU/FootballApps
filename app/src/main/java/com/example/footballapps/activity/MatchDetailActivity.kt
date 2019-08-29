@@ -1,5 +1,6 @@
 package com.example.footballapps.activity
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
@@ -9,6 +10,7 @@ import android.util.Log
 import android.view.MenuItem
 import androidx.core.content.res.ResourcesCompat
 import com.example.footballapps.R
+import com.example.footballapps.adapter.MatchRecyclerViewAdapter
 import com.example.footballapps.model.MatchItem
 import com.example.footballapps.presenter.MatchPresenter
 import com.example.footballapps.utils.gone
@@ -18,8 +20,11 @@ import com.example.footballapps.view.MatchView
 import kotlinx.android.synthetic.main.activity_match_detail.*
 import kotlinx.android.synthetic.main.activity_search_match_schedule.*
 import java.lang.StringBuilder
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+@SuppressLint("SimpleDateFormat")
 class MatchDetailActivity : AppCompatActivity(), MatchView {
 
     lateinit var eventId : String
@@ -86,9 +91,10 @@ class MatchDetailActivity : AppCompatActivity(), MatchView {
                     else -> resources.getString(R.string.match_week_unknown)
                 }
 
-                // todo: date event dan time event itu di bikin functionnya aja kali ya
-                match_detail_event_date.text = matchList[i].dateEvent
-                match_detail_event_time.text = matchList[i].timeEvent
+                val arrayLocalTimeDt = convertDateTimeToLocalTimeZone(formatDate(matchList[i].dateEvent), formatTime(matchList[i].timeEvent))
+
+                match_detail_event_date.text = arrayLocalTimeDt[0]
+                match_detail_event_time.text = arrayLocalTimeDt[1]
 
                 match_detail_home_team_name.text = matchList[i].homeTeamName ?: "-"
                 match_detail_home_team_score.text = matchList[i].homeTeamScore ?: "-"
@@ -154,7 +160,57 @@ class MatchDetailActivity : AppCompatActivity(), MatchView {
             return "-"
         }
 
+    }
 
+    private fun formatDate(stringValue : String?) : String {
+        return if(stringValue != null && stringValue.isNotEmpty()) {
+            val oldDateFormat = SimpleDateFormat("yyyy-MM-dd")
+            val newDateFormat = SimpleDateFormat("dd MMM yyyy")
+            val date : Date = oldDateFormat.parse(stringValue)
+            val formattedDateEvent = newDateFormat.format(date)
+
+            formattedDateEvent
+        } else {
+            MatchRecyclerViewAdapter.MatchViewHolder.dateUnknown
+        }
+    }
+
+    private fun formatTime(stringValue: String?) : String {
+        // 00:00:00 is the placeholder for unknown time
+        return if(stringValue != null && stringValue.isNotEmpty() && stringValue != "00:00:00") {
+            val timeFormat = SimpleDateFormat("HH:mm")
+            val timeInDate : Date = timeFormat.parse(stringValue)
+            val formattedTimeEvent = timeFormat.format(timeInDate)
+
+            formattedTimeEvent
+        } else {
+            MatchRecyclerViewAdapter.MatchViewHolder.timeUnknown
+        }
+    }
+
+    private fun convertDateTimeToLocalTimeZone(date : String, time : String) : List<String>{
+
+        lateinit var localTimeArray : List<String>
+
+        if(date != MatchRecyclerViewAdapter.MatchViewHolder.dateUnknown &&
+            time != MatchRecyclerViewAdapter.MatchViewHolder.timeUnknown
+        ){
+            val dateTimeStr = "$date,$time"
+            val dateTimeFormat = SimpleDateFormat("dd MMM yyyy,HH:mm", Locale.ENGLISH)
+            dateTimeFormat.timeZone = TimeZone.getTimeZone("UTC")
+            val dateTime = dateTimeFormat.parse(dateTimeStr)
+            dateTimeFormat.timeZone = TimeZone.getDefault()
+            val localTimeDtFormat = dateTimeFormat.format(dateTime)
+            Log.d("local date time", localTimeDtFormat)
+            localTimeArray = localTimeDtFormat.split(",")
+
+        } else {
+            val localTimeDtFormat = "$date,$time"
+            Log.d("local date time", localTimeDtFormat)
+            localTimeArray = localTimeDtFormat.split(",")
+        }
+
+        return localTimeArray
     }
 
 //    private fun isOnline() : Boolean {
