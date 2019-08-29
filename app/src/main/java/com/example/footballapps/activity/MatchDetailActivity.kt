@@ -77,7 +77,6 @@ class MatchDetailActivity : AppCompatActivity(), MatchView {
     }
 
     override fun showMatchData(matchList: List<MatchItem>) {
-        // todo: tinggal kasih liat info2nya gmn
         match_detail_swipe_refresh_layout.isRefreshing = false
         for(i in matchList.indices) {
             if(i == 0){

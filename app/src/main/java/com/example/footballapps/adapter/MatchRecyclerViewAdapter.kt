@@ -2,13 +2,13 @@ package com.example.footballapps.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.Resources
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.footballapps.R
+import com.example.footballapps.application.FootballApps
 import com.example.footballapps.model.MatchItem
 import kotlinx.android.synthetic.main.item_match_data.view.*
 import java.lang.StringBuilder
@@ -31,31 +31,40 @@ class MatchRecyclerViewAdapter(private val context : Context, private val matchL
     @SuppressLint("SimpleDateFormat")
     class MatchViewHolder(view : View) : RecyclerView.ViewHolder(view) {
 
+        companion object {
+            val leagueNameUnknown = FootballApps.res.getString(R.string.league_unknown)
+            val matchWeekUnknown = FootballApps.res.getString(R.string.match_week_unknown)
+            val homeTeamNameUnknown = FootballApps.res.getString(R.string.home_team_unknown)
+            val awayTeamNameUnknown = FootballApps.res.getString(R.string.away_team_unknown)
+            val dateUnknown = FootballApps.res.getString(R.string.date_unknown)
+            val timeUnknown = FootballApps.res.getString(R.string.time_unknown)
+        }
+
         fun bindItem(matchItem : MatchItem, clickListener : (MatchItem) -> Unit) {
-            itemView.league_item_name.text = matchItem.leagueName ?: Resources.getSystem().getString(R.string.league_unknown)
+            itemView.league_item_name.text = matchItem.leagueName ?: leagueNameUnknown
             itemView.league_item_match_week.text = when {
                 matchItem.leagueMatchWeek != null -> StringBuilder("Week ${matchItem.leagueMatchWeek}")
-                else -> Resources.getSystem().getString(R.string.match_week_unknown)
+                else -> matchWeekUnknown
             }
 
-            itemView.league_item_event_date.text = formatDate(matchItem.dateEvent)
+            val arrayLocalTimeDt = convertDateTimeToLocalTimeZone(formatDate(matchItem.dateEvent), formatTime(matchItem.timeEvent))
 
-            itemView.league_item_event_time.text = formatTime(matchItem.timeEvent)
+            itemView.league_item_event_date.text = arrayLocalTimeDt[0]
 
-            itemView.league_item_home_team_name.text = matchItem.homeTeamName ?: Resources.getSystem().getString(R.string.home_team_unknown)
+            itemView.league_item_event_time.text = arrayLocalTimeDt[1]
+
+            itemView.league_item_home_team_name.text = matchItem.homeTeamName ?: homeTeamNameUnknown
 
             itemView.league_item_home_team_score.text = matchItem.homeTeamScore ?: "-"
 
             itemView.league_item_away_team_score.text = matchItem.awayTeamScore ?: "-"
 
-            itemView.league_item_away_team_name.text = matchItem.awayTeamName ?: Resources.getSystem().getString(R.string.away_team_unknown)
+            itemView.league_item_away_team_name.text = matchItem.awayTeamName ?: awayTeamNameUnknown
 
             itemView.setOnClickListener {
                 clickListener(matchItem)
             }
         }
-
-        // todo: mesti di gabungin string date sm time, trus di format abis itu d split
 
         private fun formatDate(stringValue : String?) : String {
             return if(stringValue != null && stringValue.isNotEmpty()) {
@@ -66,25 +75,47 @@ class MatchRecyclerViewAdapter(private val context : Context, private val matchL
 
                 formattedDateEvent
             } else {
-                Resources.getSystem().getString(R.string.date_unknown)
+                dateUnknown
             }
         }
 
         private fun formatTime(stringValue: String?) : String {
-            return if(stringValue != null && stringValue.isNotEmpty()) {
+            return if(stringValue != null && stringValue.isNotEmpty() && stringValue != "00:00:00") {
                 val timeFormat = SimpleDateFormat("HH:mm")
-                timeFormat.timeZone = TimeZone.getTimeZone("UTC")
                 val timeInDate : Date = timeFormat.parse(stringValue)
-                timeFormat.timeZone = TimeZone.getDefault()
                 val formattedTimeEvent = timeFormat.format(timeInDate)
 
                 formattedTimeEvent
             } else {
-                Resources.getSystem().getString(R.string.time_unknown)
+                timeUnknown
             }
         }
 
-        // todo: sebenarnya bisa d bikin date and time abis itu di split into 2 parts, date and time agar bisa di mainin d text value thing
+        private fun convertDateTimeToLocalTimeZone(date : String, time : String) : List<String>{
+
+            lateinit var localTimeArray : List<String>
+
+            if(date != dateUnknown &&
+                time != timeUnknown){
+                val dateTimeStr = "$date,$time"
+                val dateTimeFormat = SimpleDateFormat("dd MMM yyyy,HH:mm", Locale.ENGLISH)
+                dateTimeFormat.timeZone = TimeZone.getTimeZone("UTC")
+                val dateTime = dateTimeFormat.parse(dateTimeStr)
+                dateTimeFormat.timeZone = TimeZone.getDefault()
+                val localTimeDtFormat = dateTimeFormat.format(dateTime)
+                Log.d("local date time", localTimeDtFormat)
+                localTimeArray = localTimeDtFormat.split(",")
+
+            } else {
+                val localTimeDtFormat = "$date,$time"
+                Log.d("local date time", localTimeDtFormat)
+                localTimeArray = localTimeDtFormat.split(",")
+            }
+
+            return localTimeArray
+        }
+
+
     }
 
 
