@@ -19,6 +19,8 @@ import com.example.footballapps.utils.visible
 import com.example.footballapps.view.MatchView
 import kotlinx.android.synthetic.main.activity_search_match_schedule.*
 import org.jetbrains.anko.startActivity
+import java.io.IOException
+
 
 class SearchMatchScheduleActivity : AppCompatActivity(), MatchView {
 
@@ -26,6 +28,8 @@ class SearchMatchScheduleActivity : AppCompatActivity(), MatchView {
 
     private var searchResultMatches : MutableList<MatchItem> = mutableListOf()
     private lateinit var searchResultMatchRvAdapter : MatchRecyclerViewAdapter
+
+    private var isDataLoading = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,7 +89,9 @@ class SearchMatchScheduleActivity : AppCompatActivity(), MatchView {
 
             searchScheduleSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    searchResultMatchPresenter.getSearchMatchInfo(query!!)
+                    if(!isDataLoading){
+                        searchResultMatchPresenter.getSearchMatchInfo(query!!)
+                    }
                     return true
                 }
 
@@ -102,22 +108,58 @@ class SearchMatchScheduleActivity : AppCompatActivity(), MatchView {
     }
 
     override fun dataIsLoading() {
+        isDataLoading = true
         search_match_progress_bar.visible()
         search_match_error_data_text.gone()
         rv_search_match_schedule.invisible()
     }
 
     override fun dataLoadingFinished() {
-        // todo: tinggal cek connectivity thing
-        if(searchResultMatches.size == 0) {
+        val isConnected = checkDeviceIsConnected()
+        if(isConnected) {
+            when {
+                searchResultMatches.size == 0 -> {
+                    rv_search_match_schedule.invisible()
+                    search_match_error_data_text.visible()
+                    search_match_progress_bar.gone()
+
+                    search_match_error_data_text.text = resources.getString(R.string.no_data_to_show)
+
+                    isDataLoading = false
+                }
+                else -> {
+                    rv_search_match_schedule.visible()
+                    search_match_error_data_text.gone()
+                    search_match_progress_bar.gone()
+
+                    isDataLoading = false
+                }
+            }
+        } else {
             rv_search_match_schedule.invisible()
             search_match_error_data_text.visible()
             search_match_progress_bar.gone()
-        } else {
-            rv_search_match_schedule.visible()
-            search_match_error_data_text.gone()
-            search_match_progress_bar.gone()
+
+            search_match_error_data_text.text = resources.getString(R.string.no_internet_connection)
+
+            isDataLoading = false
         }
+
+    }
+
+    private fun checkDeviceIsConnected(): Boolean {
+        val runtime = Runtime.getRuntime()
+        try {
+            val ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8")
+            val exitValue = ipProcess.waitFor()
+            return exitValue == 0
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
+
+        return false
     }
 
     override fun showMatchData(matchList: List<MatchItem>) {
