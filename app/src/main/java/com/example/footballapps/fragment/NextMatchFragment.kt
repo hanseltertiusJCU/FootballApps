@@ -1,5 +1,6 @@
 package com.example.footballapps.fragment
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -86,7 +87,9 @@ class NextMatchFragment : Fragment(), MatchView {
                         bottomToBottom = R.id.next_match_parent_layout
                     }
 
-                nextMatchErrorText = textView().lparams{
+                nextMatchErrorText = textView{
+                    textColor = Color.BLACK
+                }.lparams{
                     topToTop = R.id.next_match_parent_layout
                     leftToLeft = R.id.next_match_parent_layout
                     rightToRight = R.id.next_match_parent_layout

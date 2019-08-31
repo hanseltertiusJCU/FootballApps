@@ -28,6 +28,7 @@
                 android:id="@+id/league_item_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                style="@style/text_content"
                 android:text="@string/league_name" />
 
             <TextView
@@ -36,6 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/league_item_name"
                 android:layout_marginTop="8dp"
+                style="@style/text_content"
                 android:text="@string/league_match_week" />
 
             <TextView
@@ -43,6 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                style="@style/text_content"
                 android:text="@string/event_date" />
 
             <TextView
@@ -52,6 +55,7 @@
                 android:layout_below="@id/league_item_event_date"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="8dp"
+                style="@style/text_content"
                 android:text="@string/event_time" />
 
         </RelativeLayout>
@@ -69,6 +73,7 @@
                 android:gravity="start"
                 android:layout_alignParentStart="true"
                 android:layout_toStartOf="@id/layout_score"
+                style="@style/text_content"
                 android:text="@string/home_team_name" />
 
             <LinearLayout
@@ -85,7 +90,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/no_score"
-                    android:textSize="24sp"
+                    style="@style/text_score"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/league_item_home_team_name" />
 
@@ -97,6 +102,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:text="@string/versus"
+                    style="@style/text_score"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/league_item_home_team_score" />
 
@@ -105,7 +111,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/no_score"
-                    android:textSize="24sp"
+                    style="@style/text_score"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/league_item_versus" />
 
@@ -118,6 +124,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/layout_score"
                 android:gravity="end"
+                style="@style/text_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:text="@string/away_team_name" />

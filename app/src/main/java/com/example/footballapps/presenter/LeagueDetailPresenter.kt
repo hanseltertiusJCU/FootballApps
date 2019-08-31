@@ -10,19 +10,15 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class LeagueDetailPresenter(private val leagueDetailView : LeagueDetailView, private val leagueItem : LeagueItem){
+class LeagueDetailPresenter(private val leagueDetailView : LeagueDetailView){
 
-    fun getLeagueDetailTitle(){
-        leagueDetailView.showLeagueDetailTitle(leagueItem)
-    }
-
-    fun getLeagueDetailInfo(){
+    fun getLeagueDetailInfo(leagueId : String){
         leagueDetailView.dataIsLoading()
 
         val retrofitClient = RetrofitClient()
         val retrofit = retrofitClient.getClient()
         val leagueDetailService = retrofit?.create(LeagueDetailService::class.java)
-        val call : Call<LeagueDetailResponse> = leagueDetailService?.getLeagueDetailResponse(leagueItem.leagueId!!)!!
+        val call : Call<LeagueDetailResponse> = leagueDetailService?.getLeagueDetailResponse(leagueId)!!
 
         call.enqueue(object : Callback<LeagueDetailResponse>{
 

@@ -23,6 +23,7 @@ import com.example.footballapps.view.LeagueDetailView
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.constraint.layout.constraintLayout
+import org.jetbrains.anko.custom.style
 import org.jetbrains.anko.design.coordinatorLayout
 import org.jetbrains.anko.design.themedAppBarLayout
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
@@ -31,8 +32,8 @@ import org.jetbrains.anko.support.v4.swipeRefreshLayout
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
 
-    // todo: i think we dont need league item to there, just league id and league name
-    private lateinit var leagueItem : LeagueItem
+    private lateinit var leagueName : String
+    private lateinit var leagueId : String
 
     private lateinit var tvLeagueDetailName : TextView
     private lateinit var ivLeagueDetailImage : ImageView
@@ -130,7 +131,9 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
                         bottomToBottom = R.id.container_layout_league_detail
                     }
 
-                    leagueDetailErrorDataText = textView().lparams{
+                    leagueDetailErrorDataText = textView{
+                        textColor = Color.BLACK
+                    }.lparams{
                         topToTop = R.id.container_layout_league_detail
                         startToStart = R.id.container_layout_league_detail
                         endToEnd = R.id.container_layout_league_detail
@@ -146,16 +149,17 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
 
     private fun initData() {
         val intent = intent
-        leagueItem = intent.getParcelableExtra("leagueItem")
+        leagueName = intent.getStringExtra("leagueName")
+        leagueId = intent.getStringExtra("leagueId")
 
-        leagueDetailPresenter = LeagueDetailPresenter(this, leagueItem)
+        setToolbarBehavior()
 
-        leagueDetailPresenter.getLeagueDetailTitle()
+        leagueDetailPresenter = LeagueDetailPresenter(this)
 
-        leagueDetailPresenter.getLeagueDetailInfo()
+        leagueDetailPresenter.getLeagueDetailInfo(leagueId)
 
         leagueDetailSwipeRefreshLayout.setOnRefreshListener {
-            leagueDetailPresenter.getLeagueDetailInfo()
+            leagueDetailPresenter.getLeagueDetailInfo(leagueId)
         }
 
     }
@@ -184,6 +188,12 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
         setSupportActionBar(toolbarLeagueDetail)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = leagueItem.leagueName
+    }
+
+    fun setToolbarBehavior(){
+        setSupportActionBar(toolbarLeagueDetail)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = leagueName
     }
 
     override fun showLeagueDetailInfo(leagueDetailItemList: List<LeagueDetailItem>) {

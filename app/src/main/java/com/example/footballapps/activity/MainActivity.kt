@@ -80,7 +80,8 @@ class MainActivity : AppCompatActivity(), MainView {
                 val options = listOf("Go to League Detail Info", "Go to League Match Info")
                 selector("Where do you want to go to?", options) { _, i ->
                     if(i == 0) {
-                        startActivity<LeagueDetailActivity>("leagueItem" to leagueItem)
+                        // todo: tinggal pake league id dan juga event name
+                        startActivity<LeagueDetailActivity>("leagueName" to leagueItem.leagueName, "leagueId" to leagueItem.leagueId)
                     } else {
                         startActivity<MatchScheduleActivity>("leagueName" to leagueItem.leagueName, "leagueId" to leagueItem.leagueId)
                     }
@@ -92,7 +93,7 @@ class MainActivity : AppCompatActivity(), MainView {
         mainActivityUI.recyclerViewLeagueList.addItemDecoration(
             GridSpacingItemDecoration(
                 spanCount = spanCount,
-                space = convertDpToPx(8f),
+                space = convertDpToPx(16f),
                 includeEdge = includeEdge
             )
         )
