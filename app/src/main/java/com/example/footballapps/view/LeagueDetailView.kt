@@ -8,5 +8,5 @@ interface LeagueDetailView {
     fun dataLoadingFinished()
     fun dataFailedToLoad()
     fun showLeagueDetailTitle(leagueItem : LeagueItem)
-    fun showLeagueDetailInfo(leagueDetailItemList : List<LeagueDetailItem>)
+    fun showLeagueDetailInfo(leagueDetailItem : LeagueDetailItem)
 }

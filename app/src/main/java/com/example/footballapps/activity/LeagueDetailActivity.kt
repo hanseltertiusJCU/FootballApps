@@ -196,21 +196,14 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
         supportActionBar?.title = leagueName
     }
 
-    override fun showLeagueDetailInfo(leagueDetailItemList: List<LeagueDetailItem>) {
-        for(i in leagueDetailItemList.indices) {
-            if(i == 0) {
-                tvLeagueDetailName.text = leagueDetailItemList[i].leagueName
-                tvLeagueDetailDesc.text = leagueDetailItemList[i].leagueDescription
+    override fun showLeagueDetailInfo(leagueDetailItem: LeagueDetailItem) {
+        tvLeagueDetailName.text = leagueDetailItem.leagueName
+        tvLeagueDetailDesc.text = leagueDetailItem.leagueDescription
 
-                Glide.with(applicationContext)
-                    .load(leagueDetailItemList[i].leagueBadge)
-                    .placeholder(R.drawable.empty_league_image_info)
-                    .into(ivLeagueDetailImage)
-
-                break
-            }
-        }
-
+        Glide.with(applicationContext)
+            .load(leagueDetailItem.leagueBadge)
+            .placeholder(R.drawable.empty_league_image_info)
+            .into(ivLeagueDetailImage)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

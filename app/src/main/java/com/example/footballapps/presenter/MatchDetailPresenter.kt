@@ -25,20 +25,20 @@ class MatchDetailPresenter(private val matchDetailView: MatchDetailView) {
         val matchService = retrofit?.create(MatchService::class.java)
         val teamService = retrofit?.create(TeamService::class.java)
 
-        val matchResponseObservable: Observable<MatchResponse> = matchService
-            ?.getDetailMatchResponse(eventId)!!
-            .subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
+        val matchResponseObservable: Observable<MatchResponse>? = matchService
+            ?.getDetailMatchResponse(eventId)
+            ?.subscribeOn(Schedulers.newThread())
+            ?.observeOn(AndroidSchedulers.mainThread())
 
-        val homeTeamResponseObservable: Observable<TeamResponse> = teamService
-            ?.getTeamResponse(homeTeamId)!!
-            .subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
+        val homeTeamResponseObservable: Observable<TeamResponse>? = teamService
+            ?.getTeamResponse(homeTeamId)
+            ?.subscribeOn(Schedulers.newThread())
+            ?.observeOn(AndroidSchedulers.mainThread())
 
-        val awayTeamResponseObservable: Observable<TeamResponse> = teamService
-            .getTeamResponse(awayTeamId)
-            .subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
+        val awayTeamResponseObservable: Observable<TeamResponse>? = teamService
+            ?.getTeamResponse(awayTeamId)
+            ?.subscribeOn(Schedulers.newThread())
+            ?.observeOn(AndroidSchedulers.mainThread())
 
         val combinedMatchTeamsObservable: Observable<CombinedMatchTeamsResponse> = Observable.zip(
             matchResponseObservable,
@@ -57,21 +57,29 @@ class MatchDetailPresenter(private val matchDetailView: MatchDetailView) {
 
             override fun onNext(combinedMatchTeamsResponse: CombinedMatchTeamsResponse) {
                 val matchDetailResponse = combinedMatchTeamsResponse.matchDetailResponse
-                val matchDetail = matchDetailResponse.events.first()
+                val matchDetail = matchDetailResponse.events?.first()
 
-                matchDetailView.showMatchData(matchDetail)
+                if(matchDetail != null){
+                    matchDetailView.showMatchData(matchDetail)
 
-                val homeTeamResponse = combinedMatchTeamsResponse.homeTeamResponse
-                val homeTeam = homeTeamResponse.teams.first()
+                    val homeTeamResponse = combinedMatchTeamsResponse.homeTeamResponse
+                    val homeTeam = homeTeamResponse.teams?.first()
 
-                matchDetailView.showHomeTeamBadge(homeTeam.teamBadge)
+                    if(homeTeam?.teamBadge != null){
+                        matchDetailView.showHomeTeamBadge(homeTeam.teamBadge)
+                    }
 
-                val awayTeamResponse = combinedMatchTeamsResponse.awayTeamResponse
-                val awayTeam = awayTeamResponse.teams.first()
+                    val awayTeamResponse = combinedMatchTeamsResponse.awayTeamResponse
+                    val awayTeam = awayTeamResponse.teams?.first()
 
-                matchDetailView.showAwayTeamBadge(awayTeam.teamBadge)
+                    if(awayTeam?.teamBadge != null){
+                        matchDetailView.showAwayTeamBadge(awayTeam.teamBadge)
+                    }
 
-                matchDetailView.dataLoadingFinished()
+                    matchDetailView.dataLoadingFinished()
+                } else {
+                    matchDetailView.dataFailedToLoad()
+                }
 
             }
 

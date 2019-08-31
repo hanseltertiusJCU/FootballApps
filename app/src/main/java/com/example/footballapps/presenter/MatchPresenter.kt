@@ -26,30 +26,35 @@ class MatchPresenter(private val matchView: MatchView) {
         val retrofitClient = RetrofitClient()
         val retrofit = retrofitClient.getClient()
         val matchService = retrofit?.create(MatchService::class.java)
-        val call: Call<MatchResponse> = matchService?.getNextMatchResponse(leagueId)!!
 
-        call.enqueue(object : Callback<MatchResponse> {
+        val nextMatchResponseObservable : Observable<MatchResponse>? = matchService
+            ?.getNextMatchResponse(leagueId)
+            ?.subscribeOn(Schedulers.newThread())
+            ?.observeOn(AndroidSchedulers.mainThread())
 
-            override fun onResponse(call: Call<MatchResponse>, response: Response<MatchResponse>) {
-                if (response.isSuccessful) {
+        nextMatchResponseObservable?.subscribe(object : Observer<MatchResponse> {
+            override fun onComplete() {}
 
-                    val data = response.body()
+            override fun onSubscribe(disposable: Disposable) {}
 
-                    val matches = data?.events
+            override fun onNext(matchResponse: MatchResponse) {
+                val nextMatches = matchResponse.events
 
-                    if(matches != null){
-                        matchView.showMatchData(matches)
-                    }
+                if(nextMatches != null){
+                    matchView.showMatchData(nextMatches)
 
                     matchView.dataLoadingFinished()
+                } else {
+                    matchView.dataFailedToLoad()
                 }
+
+
             }
 
-            override fun onFailure(call: Call<MatchResponse>, error: Throwable) {
+            override fun onError(error: Throwable) {
+                Log.d("nextMatchError", error.message!!)
 
                 matchView.dataFailedToLoad()
-
-                Log.e("errorTag", "Error : ${error.message}")
             }
 
         })
@@ -61,30 +66,35 @@ class MatchPresenter(private val matchView: MatchView) {
         val retrofitClient = RetrofitClient()
         val retrofit = retrofitClient.getClient()
         val matchService = retrofit?.create(MatchService::class.java)
-        val call: Call<MatchResponse> = matchService?.getPastMatchResponse(leagueId)!!
 
-        call.enqueue(object : Callback<MatchResponse> {
+        val previousMatchResponseObservable : Observable<MatchResponse>? = matchService
+            ?.getPastMatchResponse(leagueId)
+            ?.subscribeOn(Schedulers.newThread())
+            ?.observeOn(AndroidSchedulers.mainThread())
 
-            override fun onResponse(call: Call<MatchResponse>, response: Response<MatchResponse>) {
-                if (response.isSuccessful) {
+        previousMatchResponseObservable?.subscribe(object : Observer<MatchResponse>{
+            override fun onComplete() {}
 
-                    val data = response.body()
+            override fun onSubscribe(disposable: Disposable) {}
 
-                    val matches = data?.events
+            override fun onNext(matchResponse: MatchResponse) {
+                val previousMatches = matchResponse.events
 
-                    if(matches != null){
-                        matchView.showMatchData(matches)
-                    }
+                if(previousMatches != null){
+                    matchView.showMatchData(previousMatches)
 
                     matchView.dataLoadingFinished()
+                } else {
+                    matchView.dataFailedToLoad()
                 }
+
+                matchView.dataLoadingFinished()
             }
 
-            override fun onFailure(call: Call<MatchResponse>, error: Throwable) {
+            override fun onError(error: Throwable) {
+                Log.d("previousMatchError", error.message!!)
 
                 matchView.dataFailedToLoad()
-
-                Log.e("errorTag", "Error : ${error.message}")
             }
 
         })
@@ -96,38 +106,40 @@ class MatchPresenter(private val matchView: MatchView) {
         val retrofitClient = RetrofitClient()
         val retrofit = retrofitClient.getClient()
         val matchService = retrofit?.create(MatchService::class.java)
-        val call: Call<MatchResponse> = matchService?.getSearchMatchResponse(query)!!
 
-        call.enqueue(object : Callback<MatchResponse> {
+        val searchMatchResponseObservable : Observable<MatchResponse>? = matchService
+            ?.getSearchMatchResponse(query)
+            ?.subscribeOn(Schedulers.newThread())
+            ?.observeOn(AndroidSchedulers.mainThread())
 
-            override fun onResponse(call: Call<MatchResponse>, response: Response<MatchResponse>) {
-                if (response.isSuccessful) {
+        searchMatchResponseObservable?.subscribe(object : Observer<MatchResponse> {
+            override fun onComplete() {}
 
-                    val data = response.body()
+            override fun onSubscribe(disposable: Disposable) {}
 
-                    val matches = data?.searchResultEvents
+            override fun onNext(matchResponse: MatchResponse) {
 
-                    val filteredMatches = mutableListOf<MatchItem>()
+                val searchResultMatches = matchResponse.searchResultEvents
 
-                    if (matches != null) {
-                        for (match in matches) {
-                            if (match.sportType.equals("Soccer")) {
-                                filteredMatches.add(match)
-                            }
+                val filteredMatches = mutableListOf<MatchItem>()
+
+                if(searchResultMatches != null){
+                    for (match in searchResultMatches) {
+                        if (match.sportType.equals("Soccer")) {
+                            filteredMatches.add(match)
                         }
                     }
-
-                    matchView.showMatchData(filteredMatches)
-
-                    matchView.dataLoadingFinished()
                 }
+
+                matchView.showMatchData(filteredMatches)
+
+                matchView.dataLoadingFinished()
             }
 
-            override fun onFailure(call: Call<MatchResponse>, error: Throwable) {
+            override fun onError(error: Throwable) {
+                Log.d("matchDetailError", error.message!!)
 
                 matchView.dataFailedToLoad()
-
-                Log.e("errorTag", "Error : ${error.message}")
             }
 
         })

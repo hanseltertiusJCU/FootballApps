@@ -7,6 +7,6 @@ interface MatchDetailView {
     fun dataLoadingFinished()
     fun dataFailedToLoad()
     fun showMatchData(matchItem : MatchItem)
-    fun showHomeTeamBadge(homeTeamBadgeUrl : String)
-    fun showAwayTeamBadge(awayTeamBadgeUrl : String)
+    fun showHomeTeamBadge(homeTeamBadgeUrl : String?)
+    fun showAwayTeamBadge(awayTeamBadgeUrl : String?)
 }

@@ -154,7 +154,7 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
         match_detail_away_substitutes.text = createTextFromStringValue(matchItem.awayTeamSubstitutes)
     }
 
-    override fun showHomeTeamBadge(homeTeamBadgeUrl: String) {
+    override fun showHomeTeamBadge(homeTeamBadgeUrl: String?) {
         Glide
             .with(this)
             .load(homeTeamBadgeUrl)
@@ -163,7 +163,7 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
             .into(match_detail_home_team_logo)
     }
 
-    override fun showAwayTeamBadge(awayTeamBadgeUrl: String) {
+    override fun showAwayTeamBadge(awayTeamBadgeUrl: String?) {
         Glide
             .with(this)
             .load(awayTeamBadgeUrl)
