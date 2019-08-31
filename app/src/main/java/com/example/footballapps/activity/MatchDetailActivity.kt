@@ -66,7 +66,7 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
         match_detail_swipe_refresh_layout.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent))
     }
 
-    fun setToolbarBehavior(){
+    private fun setToolbarBehavior(){
         setSupportActionBar(toolbar_detail_match)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = eventName

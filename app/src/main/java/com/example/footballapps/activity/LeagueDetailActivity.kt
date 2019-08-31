@@ -5,8 +5,9 @@ import android.graphics.Typeface
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.util.TypedValue
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
 import android.widget.*
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -23,7 +24,6 @@ import com.example.footballapps.view.LeagueDetailView
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.constraint.layout.constraintLayout
-import org.jetbrains.anko.custom.style
 import org.jetbrains.anko.design.coordinatorLayout
 import org.jetbrains.anko.design.themedAppBarLayout
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
@@ -190,7 +190,7 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
         supportActionBar?.title = leagueItem.leagueName
     }
 
-    fun setToolbarBehavior(){
+    private fun setToolbarBehavior(){
         setSupportActionBar(toolbarLeagueDetail)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = leagueName
@@ -213,9 +213,21 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+
+        val menuInflater: MenuInflater = menuInflater
+        menuInflater.inflate(R.menu.menu_league_detail, menu)
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if(item?.itemId == android.R.id.home){
-            finish()
+        when {
+            item?.itemId == android.R.id.home -> finish()
+            item?.itemId == R.id.action_match_schedule -> {
+                startActivity<MatchScheduleActivity>("leagueName" to leagueName, "leagueId" to leagueId)
+                finish()
+            }
         }
         return super.onOptionsItemSelected(item)
     }

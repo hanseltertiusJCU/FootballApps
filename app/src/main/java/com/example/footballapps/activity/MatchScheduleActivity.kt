@@ -4,6 +4,7 @@ import android.app.SearchManager
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -16,6 +17,8 @@ import com.example.footballapps.fragment.NextMatchFragment
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_match_schedule.*
 import org.jetbrains.anko.startActivity
+import com.example.footballapps.lifecycle.FragmentLifecycle
+
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class MatchScheduleActivity : AppCompatActivity() {
@@ -58,6 +61,8 @@ class MatchScheduleActivity : AppCompatActivity() {
 
         tab_layout_match_schedule.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 
+            var currentPosition = 0
+
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when(tab?.position) {
                     1 -> {
@@ -70,6 +75,17 @@ class MatchScheduleActivity : AppCompatActivity() {
                     }
 
                 }
+
+                val newPosition = tab?.position!!
+
+                val fragmentToShow = matchViewPagerAdapter.getItem(newPosition) as FragmentLifecycle
+                fragmentToShow.onResumeFragment()
+
+                val fragmentToHide = matchViewPagerAdapter.getItem(currentPosition) as FragmentLifecycle
+                fragmentToHide.onPauseFragment()
+
+                currentPosition = newPosition
+
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {}
@@ -82,7 +98,7 @@ class MatchScheduleActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
         val menuInflater: MenuInflater = menuInflater
-        menuInflater.inflate(R.menu.menu_search, menu)
+        menuInflater.inflate(R.menu.menu_match_schedule, menu)
 
         val scheduleSearchItem: MenuItem? = menu!!.findItem(R.id.action_search)
 
@@ -101,11 +117,13 @@ class MatchScheduleActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item?.itemId == android.R.id.home) {
-            finish()
-        } else if (item?.itemId == R.id.action_search) {
-            invalidateOptionsMenu()
-            startActivity<SearchMatchScheduleActivity>()
+        when {
+            item?.itemId == android.R.id.home -> finish()
+            item?.itemId == R.id.action_search -> {
+                invalidateOptionsMenu()
+                startActivity<SearchMatchScheduleActivity>()
+            }
+            item?.itemId == R.id.action_league_detail -> startActivity<LeagueDetailActivity>("leagueName" to leagueName, "leagueId" to leagueId)
         }
         return super.onOptionsItemSelected(item!!)
     }

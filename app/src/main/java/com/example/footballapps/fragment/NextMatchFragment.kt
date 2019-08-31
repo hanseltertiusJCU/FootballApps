@@ -2,6 +2,7 @@ package com.example.footballapps.fragment
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import com.example.footballapps.R
 import com.example.footballapps.activity.MatchDetailActivity
 import com.example.footballapps.activity.MatchScheduleActivity
 import com.example.footballapps.adapter.MatchRecyclerViewAdapter
+import com.example.footballapps.lifecycle.FragmentLifecycle
 import com.example.footballapps.model.LeagueOption
 import com.example.footballapps.model.MatchItem
 import com.example.footballapps.presenter.MatchPresenter
@@ -31,7 +33,7 @@ import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.startActivity
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 
-class NextMatchFragment : Fragment(), MatchView {
+class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
 
     private lateinit var nextMatchRecyclerView : RecyclerView
     private lateinit var nextMatchProgressBar : ProgressBar
@@ -44,8 +46,6 @@ class NextMatchFragment : Fragment(), MatchView {
     private var nextMatches : MutableList<MatchItem> = mutableListOf()
 
     private lateinit var nextMatchRvAdapter : MatchRecyclerViewAdapter
-
-    private lateinit var selectedLeagueId : String
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return UI {
@@ -137,15 +137,17 @@ class NextMatchFragment : Fragment(), MatchView {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedLeagueOption = parent!!.selectedItem as LeagueOption
-                selectedLeagueId = selectedLeagueOption.leagueId
 
-                nextMatchPresenter.getNextMatchInfo(selectedLeagueId)
+                (activity as MatchScheduleActivity).leagueId = selectedLeagueOption.leagueId
+                (activity as MatchScheduleActivity).leagueName = selectedLeagueOption.leagueName
+
+                nextMatchPresenter.getNextMatchInfo((activity as MatchScheduleActivity).leagueId)
             }
 
         }
 
         nextMatchSwipeRefreshLayout.onRefresh {
-            nextMatchPresenter.getNextMatchInfo(selectedLeagueId)
+            nextMatchPresenter.getNextMatchInfo((activity as MatchScheduleActivity).leagueId)
         }
     }
 
@@ -175,5 +177,17 @@ class NextMatchFragment : Fragment(), MatchView {
         nextMatches.clear()
         nextMatches.addAll(matchList)
         nextMatchRvAdapter.notifyDataSetChanged()
+    }
+
+    override fun onPauseFragment() {}
+
+    override fun onResumeFragment() {
+        if(::nextMatchLeagueSpinner.isInitialized){
+            val selectedLeagueOption = nextMatchLeagueSpinner.selectedItem as LeagueOption
+
+            (activity as MatchScheduleActivity).leagueId = selectedLeagueOption.leagueId
+            (activity as MatchScheduleActivity).leagueName = selectedLeagueOption.leagueName
+        }
+
     }
 }

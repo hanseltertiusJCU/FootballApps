@@ -37,7 +37,9 @@ class MatchPresenter(private val matchView: MatchView) {
 
                     val matches = data?.events
 
-                    matchView.showMatchData(matches!!)
+                    if(matches != null){
+                        matchView.showMatchData(matches)
+                    }
 
                     matchView.dataLoadingFinished()
                 }
@@ -70,7 +72,9 @@ class MatchPresenter(private val matchView: MatchView) {
 
                     val matches = data?.events
 
-                    matchView.showMatchData(matches!!)
+                    if(matches != null){
+                        matchView.showMatchData(matches)
+                    }
 
                     matchView.dataLoadingFinished()
                 }

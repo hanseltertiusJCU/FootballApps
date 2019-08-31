@@ -80,7 +80,6 @@ class MainActivity : AppCompatActivity(), MainView {
                 val options = listOf("Go to League Detail Info", "Go to League Match Info")
                 selector("Where do you want to go to?", options) { _, i ->
                     if(i == 0) {
-                        // todo: tinggal pake league id dan juga event name
                         startActivity<LeagueDetailActivity>("leagueName" to leagueItem.leagueName, "leagueId" to leagueItem.leagueId)
                     } else {
                         startActivity<MatchScheduleActivity>("leagueName" to leagueItem.leagueName, "leagueId" to leagueItem.leagueId)

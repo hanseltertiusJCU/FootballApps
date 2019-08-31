@@ -19,8 +19,6 @@ import com.example.footballapps.utils.visible
 import com.example.footballapps.view.MatchView
 import kotlinx.android.synthetic.main.activity_search_match_schedule.*
 import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.support.v4.startActivity
-import java.io.IOException
 
 
 class SearchMatchScheduleActivity : AppCompatActivity(), MatchView {
@@ -61,7 +59,7 @@ class SearchMatchScheduleActivity : AppCompatActivity(), MatchView {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
         val menuInflater : MenuInflater = menuInflater
-        menuInflater.inflate(R.menu.menu_search, menu)
+        menuInflater.inflate(R.menu.menu_search_match_schedule, menu)
 
         val searchScheduleSearchItem : MenuItem? = menu!!.findItem(R.id.action_search)
         searchScheduleSearchItem?.expandActionView()

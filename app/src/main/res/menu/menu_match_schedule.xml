@@ -5,9 +5,15 @@
 
     <item
         android:id="@+id/action_search"
-        android:icon="@drawable/ic_menu_search_white_24dp"
-        app:showAsAction="always|collapseActionView"
+        android:icon="@drawable/ic_menu_search_white"
+        app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         android:title="@string/search"/>
+
+    <item
+        android:id="@+id/action_league_detail"
+        android:icon="@drawable/ic_menu_info_white"
+        app:showAsAction="ifRoom|collapseActionView"
+        android:title="@string/info"/>
 
 </menu>
