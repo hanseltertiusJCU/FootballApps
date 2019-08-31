@@ -79,8 +79,8 @@ class MatchRecyclerViewAdapter(private val context : Context, private val matchL
         }
 
         private fun formatTime(stringValue: String?) : String {
-            // 00:00:00 is the placeholder for unknown time
-            return if(stringValue != null && stringValue.isNotEmpty() && stringValue != "00:00:00") {
+            return if(stringValue != null && stringValue.isNotEmpty()
+                && stringValue != "00:00:00" && stringValue != "23:59:59") {
                 val timeFormat = SimpleDateFormat("HH:mm")
                 val timeInDate : Date = timeFormat.parse(stringValue)
                 val formattedTimeEvent = timeFormat.format(timeInDate)

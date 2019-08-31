@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.example.footballapps.R
@@ -64,6 +65,8 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
         match_detail_swipe_refresh_layout.setOnRefreshListener {
             matchDetailPresenter.getDetailMatchInfo(eventId, homeTeamId, awayTeamId)
         }
+
+        match_detail_swipe_refresh_layout.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -80,19 +83,22 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
     }
 
     override fun dataLoadingFinished() {
+        match_detail_swipe_refresh_layout.isRefreshing = false
         progress_bar_match_detail.gone()
         match_detail_error_data_text.gone()
         layout_match_detail_data.visible()
     }
 
     override fun dataFailedToLoad() {
+        match_detail_swipe_refresh_layout.isRefreshing = false
         progress_bar_match_detail.gone()
         match_detail_error_data_text.visible()
         layout_match_detail_data.invisible()
+
+        match_detail_error_data_text.text = resources.getString(R.string.no_internet_connection)
     }
 
     override fun showMatchData(matchItem: MatchItem) {
-        match_detail_swipe_refresh_layout.isRefreshing = false
         match_detail_league_name.text = matchItem.leagueName ?: "-"
         match_detail_match_week.text = when {
             matchItem.leagueMatchWeek != null -> StringBuilder("Week ${matchItem.leagueMatchWeek}")
@@ -198,8 +204,8 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
     }
 
     private fun formatTime(stringValue: String?) : String {
-        // 00:00:00 is the placeholder for unknown time
-        return if(stringValue != null && stringValue.isNotEmpty() && stringValue != "00:00:00") {
+        return if(stringValue != null && stringValue.isNotEmpty()
+            && stringValue != "00:00:00" && stringValue != "23:59:59") {
             val timeFormat = SimpleDateFormat("HH:mm")
             val timeInDate : Date = timeFormat.parse(stringValue)
             val formattedTimeEvent = timeFormat.format(timeInDate)

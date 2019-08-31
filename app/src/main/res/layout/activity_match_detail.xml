@@ -109,6 +109,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
+                                    android:gravity="center"
                                     android:layout_marginTop="8dp"
                                     android:text="@string/home_team_name" />
 
@@ -177,6 +178,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="8dp"
                                     android:layout_gravity="center"
+                                    android:gravity="center"
                                     android:text="@string/away_team_name" />
 
                             </LinearLayout>
@@ -687,7 +689,7 @@
                                     android:layout_centerVertical="true"
                                     android:layout_toStartOf="@id/match_detail_substitutes"
                                     android:gravity="start"
-                                    android:text="Home Team Substitutes" />
+                                    android:text="@string/home_team_substitutes" />
 
                                 <TextView
                                     android:id="@+id/match_detail_substitutes"
@@ -696,7 +698,7 @@
                                     android:layout_centerInParent="true"
                                     android:layout_marginLeft="8dp"
                                     android:layout_marginRight="8dp"
-                                    android:text="Substitutes" />
+                                    android:text="@string/substitutes" />
 
                                 <TextView
                                     android:id="@+id/match_detail_away_substitutes"
@@ -706,7 +708,7 @@
                                     android:layout_centerVertical="true"
                                     android:layout_toEndOf="@id/match_detail_substitutes"
                                     android:gravity="end"
-                                    android:text="Away Team Substitutes" />
+                                    android:text="@string/away_team_substitutes" />
 
 
                             </RelativeLayout>

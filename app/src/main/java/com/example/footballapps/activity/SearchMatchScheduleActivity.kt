@@ -121,51 +121,33 @@ class SearchMatchScheduleActivity : AppCompatActivity(), MatchView {
     }
 
     override fun dataLoadingFinished() {
-        val isConnected = checkDeviceIsConnected()
-        if(isConnected) {
-            when {
-                searchResultMatches.size == 0 -> {
-                    rv_search_match_schedule.invisible()
-                    search_match_error_data_text.visible()
-                    search_match_progress_bar.gone()
+        when {
+            searchResultMatches.size == 0 -> {
+                rv_search_match_schedule.invisible()
+                search_match_error_data_text.visible()
+                search_match_progress_bar.gone()
 
-                    search_match_error_data_text.text = resources.getString(R.string.no_data_to_show)
+                search_match_error_data_text.text = resources.getString(R.string.no_data_to_show)
 
-                    isDataLoading = false
-                }
-                else -> {
-                    rv_search_match_schedule.visible()
-                    search_match_error_data_text.gone()
-                    search_match_progress_bar.gone()
-
-                    isDataLoading = false
-                }
+                isDataLoading = false
             }
-        } else {
-            rv_search_match_schedule.invisible()
-            search_match_error_data_text.visible()
-            search_match_progress_bar.gone()
+            else -> {
+                rv_search_match_schedule.visible()
+                search_match_error_data_text.gone()
+                search_match_progress_bar.gone()
 
-            search_match_error_data_text.text = resources.getString(R.string.no_internet_connection)
-
-            isDataLoading = false
+                isDataLoading = false
+            }
         }
 
     }
 
-    private fun checkDeviceIsConnected(): Boolean {
-        val runtime = Runtime.getRuntime()
-        try {
-            val ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8")
-            val exitValue = ipProcess.waitFor()
-            return exitValue == 0
-        } catch (e: IOException) {
-            e.printStackTrace()
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        }
+    override fun dataFailedToLoad() {
+        rv_search_match_schedule.invisible()
+        search_match_error_data_text.visible()
+        search_match_progress_bar.gone()
 
-        return false
+        search_match_error_data_text.text = resources.getString(R.string.no_internet_connection)
     }
 
     override fun showMatchData(matchList: List<MatchItem>) {

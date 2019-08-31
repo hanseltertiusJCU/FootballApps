@@ -6,10 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.ProgressBar
-import android.widget.Spinner
+import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -42,6 +40,7 @@ class LastMatchFragment : Fragment(), MatchView {
     private lateinit var lastMatchProgressBar : ProgressBar
     private lateinit var lastMatchSwipeRefreshLayout: SwipeRefreshLayout
     private lateinit var lastMatchLeagueSpinner : Spinner
+    private lateinit var lastMatchErrorText : TextView
 
     private lateinit var lastMatchPresenter: MatchPresenter
 
@@ -70,6 +69,8 @@ class LastMatchFragment : Fragment(), MatchView {
 
                 lastMatchSwipeRefreshLayout = swipeRefreshLayout{
 
+                    setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
+
                     lastMatchRecyclerView = recyclerView {
                         lparams(width = matchParent, height = wrapContent)
                         layoutManager = LinearLayoutManager(context)
@@ -85,13 +86,19 @@ class LastMatchFragment : Fragment(), MatchView {
                     verticalBias = 0f
                 }
 
-                lastMatchProgressBar = progressBar()
-                    .lparams{
+                lastMatchProgressBar = progressBar().lparams{
                         topToTop = R.id.last_match_parent_layout
                         leftToLeft = R.id.last_match_parent_layout
                         rightToRight = R.id.last_match_parent_layout
                         bottomToBottom = R.id.last_match_parent_layout
                     }
+
+                lastMatchErrorText = textView().lparams{
+                    topToTop = R.id.last_match_parent_layout
+                    leftToLeft = R.id.last_match_parent_layout
+                    rightToRight = R.id.last_match_parent_layout
+                    bottomToBottom = R.id.last_match_parent_layout
+                }
 
             }
         }.view
@@ -151,12 +158,24 @@ class LastMatchFragment : Fragment(), MatchView {
 
     override fun dataIsLoading() {
         lastMatchProgressBar.visible()
+        lastMatchErrorText.gone()
         lastMatchRecyclerView.invisible()
     }
 
     override fun dataLoadingFinished() {
+        lastMatchSwipeRefreshLayout.isRefreshing = false
         lastMatchProgressBar.gone()
+        lastMatchErrorText.gone()
         lastMatchRecyclerView.visible()
+    }
+
+    override fun dataFailedToLoad() {
+        lastMatchSwipeRefreshLayout.isRefreshing = false
+        lastMatchProgressBar.gone()
+        lastMatchErrorText.visible()
+        lastMatchRecyclerView.invisible()
+
+        lastMatchErrorText.text = resources.getString(R.string.no_internet_connection)
     }
 
     override fun showMatchData(matchList: List<MatchItem>) {

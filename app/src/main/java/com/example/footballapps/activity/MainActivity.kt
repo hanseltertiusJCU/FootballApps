@@ -20,6 +20,7 @@ import org.jetbrains.anko.constraint.layout.constraintLayout
 import org.jetbrains.anko.design.appBarLayout
 import org.jetbrains.anko.design.coordinatorLayout
 import org.jetbrains.anko.design.snackbar
+import org.jetbrains.anko.design.themedAppBarLayout
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 
 class MainActivity : AppCompatActivity(), MainView {
@@ -122,12 +123,11 @@ class MainActivity : AppCompatActivity(), MainView {
         override fun createView(ui: AnkoContext<MainActivity>): View = with(ui){
 
             coordinatorLayout {
-                appBarLayout{
+                themedAppBarLayout(R.style.ThemeOverlay_AppCompat_Dark_ActionBar){
                     lparams(width = matchParent, height = wrapContent)
                     toolbarMain = toolbar {
                         lparams(width = matchParent, height = dimenAttr(R.attr.actionBarSize))
                         popupTheme = R.style.ThemeOverlay_AppCompat_Light
-                        setTitleTextColor(ContextCompat.getColor(context, android.R.color.white))
                     }
                 }
 

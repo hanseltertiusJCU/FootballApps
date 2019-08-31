@@ -1,44 +1,31 @@
 package com.example.footballapps.activity
 
-import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import android.util.TypedValue
-import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.ScrollView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.example.footballapps.R
-import com.example.footballapps.client.RetrofitClient
 import com.example.footballapps.model.LeagueDetailItem
-import com.example.footballapps.model.LeagueDetailResponse
 import com.example.footballapps.model.LeagueItem
 import com.example.footballapps.presenter.LeagueDetailPresenter
-import com.example.footballapps.service.LeagueDetailService
-import com.example.footballapps.utils.PicassoCircleTransformation
 import com.example.footballapps.utils.gone
 import com.example.footballapps.utils.invisible
 import com.example.footballapps.utils.visible
 import com.example.footballapps.view.LeagueDetailView
-import com.squareup.picasso.Picasso
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
-import org.jetbrains.anko.design.appBarLayout
+import org.jetbrains.anko.constraint.layout.constraintLayout
 import org.jetbrains.anko.design.coordinatorLayout
-import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.design.themedAppBarLayout
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import org.jetbrains.anko.support.v4.swipeRefreshLayout
 
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -52,13 +39,14 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
     private lateinit var tvLeagueDetailDesc : TextView
     private lateinit var tvDescTitle : TextView
 
-    private lateinit var progressBar : ProgressBar
-
     private lateinit var leagueDetailPresenter : LeagueDetailPresenter
 
     private lateinit var leagueDetailScrollView : ScrollView
-
     private lateinit var toolbarLeagueDetail : Toolbar
+    private lateinit var leagueDetailSwipeRefreshLayout : SwipeRefreshLayout
+    private lateinit var leagueDetailLayout: RelativeLayout
+    private lateinit var leagueDetailErrorDataText : TextView
+    private lateinit var leagueDetailProgressBar : ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,72 +58,89 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
     }
 
     private fun initView() {
-
         coordinatorLayout{
-            themedAppBarLayout(R.style.ThemeOverlay_AppCompat_Dark_ActionBar){
-                lparams(width = matchParent, height = wrapContent)
 
-                toolbarLeagueDetail = toolbar {
-                    id = R.id.toolbar_league_detail
-                    lparams(width = matchParent, height = dimenAttr(R.attr.actionBarSize))
-                    setTitleTextColor(ContextCompat.getColor(context, android.R.color.white))
-                    popupTheme = R.style.ThemeOverlay_AppCompat_Light
+            verticalLayout {
+                themedAppBarLayout(R.style.ThemeOverlay_AppCompat_Dark_ActionBar){
+                    lparams(width = matchParent, height = wrapContent)
+
+                    toolbarLeagueDetail = toolbar {
+                        id = R.id.toolbar_league_detail
+                        lparams(width = matchParent, height = dimenAttr(R.attr.actionBarSize))
+                        popupTheme = R.style.ThemeOverlay_AppCompat_Light
+                    }
                 }
-            }
 
-            leagueDetailScrollView = scrollView {
-                relativeLayout {
-                    padding = dip(16)
-                    ivLeagueDetailImage = imageView{
-                        id = R.id.iv_league_detail_image
-                    }.lparams {
-                        width = convertDpToPx(96f)
-                        height = convertDpToPx(96f)
-                        centerHorizontally()
+                constraintLayout {
+                    id = R.id.container_layout_league_detail
+                    leagueDetailSwipeRefreshLayout = swipeRefreshLayout {
+
+                        setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
+
+                        leagueDetailScrollView = scrollView {
+                            leagueDetailLayout = relativeLayout {
+                                padding = dip(16)
+                                ivLeagueDetailImage = imageView{
+                                    id = R.id.iv_league_detail_image
+                                }.lparams {
+                                    width = convertDpToPx(96f)
+                                    height = convertDpToPx(96f)
+                                    centerHorizontally()
+                                }
+
+                                tvLeagueDetailName = textView {
+                                    id = R.id.tv_league_detail_name
+                                    typeface = Typeface.DEFAULT_BOLD
+                                    textSize = 20f
+                                    textColor = Color.BLACK
+                                }.lparams {
+                                    centerHorizontally()
+                                    topMargin = dip(8)
+                                    bottomOf(R.id.iv_league_detail_image)
+                                }
+
+                                tvDescTitle = textView("Description : ") {
+                                    id = R.id.tv_desc_title
+                                    typeface = Typeface.DEFAULT_BOLD
+                                    textSize = 16f
+                                    textColor = Color.BLACK
+                                }.lparams {
+                                    topMargin = dip(8)
+                                    bottomOf(R.id.tv_league_detail_name)
+                                }
+                                tvLeagueDetailDesc = textView {
+                                    id = R.id.tv_league_detail_desc
+                                    textColor = Color.BLACK
+                                }.lparams {
+                                    topMargin = dip(8)
+                                    bottomOf(R.id.tv_desc_title)
+                                }
+                            }
+                        }
                     }
 
-                    tvLeagueDetailName = textView {
-                        id = R.id.tv_league_detail_name
-                        typeface = Typeface.DEFAULT_BOLD
-                        textSize = 20f
-                        textColor = Color.BLACK
-                    }.lparams {
-                        centerHorizontally()
-                        topMargin = dip(8)
-                        bottomOf(R.id.iv_league_detail_image)
-                    }
-
-                    tvDescTitle = textView("Description : ") {
-                        id = R.id.tv_desc_title
-                        typeface = Typeface.DEFAULT_BOLD
-                        textSize = 16f
-                        textColor = Color.BLACK
-                        visibility = View.INVISIBLE
-                    }.lparams {
-                        topMargin = dip(8)
-                        bottomOf(R.id.tv_league_detail_name)
-                    }
-                    tvLeagueDetailDesc = textView {
-                        id = R.id.tv_league_detail_desc
-                        textColor = Color.BLACK
-                    }.lparams {
-                        topMargin = dip(8)
-                        bottomOf(R.id.tv_desc_title)
-                    }
-
-                    progressBar = progressBar{
+                    leagueDetailProgressBar = progressBar{
                         id = R.id.progress_bar
                     }.lparams{
                         width = convertDpToPx(48f)
                         height = convertDpToPx(48f)
-                        centerInParent()
+                        topToTop = R.id.container_layout_league_detail
+                        startToStart = R.id.container_layout_league_detail
+                        endToEnd = R.id.container_layout_league_detail
+                        bottomToBottom = R.id.container_layout_league_detail
+                    }
+
+                    leagueDetailErrorDataText = textView().lparams{
+                        topToTop = R.id.container_layout_league_detail
+                        startToStart = R.id.container_layout_league_detail
+                        endToEnd = R.id.container_layout_league_detail
+                        bottomToBottom = R.id.container_layout_league_detail
                     }
                 }
-            }.lparams{
-                width = matchParent
-                height = matchParent
-                topMargin = dimenAttr(R.attr.actionBarSize)
             }
+
+
+
         }
     }
 
@@ -149,16 +154,30 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
 
         leagueDetailPresenter.getLeagueDetailInfo()
 
+        leagueDetailSwipeRefreshLayout.setOnRefreshListener {
+            leagueDetailPresenter.getLeagueDetailInfo()
+        }
+
     }
 
     override fun dataIsLoading() {
-        progressBar.visible()
-        tvDescTitle.invisible()
+        leagueDetailProgressBar.visible()
+        leagueDetailErrorDataText.gone()
+        leagueDetailLayout.invisible()
     }
 
     override fun dataLoadingFinished() {
-        progressBar.gone()
-        tvDescTitle.visible()
+        leagueDetailSwipeRefreshLayout.isRefreshing = false
+        leagueDetailProgressBar.gone()
+        leagueDetailErrorDataText.gone()
+        leagueDetailLayout.visible()
+    }
+
+    override fun dataFailedToLoad() {
+        leagueDetailSwipeRefreshLayout.isRefreshing = false
+        leagueDetailProgressBar.gone()
+        leagueDetailErrorDataText.visible()
+        leagueDetailLayout.invisible()
     }
 
     override fun showLeagueDetailTitle(leagueItem: LeagueItem) {

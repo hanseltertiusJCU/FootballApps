@@ -1,9 +1,5 @@
 package com.example.footballapps.model
 
-import android.R.id
-import android.R.attr.name
-
-
 
 data class LeagueOption (val leagueId : String, val leagueName : String) {
     override fun toString(): String {

@@ -7,6 +7,7 @@
     <item name="tv_league_detail_desc" type="id"/>
     <item name="progress_bar" type="id"/>
     <item name="toolbar_league_detail" type="id" />
+    <item name="container_layout_league_detail" type="id" />
 
     <!-- Last match fragment -->
     <item name="last_match_parent_layout" type="id"/>

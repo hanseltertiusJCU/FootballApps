@@ -86,6 +86,9 @@
     <string name="home_team_forwards">Home Team Forwards</string>
     <string name="forwards">Forwards</string>
     <string name="away_team_forwards">Away Team Forwards</string>
+    <string name="home_team_substitutes">Home Team Substitutes</string>
+    <string name="substitutes">Substitutes</string>
+    <string name="away_team_substitutes">Away Team Substitutes</string>
 
     <!-- Unknown data -->
     <string name="match_week_unknown">Week Unknown</string>
@@ -95,5 +98,8 @@
     <string name="league_unknown">Unknown League</string>
     <string name="date_unknown">Unknown Date</string>
     <string name="time_unknown">Unknown Time</string>
+
+    <!-- Menu item title -->
+    <string name="search">Search</string>
 
 </resources>

@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.ProgressBar
-import android.widget.Spinner
+import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -38,6 +36,7 @@ class NextMatchFragment : Fragment(), MatchView {
     private lateinit var nextMatchProgressBar : ProgressBar
     private lateinit var nextMatchSwipeRefreshLayout: SwipeRefreshLayout
     private lateinit var nextMatchLeagueSpinner : Spinner
+    private lateinit var nextMatchErrorText : TextView
 
     private lateinit var  nextMatchPresenter: MatchPresenter
 
@@ -63,6 +62,8 @@ class NextMatchFragment : Fragment(), MatchView {
 
                 nextMatchSwipeRefreshLayout = swipeRefreshLayout{
 
+                    setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
+
                     nextMatchRecyclerView = recyclerView {
                         lparams(width = matchParent, height = wrapContent)
                         layoutManager = LinearLayoutManager(context)
@@ -78,13 +79,19 @@ class NextMatchFragment : Fragment(), MatchView {
                     verticalBias = 0f
                 }
 
-                nextMatchProgressBar = progressBar()
-                    .lparams{
+                nextMatchProgressBar = progressBar().lparams{
                         topToTop = R.id.next_match_parent_layout
                         leftToLeft = R.id.next_match_parent_layout
                         rightToRight = R.id.next_match_parent_layout
                         bottomToBottom = R.id.next_match_parent_layout
                     }
+
+                nextMatchErrorText = textView().lparams{
+                    topToTop = R.id.next_match_parent_layout
+                    leftToLeft = R.id.next_match_parent_layout
+                    rightToRight = R.id.next_match_parent_layout
+                    bottomToBottom = R.id.next_match_parent_layout
+                }
 
             }
         }.view
@@ -142,16 +149,26 @@ class NextMatchFragment : Fragment(), MatchView {
     override fun dataIsLoading() {
         nextMatchProgressBar.visible()
         nextMatchRecyclerView.invisible()
+        nextMatchErrorText.gone()
     }
 
     override fun dataLoadingFinished() {
-        // todo: tinggal cek connectivity
+        nextMatchSwipeRefreshLayout.isRefreshing = false
         nextMatchProgressBar.gone()
         nextMatchRecyclerView.visible()
+        nextMatchErrorText.gone()
+    }
+
+    override fun dataFailedToLoad() {
+        nextMatchSwipeRefreshLayout.isRefreshing = false
+        nextMatchProgressBar.gone()
+        nextMatchRecyclerView.invisible()
+        nextMatchErrorText.visible()
+
+        nextMatchErrorText.text = resources.getString(R.string.no_internet_connection)
     }
 
     override fun showMatchData(matchList: List<MatchItem>) {
-        nextMatchSwipeRefreshLayout.isRefreshing = false
         nextMatches.clear()
         nextMatches.addAll(matchList)
         nextMatchRvAdapter.notifyDataSetChanged()

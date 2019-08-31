@@ -10,7 +10,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-// todo: pake league item
 class LeagueDetailPresenter(private val leagueDetailView : LeagueDetailView, private val leagueItem : LeagueItem){
 
     fun getLeagueDetailTitle(){
@@ -42,7 +41,7 @@ class LeagueDetailPresenter(private val leagueDetailView : LeagueDetailView, pri
 
             override fun onFailure(call: Call<LeagueDetailResponse>, error: Throwable) {
 
-                leagueDetailView.dataLoadingFinished()
+                leagueDetailView.dataFailedToLoad()
 
                 Log.e("errorTag", "Error : ${error.message}")
             }
