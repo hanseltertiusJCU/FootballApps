@@ -102,7 +102,6 @@
                                     android:layout_width="48dp"
                                     android:layout_height="48dp"
                                     android:layout_gravity="center"
-                                    android:background="@drawable/team_badge_placeholder"
                                     android:contentDescription="@string/home_team_name" />
 
                                 <TextView
@@ -170,7 +169,6 @@
                                     android:layout_width="48dp"
                                     android:layout_height="48dp"
                                     android:layout_gravity="center"
-                                    android:background="@drawable/team_badge_placeholder"
                                     android:contentDescription="@string/away_team_name" />
 
                                 <TextView

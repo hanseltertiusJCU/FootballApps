@@ -1,6 +1,7 @@
 package com.example.footballapps.service
 
 import com.example.footballapps.model.MatchResponse
+import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -13,7 +14,7 @@ interface MatchService {
     fun getPastMatchResponse(@Query("id") idLeague: String) : Call<MatchResponse>
 
     @GET("lookupevent.php?")
-    fun getDetailMatchResponse(@Query("id") idEvent : String) : Call<MatchResponse>
+    fun getDetailMatchResponse(@Query("id") idEvent : String) : Observable<MatchResponse>
 
     @GET("searchevents.php")
     fun getSearchMatchResponse(@Query("e") query : String) : Call<MatchResponse>

@@ -3,6 +3,7 @@ package com.example.footballapps.client
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 class RetrofitClient {
@@ -21,6 +22,7 @@ class RetrofitClient {
                 .baseUrl("https://www.thesportsdb.com/api/v1/json/1/")
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
         }
 

@@ -138,5 +138,9 @@ data class MatchItem(
     @SerializedName("strAwayLineupForward")
     var awayTeamForward : String?,
     @SerializedName("strAwayLineupSubstitutes")
-    var awayTeamSubstitutes : String?
+    var awayTeamSubstitutes : String?,
+    @SerializedName("idHomeTeam")
+    var homeTeamId : String?,
+    @SerializedName("idAwayTeam")
+    var awayTeamId : String?
 )

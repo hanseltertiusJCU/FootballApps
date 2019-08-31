@@ -121,7 +121,12 @@ class LastMatchFragment : Fragment(), MatchView {
         lastMatchLeagueSpinner.setSelection(spinnerAdapter.getPosition(selectedLeagueOption))
 
         lastMatchRvAdapter = MatchRecyclerViewAdapter(context!!, lastMatches){
-            startActivity<MatchDetailActivity>("eventId" to it.idEvent, "eventName" to it.strEvent)
+            startActivity<MatchDetailActivity>(
+                "eventId" to it.idEvent,
+                "eventName" to it.strEvent,
+                "homeTeamId" to it.homeTeamId,
+                "awayTeamId" to it.awayTeamId
+            )
         }
         lastMatchRecyclerView.adapter = lastMatchRvAdapter
 

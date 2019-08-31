@@ -111,7 +111,12 @@ class NextMatchFragment : Fragment(), MatchView {
         nextMatchLeagueSpinner.adapter = spinnerAdapter
 
         nextMatchRvAdapter = MatchRecyclerViewAdapter(context!!, nextMatches){
-            startActivity<MatchDetailActivity>("eventId" to it.idEvent, "eventName" to it.strEvent)
+            startActivity<MatchDetailActivity>(
+                "eventId" to it.idEvent,
+                "eventName" to it.strEvent,
+                "homeTeamId" to it.homeTeamId,
+                "awayTeamId" to it.awayTeamId
+            )
         }
         nextMatchRecyclerView.adapter = nextMatchRvAdapter
 

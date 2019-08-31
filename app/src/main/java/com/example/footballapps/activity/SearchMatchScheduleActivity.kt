@@ -19,6 +19,7 @@ import com.example.footballapps.utils.visible
 import com.example.footballapps.view.MatchView
 import kotlinx.android.synthetic.main.activity_search_match_schedule.*
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.support.v4.startActivity
 import java.io.IOException
 
 
@@ -44,7 +45,12 @@ class SearchMatchScheduleActivity : AppCompatActivity(), MatchView {
     private fun initData() {
 
         searchResultMatchRvAdapter = MatchRecyclerViewAdapter(this, searchResultMatches){
-            startActivity<MatchDetailActivity>("eventId" to it.idEvent, "eventName" to it.strEvent)
+            startActivity<MatchDetailActivity>(
+                "eventId" to it.idEvent,
+                "eventName" to it.strEvent,
+                "homeTeamId" to it.homeTeamId,
+                "awayTeamId" to it.awayTeamId
+            )
         }
         rv_search_match_schedule.adapter = searchResultMatchRvAdapter
         rv_search_match_schedule.layoutManager = LinearLayoutManager(this)

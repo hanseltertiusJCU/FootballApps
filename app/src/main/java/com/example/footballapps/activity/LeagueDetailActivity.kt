@@ -1,5 +1,6 @@
 package com.example.footballapps.activity
 
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
@@ -34,6 +35,7 @@ import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.design.appBarLayout
 import org.jetbrains.anko.design.coordinatorLayout
 import org.jetbrains.anko.design.snackbar
+import org.jetbrains.anko.design.themedAppBarLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -70,7 +72,7 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
     private fun initView() {
 
         coordinatorLayout{
-            appBarLayout{
+            themedAppBarLayout(R.style.ThemeOverlay_AppCompat_Dark_ActionBar){
                 lparams(width = matchParent, height = wrapContent)
 
                 toolbarLeagueDetail = toolbar {
