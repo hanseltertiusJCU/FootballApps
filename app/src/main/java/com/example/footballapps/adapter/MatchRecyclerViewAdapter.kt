@@ -10,16 +10,25 @@ import com.example.footballapps.R
 import com.example.footballapps.application.FootballApps
 import com.example.footballapps.model.MatchItem
 import kotlinx.android.synthetic.main.item_match_data.view.*
-import java.lang.StringBuilder
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-class MatchRecyclerViewAdapter(private val context : Context, private val matchList : List<MatchItem>, private val clickListener : (MatchItem) -> Unit) :
+class MatchRecyclerViewAdapter(
+    private val context: Context,
+    private val matchList: List<MatchItem>,
+    private val clickListener: (MatchItem) -> Unit
+) :
     RecyclerView.Adapter<MatchRecyclerViewAdapter.MatchViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MatchViewHolder =
-        MatchViewHolder(LayoutInflater.from(context).inflate(R.layout.item_match_data, parent, false))
+        MatchViewHolder(
+            LayoutInflater.from(context).inflate(
+                R.layout.item_match_data,
+                parent,
+                false
+            )
+        )
 
     override fun getItemCount(): Int = matchList.size
 
@@ -28,7 +37,7 @@ class MatchRecyclerViewAdapter(private val context : Context, private val matchL
     }
 
     @SuppressLint("SimpleDateFormat")
-    class MatchViewHolder(view : View) : RecyclerView.ViewHolder(view) {
+    class MatchViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         companion object {
             val leagueNameUnknown = FootballApps.res.getString(R.string.league_unknown)
@@ -39,14 +48,17 @@ class MatchRecyclerViewAdapter(private val context : Context, private val matchL
             val timeUnknown = FootballApps.res.getString(R.string.time_unknown)
         }
 
-        fun bindItem(matchItem : MatchItem, clickListener : (MatchItem) -> Unit) {
+        fun bindItem(matchItem: MatchItem, clickListener: (MatchItem) -> Unit) {
             itemView.league_item_name.text = matchItem.leagueName ?: leagueNameUnknown
             itemView.league_item_match_week.text = when {
                 matchItem.leagueMatchWeek != null -> StringBuilder("Week ${matchItem.leagueMatchWeek}")
                 else -> matchWeekUnknown
             }
 
-            val arrayLocalTimeDt = convertDateTimeToLocalTimeZone(formatDate(matchItem.dateEvent), formatTime(matchItem.timeEvent))
+            val arrayLocalTimeDt = convertDateTimeToLocalTimeZone(
+                formatDate(matchItem.dateEvent),
+                formatTime(matchItem.timeEvent)
+            )
 
             itemView.league_item_event_date.text = arrayLocalTimeDt[0]
 
@@ -65,11 +77,11 @@ class MatchRecyclerViewAdapter(private val context : Context, private val matchL
             }
         }
 
-        private fun formatDate(stringValue : String?) : String {
-            return if(stringValue != null && stringValue.isNotEmpty()) {
+        private fun formatDate(stringValue: String?): String {
+            return if (stringValue != null && stringValue.isNotEmpty()) {
                 val oldDateFormat = SimpleDateFormat("yyyy-MM-dd")
                 val newDateFormat = SimpleDateFormat("dd MMM yyyy")
-                val date : Date = oldDateFormat.parse(stringValue)
+                val date: Date = oldDateFormat.parse(stringValue)
                 val formattedDateEvent = newDateFormat.format(date)
 
                 formattedDateEvent
@@ -78,11 +90,12 @@ class MatchRecyclerViewAdapter(private val context : Context, private val matchL
             }
         }
 
-        private fun formatTime(stringValue: String?) : String {
-            return if(stringValue != null && stringValue.isNotEmpty()
-                && stringValue != "00:00:00" && stringValue != "23:59:59") {
+        private fun formatTime(stringValue: String?): String {
+            return if (stringValue != null && stringValue.isNotEmpty()
+                && stringValue != "00:00:00" && stringValue != "23:59:59"
+            ) {
                 val timeFormat = SimpleDateFormat("HH:mm")
-                val timeInDate : Date = timeFormat.parse(stringValue)
+                val timeInDate: Date = timeFormat.parse(stringValue)
                 val formattedTimeEvent = timeFormat.format(timeInDate)
 
                 formattedTimeEvent
@@ -91,12 +104,13 @@ class MatchRecyclerViewAdapter(private val context : Context, private val matchL
             }
         }
 
-        private fun convertDateTimeToLocalTimeZone(date : String, time : String) : List<String>{
+        private fun convertDateTimeToLocalTimeZone(date: String, time: String): List<String> {
 
-            lateinit var localTimeArray : List<String>
+            lateinit var localTimeArray: List<String>
 
-            if(date != dateUnknown &&
-                time != timeUnknown){
+            if (date != dateUnknown &&
+                time != timeUnknown
+            ) {
                 val dateTimeStr = "$date,$time"
                 val dateTimeFormat = SimpleDateFormat("dd MMM yyyy,HH:mm", Locale.ENGLISH)
                 dateTimeFormat.timeZone = TimeZone.getTimeZone("UTC")

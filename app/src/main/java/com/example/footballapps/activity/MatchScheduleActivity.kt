@@ -2,22 +2,21 @@ package com.example.footballapps.activity
 
 import android.app.SearchManager
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.viewpager.widget.ViewPager
 import com.example.footballapps.R
 import com.example.footballapps.adapter.MatchViewPagerAdapter
 import com.example.footballapps.fragment.LastMatchFragment
 import com.example.footballapps.fragment.NextMatchFragment
+import com.example.footballapps.lifecycle.FragmentLifecycle
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_match_schedule.*
 import org.jetbrains.anko.startActivity
-import com.example.footballapps.lifecycle.FragmentLifecycle
 
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -55,16 +54,21 @@ class MatchScheduleActivity : AppCompatActivity() {
         setListener()
     }
 
-    private fun setListener(){
+    private fun setListener() {
 
-        view_pager_match_schedule.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tab_layout_match_schedule))
+        view_pager_match_schedule.addOnPageChangeListener(
+            TabLayout.TabLayoutOnPageChangeListener(
+                tab_layout_match_schedule
+            )
+        )
 
-        tab_layout_match_schedule.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        tab_layout_match_schedule.addOnTabSelectedListener(object :
+            TabLayout.OnTabSelectedListener {
 
             var currentPosition = 0
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                when(tab?.position) {
+                when (tab?.position) {
                     1 -> {
                         view_pager_match_schedule.currentItem = 1
                         supportActionBar?.title = matchViewPagerAdapter.getPageTitle(1)
@@ -81,7 +85,8 @@ class MatchScheduleActivity : AppCompatActivity() {
                 val fragmentToShow = matchViewPagerAdapter.getItem(newPosition) as FragmentLifecycle
                 fragmentToShow.onResumeFragment()
 
-                val fragmentToHide = matchViewPagerAdapter.getItem(currentPosition) as FragmentLifecycle
+                val fragmentToHide =
+                    matchViewPagerAdapter.getItem(currentPosition) as FragmentLifecycle
                 fragmentToHide.onPauseFragment()
 
                 currentPosition = newPosition
@@ -123,7 +128,10 @@ class MatchScheduleActivity : AppCompatActivity() {
                 invalidateOptionsMenu()
                 startActivity<SearchMatchScheduleActivity>()
             }
-            item?.itemId == R.id.action_league_detail -> startActivity<LeagueDetailActivity>("leagueName" to leagueName, "leagueId" to leagueId)
+            item?.itemId == R.id.action_league_detail -> startActivity<LeagueDetailActivity>(
+                "leagueName" to leagueName,
+                "leagueId" to leagueId
+            )
         }
         return super.onOptionsItemSelected(item!!)
     }

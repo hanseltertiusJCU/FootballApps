@@ -56,18 +56,18 @@ import com.google.gson.annotations.SerializedName
 
 data class LeagueDetailResponse(
     @SerializedName("leagues")
-    var leagues : List<LeagueDetailItem>? = emptyList()
+    var leagues: List<LeagueDetailItem>? = emptyList()
 )
 
 data class LeagueDetailItem(
     @SerializedName("strLeague")
-    var leagueName : String?,
+    var leagueName: String?,
     @SerializedName("strDescriptionEN")
-    var leagueDescription : String?,
+    var leagueDescription: String?,
     @SerializedName("strBadge")
-    var leagueBadge : String?,
+    var leagueBadge: String?,
     @SerializedName("intFormedYear")
-    var leagueFormedYear : String?,
+    var leagueFormedYear: String?,
     @SerializedName("strCountry")
-    var leagueCountry : String?
+    var leagueCountry: String?
 )

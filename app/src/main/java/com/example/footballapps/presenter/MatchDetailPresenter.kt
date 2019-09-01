@@ -67,20 +67,20 @@ class MatchDetailPresenter(private val matchDetailView: MatchDetailView) {
                 val matchDetailResponse = combinedMatchTeamsResponse.matchDetailResponse
                 val matchDetail = matchDetailResponse.events?.first()
 
-                if(matchDetail != null){
+                if (matchDetail != null) {
                     matchDetailView.showMatchData(matchDetail)
 
                     val homeTeamResponse = combinedMatchTeamsResponse.homeTeamResponse
                     val homeTeam = homeTeamResponse.teams?.first()
 
-                    if(homeTeam?.teamBadge != null){
+                    if (homeTeam?.teamBadge != null) {
                         matchDetailView.showHomeTeamBadge(homeTeam.teamBadge)
                     }
 
                     val awayTeamResponse = combinedMatchTeamsResponse.awayTeamResponse
                     val awayTeam = awayTeamResponse.teams?.first()
 
-                    if(awayTeam?.teamBadge != null){
+                    if (awayTeam?.teamBadge != null) {
                         matchDetailView.showAwayTeamBadge(awayTeam.teamBadge)
                     }
 
@@ -94,9 +94,9 @@ class MatchDetailPresenter(private val matchDetailView: MatchDetailView) {
             override fun onError(error: Throwable) {
                 Log.d("matchDetailError", error.message!!)
 
-                if(error.message!!.contains("Unable to resolve host")){
+                if (error.message!!.contains("Unable to resolve host")) {
                     matchDetailView.dataFailedToLoad(noConnectionText)
-                }  else {
+                } else {
                     matchDetailView.dataFailedToLoad(failedToRetrieveText)
                 }
 

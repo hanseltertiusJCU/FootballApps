@@ -1,29 +1,21 @@
 package com.example.footballapps.activity
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.Network
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.example.footballapps.R
 import com.example.footballapps.adapter.MatchRecyclerViewAdapter
 import com.example.footballapps.model.MatchItem
 import com.example.footballapps.presenter.MatchDetailPresenter
-import com.example.footballapps.presenter.MatchPresenter
 import com.example.footballapps.utils.gone
 import com.example.footballapps.utils.invisible
 import com.example.footballapps.utils.visible
 import com.example.footballapps.view.MatchDetailView
-import com.example.footballapps.view.MatchView
 import kotlinx.android.synthetic.main.activity_match_detail.*
-import kotlinx.android.synthetic.main.activity_search_match_schedule.*
-import java.lang.StringBuilder
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -31,12 +23,12 @@ import java.util.*
 @SuppressLint("SimpleDateFormat")
 class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
 
-    lateinit var eventId : String
-    lateinit var eventName : String
-    lateinit var homeTeamId : String
-    lateinit var awayTeamId : String
+    lateinit var eventId: String
+    lateinit var eventName: String
+    lateinit var homeTeamId: String
+    lateinit var awayTeamId: String
 
-    lateinit var matchDetailPresenter : MatchDetailPresenter
+    lateinit var matchDetailPresenter: MatchDetailPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,10 +55,15 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
             matchDetailPresenter.getDetailMatchInfo(eventId, homeTeamId, awayTeamId)
         }
 
-        match_detail_swipe_refresh_layout.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent))
+        match_detail_swipe_refresh_layout.setColorSchemeColors(
+            ContextCompat.getColor(
+                this,
+                R.color.colorAccent
+            )
+        )
     }
 
-    private fun setToolbarBehavior(){
+    private fun setToolbarBehavior() {
         setSupportActionBar(toolbar_detail_match)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = eventName
@@ -92,7 +89,7 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
         layout_match_detail_data.visible()
     }
 
-    override fun dataFailedToLoad(errorText : String) {
+    override fun dataFailedToLoad(errorText: String) {
         match_detail_swipe_refresh_layout.isRefreshing = false
         progress_bar_match_detail.gone()
         match_detail_error_data_text.visible()
@@ -108,7 +105,10 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
             else -> resources.getString(R.string.match_week_unknown)
         }
 
-        val arrayLocalTimeDt = convertDateTimeToLocalTimeZone(formatDate(matchItem.dateEvent), formatTime(matchItem.timeEvent))
+        val arrayLocalTimeDt = convertDateTimeToLocalTimeZone(
+            formatDate(matchItem.dateEvent),
+            formatTime(matchItem.timeEvent)
+        )
 
         match_detail_event_date.text = arrayLocalTimeDt[0]
         match_detail_event_time.text = arrayLocalTimeDt[1]
@@ -123,11 +123,15 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
             else -> resources.getString(R.string.spectators_unknown)
         }
 
-        match_detail_home_goal_scorers.text = createTextFromStringValue(matchItem.homeTeamGoalDetails)
-        match_detail_away_goal_scorers.text = createTextFromStringValue(matchItem.awayTeamGoalDetails)
+        match_detail_home_goal_scorers.text =
+            createTextFromStringValue(matchItem.homeTeamGoalDetails)
+        match_detail_away_goal_scorers.text =
+            createTextFromStringValue(matchItem.awayTeamGoalDetails)
 
-        match_detail_home_yellow_cards.text = createTextFromStringValue(matchItem.homeTeamYellowCards)
-        match_detail_away_yellow_cards.text = createTextFromStringValue(matchItem.awayTeamYellowCards)
+        match_detail_home_yellow_cards.text =
+            createTextFromStringValue(matchItem.homeTeamYellowCards)
+        match_detail_away_yellow_cards.text =
+            createTextFromStringValue(matchItem.awayTeamYellowCards)
 
         match_detail_home_red_cards.text = createTextFromStringValue(matchItem.homeTeamRedCards)
         match_detail_away_red_cards.text = createTextFromStringValue(matchItem.awayTeamRedCards)
@@ -150,8 +154,10 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
         match_detail_home_forwards.text = createTextFromStringValue(matchItem.homeTeamForward)
         match_detail_away_forwards.text = createTextFromStringValue(matchItem.awayTeamForward)
 
-        match_detail_home_substitutes.text = createTextFromStringValue(matchItem.homeTeamSubstitutes)
-        match_detail_away_substitutes.text = createTextFromStringValue(matchItem.awayTeamSubstitutes)
+        match_detail_home_substitutes.text =
+            createTextFromStringValue(matchItem.homeTeamSubstitutes)
+        match_detail_away_substitutes.text =
+            createTextFromStringValue(matchItem.awayTeamSubstitutes)
     }
 
     override fun showHomeTeamBadge(homeTeamBadgeUrl: String?) {
@@ -172,16 +178,18 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
             .into(match_detail_away_team_logo)
     }
 
-    private fun createTextFromStringValue(stringValue : String?) : String {
-        if(stringValue != null && stringValue.isNotEmpty()) {
+    private fun createTextFromStringValue(stringValue: String?): String {
+        if (stringValue != null && stringValue.isNotEmpty()) {
             val arrayStringValue = stringValue.split(";")
-            val filteredArrayStringValue = arrayStringValue.filter { it.trim().isNotEmpty()}
+            val filteredArrayStringValue = arrayStringValue.filter { it.trim().isNotEmpty() }
 
             val stringBuilder = StringBuilder()
 
-            for(i in filteredArrayStringValue.indices){
-                when(i) {
-                    filteredArrayStringValue.size - 1 -> stringBuilder.append(filteredArrayStringValue[i].trim())
+            for (i in filteredArrayStringValue.indices) {
+                when (i) {
+                    filteredArrayStringValue.size - 1 -> stringBuilder.append(
+                        filteredArrayStringValue[i].trim()
+                    )
                     else -> stringBuilder.append(filteredArrayStringValue[i].trim() + "\n")
                 }
             }
@@ -193,11 +201,11 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
 
     }
 
-    private fun formatDate(stringValue : String?) : String {
-        return if(stringValue != null && stringValue.isNotEmpty()) {
+    private fun formatDate(stringValue: String?): String {
+        return if (stringValue != null && stringValue.isNotEmpty()) {
             val oldDateFormat = SimpleDateFormat("yyyy-MM-dd")
             val newDateFormat = SimpleDateFormat("dd MMM yyyy")
-            val date : Date = oldDateFormat.parse(stringValue)
+            val date: Date = oldDateFormat.parse(stringValue)
             val formattedDateEvent = newDateFormat.format(date)
 
             formattedDateEvent
@@ -206,11 +214,12 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
         }
     }
 
-    private fun formatTime(stringValue: String?) : String {
-        return if(stringValue != null && stringValue.isNotEmpty()
-            && stringValue != "00:00:00" && stringValue != "23:59:59") {
+    private fun formatTime(stringValue: String?): String {
+        return if (stringValue != null && stringValue.isNotEmpty()
+            && stringValue != "00:00:00" && stringValue != "23:59:59"
+        ) {
             val timeFormat = SimpleDateFormat("HH:mm")
-            val timeInDate : Date = timeFormat.parse(stringValue)
+            val timeInDate: Date = timeFormat.parse(stringValue)
             val formattedTimeEvent = timeFormat.format(timeInDate)
 
             formattedTimeEvent
@@ -219,13 +228,13 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
         }
     }
 
-    private fun convertDateTimeToLocalTimeZone(date : String, time : String) : List<String>{
+    private fun convertDateTimeToLocalTimeZone(date: String, time: String): List<String> {
 
-        lateinit var localTimeArray : List<String>
+        lateinit var localTimeArray: List<String>
 
-        if(date != MatchRecyclerViewAdapter.MatchViewHolder.dateUnknown &&
+        if (date != MatchRecyclerViewAdapter.MatchViewHolder.dateUnknown &&
             time != MatchRecyclerViewAdapter.MatchViewHolder.timeUnknown
-        ){
+        ) {
             val dateTimeStr = "$date,$time"
             val dateTimeFormat = SimpleDateFormat("dd MMM yyyy,HH:mm", Locale.ENGLISH)
             dateTimeFormat.timeZone = TimeZone.getTimeZone("UTC")

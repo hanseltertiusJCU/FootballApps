@@ -39,16 +39,16 @@ import org.jetbrains.anko.support.v4.swipeRefreshLayout
 
 class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
 
-    private lateinit var lastMatchRecyclerView : RecyclerView
-    private lateinit var lastMatchProgressBar : ProgressBar
+    private lateinit var lastMatchRecyclerView: RecyclerView
+    private lateinit var lastMatchProgressBar: ProgressBar
     private lateinit var lastMatchSwipeRefreshLayout: SwipeRefreshLayout
-    private lateinit var lastMatchLeagueSpinner : Spinner
-    private lateinit var lastMatchErrorText : TextView
+    private lateinit var lastMatchLeagueSpinner: Spinner
+    private lateinit var lastMatchErrorText: TextView
 
     private lateinit var lastMatchPresenter: MatchPresenter
 
-    private var lastMatches : MutableList<MatchItem> = mutableListOf()
-    private lateinit var lastMatchRvAdapter : MatchRecyclerViewAdapter
+    private var lastMatches: MutableList<MatchItem> = mutableListOf()
+    private lateinit var lastMatchRvAdapter: MatchRecyclerViewAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,13 +62,13 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
 
                 lastMatchLeagueSpinner = spinner {
                     id = R.id.last_match_league_spinner
-                }.lparams{
+                }.lparams {
                     width = matchParent
                     height = wrapContent
                     margin = dip(16)
                 }
 
-                lastMatchSwipeRefreshLayout = swipeRefreshLayout{
+                lastMatchSwipeRefreshLayout = swipeRefreshLayout {
 
                     setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
 
@@ -77,7 +77,7 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
                         layoutManager = LinearLayoutManager(context)
                     }
 
-                }.lparams{
+                }.lparams {
                     width = matchConstraint
                     height = matchConstraint
                     topToBottom = R.id.last_match_league_spinner
@@ -87,16 +87,16 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
                     verticalBias = 0f
                 }
 
-                lastMatchProgressBar = progressBar().lparams{
-                        topToTop = R.id.last_match_parent_layout
-                        leftToLeft = R.id.last_match_parent_layout
-                        rightToRight = R.id.last_match_parent_layout
-                        bottomToBottom = R.id.last_match_parent_layout
-                    }
+                lastMatchProgressBar = progressBar().lparams {
+                    topToTop = R.id.last_match_parent_layout
+                    leftToLeft = R.id.last_match_parent_layout
+                    rightToRight = R.id.last_match_parent_layout
+                    bottomToBottom = R.id.last_match_parent_layout
+                }
 
-                lastMatchErrorText = textView{
+                lastMatchErrorText = textView {
                     textColor = Color.BLACK
-                }.lparams{
+                }.lparams {
                     topToTop = R.id.last_match_parent_layout
                     leftToLeft = R.id.last_match_parent_layout
                     rightToRight = R.id.last_match_parent_layout
@@ -106,31 +106,38 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
             }
         }.view
     }
-    
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initData()
     }
 
-    private fun initData(){
+    private fun initData() {
 
         val leagueIdList = resources.getStringArray(R.array.league_id)
         val leagueNameList = resources.getStringArray(R.array.league_name)
 
         val leagueOptions = mutableListOf<LeagueOption>()
 
-        for(i in leagueIdList.indices) {
+        for (i in leagueIdList.indices) {
             leagueOptions.add(LeagueOption(leagueIdList[i], leagueNameList[i]))
         }
 
-        val spinnerAdapter = ArrayAdapter(activity!!.applicationContext, android.R.layout.simple_spinner_dropdown_item, leagueOptions)
+        val spinnerAdapter = ArrayAdapter(
+            activity!!.applicationContext,
+            android.R.layout.simple_spinner_dropdown_item,
+            leagueOptions
+        )
         lastMatchLeagueSpinner.adapter = spinnerAdapter
 
-        var selectedLeagueOption = LeagueOption((activity as MatchScheduleActivity).leagueId, (activity as MatchScheduleActivity).leagueName)
+        var selectedLeagueOption = LeagueOption(
+            (activity as MatchScheduleActivity).leagueId,
+            (activity as MatchScheduleActivity).leagueName
+        )
         lastMatchLeagueSpinner.setSelection(spinnerAdapter.getPosition(selectedLeagueOption))
 
-        lastMatchRvAdapter = MatchRecyclerViewAdapter(context!!, lastMatches){
+        lastMatchRvAdapter = MatchRecyclerViewAdapter(context!!, lastMatches) {
             startActivity<MatchDetailActivity>(
                 "eventId" to it.idEvent,
                 "eventName" to it.strEvent,
@@ -142,19 +149,25 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
 
         lastMatchPresenter = MatchPresenter(this)
 
-        lastMatchLeagueSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        lastMatchLeagueSpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
 
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                selectedLeagueOption = parent!!.selectedItem as LeagueOption
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    selectedLeagueOption = parent!!.selectedItem as LeagueOption
 
-                (activity as MatchScheduleActivity).leagueId = selectedLeagueOption.leagueId
-                (activity as MatchScheduleActivity).leagueName = selectedLeagueOption.leagueName
+                    (activity as MatchScheduleActivity).leagueId = selectedLeagueOption.leagueId
+                    (activity as MatchScheduleActivity).leagueName = selectedLeagueOption.leagueName
 
-                lastMatchPresenter.getPreviousMatchInfo((activity as MatchScheduleActivity).leagueId)
+                    lastMatchPresenter.getPreviousMatchInfo((activity as MatchScheduleActivity).leagueId)
 
+                }
             }
-        }
 
         lastMatchSwipeRefreshLayout.onRefresh {
             lastMatchPresenter.getPreviousMatchInfo((activity as MatchScheduleActivity).leagueId)
@@ -174,7 +187,7 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
         lastMatchRecyclerView.visible()
     }
 
-    override fun dataFailedToLoad(errorText : String) {
+    override fun dataFailedToLoad(errorText: String) {
         lastMatchSwipeRefreshLayout.isRefreshing = false
         lastMatchProgressBar.gone()
         lastMatchErrorText.visible()
@@ -194,7 +207,7 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
     override fun onPauseFragment() {}
 
     override fun onResumeFragment() {
-        if(::lastMatchLeagueSpinner.isInitialized){
+        if (::lastMatchLeagueSpinner.isInitialized) {
             val selectedLeagueOption = lastMatchLeagueSpinner.selectedItem as LeagueOption
 
             (activity as MatchScheduleActivity).leagueId = selectedLeagueOption.leagueId

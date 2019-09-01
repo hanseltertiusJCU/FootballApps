@@ -64,22 +64,22 @@ import com.google.gson.annotations.SerializedName
 
 data class TeamResponse(
     @SerializedName("teams")
-    var teams : List<TeamItem>? = emptyList()
+    var teams: List<TeamItem>? = emptyList()
 )
 
 data class TeamItem(
     @SerializedName("idTeam")
-    var teamId : String?,
+    var teamId: String?,
     @SerializedName("strTeam")
-    var teamName : String?,
+    var teamName: String?,
     @SerializedName("strLeague")
-    var teamLeague : String?,
+    var teamLeague: String?,
     @SerializedName("strStadium")
-    var teamStadium : String?,
+    var teamStadium: String?,
     @SerializedName("strDescriptionEN")
-    var teamDesc : String?,
+    var teamDesc: String?,
     @SerializedName("strCountry")
-    var teamCountry : String?,
+    var teamCountry: String?,
     @SerializedName("strTeamBadge")
-    var teamBadge : String?
+    var teamBadge: String?
 )

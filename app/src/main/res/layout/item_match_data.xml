@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
     android:layout_marginTop="8dp"
+    android:layout_marginRight="16dp"
     android:layout_marginBottom="8dp"
     app:cardCornerRadius="10dp"
     app:cardElevation="5dp">
@@ -27,36 +26,36 @@
 
             <TextView
                 android:id="@+id/league_item_name"
+                style="@style/text_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/text_content"
                 android:text="@string/league_name" />
 
             <TextView
                 android:id="@+id/league_item_match_week"
+                style="@style/text_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/league_item_name"
                 android:layout_marginTop="8dp"
-                style="@style/text_content"
                 android:text="@string/league_match_week" />
 
             <TextView
                 android:id="@+id/league_item_event_date"
+                style="@style/text_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                style="@style/text_content"
                 android:text="@string/event_date" />
 
             <TextView
                 android:id="@+id/league_item_event_time"
+                style="@style/text_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/league_item_event_date"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="8dp"
-                style="@style/text_content"
                 android:text="@string/event_time" />
 
         </RelativeLayout>
@@ -68,13 +67,13 @@
 
             <TextView
                 android:id="@+id/league_item_home_team_name"
+                style="@style/text_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:gravity="start"
                 android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
                 android:layout_toStartOf="@id/layout_score"
-                style="@style/text_content"
+                android:gravity="start"
                 android:text="@string/home_team_name" />
 
             <LinearLayout
@@ -88,31 +87,31 @@
 
                 <TextView
                     android:id="@+id/league_item_home_team_score"
+                    style="@style/text_score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/no_score"
-                    style="@style/text_score"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/league_item_home_team_name" />
 
                 <TextView
                     android:id="@+id/league_item_versus"
+                    style="@style/text_score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:text="@string/versus"
-                    style="@style/text_score"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/league_item_home_team_score" />
 
                 <TextView
                     android:id="@+id/league_item_away_team_score"
+                    style="@style/text_score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/no_score"
-                    style="@style/text_score"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/league_item_versus" />
 
@@ -121,13 +120,13 @@
 
             <TextView
                 android:id="@+id/league_item_away_team_name"
+                style="@style/text_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/layout_score"
-                android:gravity="end"
-                style="@style/text_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/layout_score"
+                android:gravity="end"
                 android:text="@string/away_team_name" />
 
 

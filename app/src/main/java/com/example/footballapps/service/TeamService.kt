@@ -7,5 +7,5 @@ import retrofit2.http.Query
 
 interface TeamService {
     @GET("lookupteam.php")
-    fun getTeamResponse(@Query("id") idTeam : String) : Observable<TeamResponse>
+    fun getTeamResponse(@Query("id") idTeam: String): Observable<TeamResponse>
 }

@@ -2,11 +2,11 @@ package com.example.footballapps.activity
 
 import android.app.SearchManager
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.footballapps.R
@@ -23,10 +23,10 @@ import org.jetbrains.anko.startActivity
 
 class SearchMatchScheduleActivity : AppCompatActivity(), MatchView {
 
-    private lateinit var searchResultMatchPresenter : MatchPresenter
+    private lateinit var searchResultMatchPresenter: MatchPresenter
 
-    private var searchResultMatches : MutableList<MatchItem> = mutableListOf()
-    private lateinit var searchResultMatchRvAdapter : MatchRecyclerViewAdapter
+    private var searchResultMatches: MutableList<MatchItem> = mutableListOf()
+    private lateinit var searchResultMatchRvAdapter: MatchRecyclerViewAdapter
 
     private var isDataLoading = false
 
@@ -42,7 +42,7 @@ class SearchMatchScheduleActivity : AppCompatActivity(), MatchView {
 
     private fun initData() {
 
-        searchResultMatchRvAdapter = MatchRecyclerViewAdapter(this, searchResultMatches){
+        searchResultMatchRvAdapter = MatchRecyclerViewAdapter(this, searchResultMatches) {
             startActivity<MatchDetailActivity>(
                 "eventId" to it.idEvent,
                 "eventName" to it.strEvent,
@@ -58,24 +58,26 @@ class SearchMatchScheduleActivity : AppCompatActivity(), MatchView {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
-        val menuInflater : MenuInflater = menuInflater
+        val menuInflater: MenuInflater = menuInflater
         menuInflater.inflate(R.menu.menu_search_match_schedule, menu)
 
-        val searchScheduleSearchItem : MenuItem? = menu!!.findItem(R.id.action_search)
+        val searchScheduleSearchItem: MenuItem? = menu!!.findItem(R.id.action_search)
         searchScheduleSearchItem?.expandActionView()
 
-        val searchScheduleSearchManager : SearchManager = this@SearchMatchScheduleActivity.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchScheduleSearchManager: SearchManager =
+            this@SearchMatchScheduleActivity.getSystemService(Context.SEARCH_SERVICE) as SearchManager
 
-        var searchScheduleSearchView : SearchView? = null
+        var searchScheduleSearchView: SearchView? = null
 
         var isSearch: Boolean
 
-        if(searchScheduleSearchItem != null) {
+        if (searchScheduleSearchItem != null) {
             searchScheduleSearchView = searchScheduleSearchItem.actionView as SearchView
 
             searchResultMatchPresenter.getSearchMatchInfo(searchScheduleSearchView.query.toString())
 
-            searchScheduleSearchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            searchScheduleSearchItem.setOnActionExpandListener(object :
+                MenuItem.OnActionExpandListener {
                 override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
                     isSearch = true
                     return true
@@ -83,7 +85,7 @@ class SearchMatchScheduleActivity : AppCompatActivity(), MatchView {
 
                 override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
                     isSearch = false
-                    if(!isSearch) {
+                    if (!isSearch) {
                         finish()
                     }
                     return true
@@ -91,9 +93,10 @@ class SearchMatchScheduleActivity : AppCompatActivity(), MatchView {
 
             })
 
-            searchScheduleSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            searchScheduleSearchView.setOnQueryTextListener(object :
+                SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    if(!isDataLoading){
+                    if (!isDataLoading) {
                         searchResultMatchPresenter.getSearchMatchInfo(query!!)
                     }
                     return true
@@ -106,7 +109,11 @@ class SearchMatchScheduleActivity : AppCompatActivity(), MatchView {
             })
         }
 
-        searchScheduleSearchView?.setSearchableInfo(searchScheduleSearchManager.getSearchableInfo(this@SearchMatchScheduleActivity.componentName))
+        searchScheduleSearchView?.setSearchableInfo(
+            searchScheduleSearchManager.getSearchableInfo(
+                this@SearchMatchScheduleActivity.componentName
+            )
+        )
 
         return super.onCreateOptionsMenu(menu)
     }
@@ -140,7 +147,7 @@ class SearchMatchScheduleActivity : AppCompatActivity(), MatchView {
 
     }
 
-    override fun dataFailedToLoad(errorText : String) {
+    override fun dataFailedToLoad(errorText: String) {
         rv_search_match_schedule.invisible()
         search_match_error_data_text.visible()
         search_match_progress_bar.gone()

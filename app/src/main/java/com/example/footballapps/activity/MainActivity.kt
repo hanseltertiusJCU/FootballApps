@@ -1,13 +1,12 @@
 package com.example.footballapps.activity
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.util.TypedValue
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.footballapps.R
 import com.example.footballapps.adapter.LeagueRecyclerViewAdapter
 import com.example.footballapps.model.LeagueItem
@@ -17,7 +16,6 @@ import com.example.footballapps.view.MainView
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.constraint.layout.constraintLayout
-import org.jetbrains.anko.design.appBarLayout
 import org.jetbrains.anko.design.coordinatorLayout
 import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.design.themedAppBarLayout
@@ -74,21 +72,31 @@ class MainActivity : AppCompatActivity(), MainView {
     override fun displayRecyclerViewItem(leagueInfoList: MutableList<LeagueItem>) {
         mainActivityUI.recyclerViewLeagueList.layoutManager =
             GridLayoutManager(this, spanCount)
-        mainActivityUI.recyclerViewLeagueList.adapter = LeagueRecyclerViewAdapter(leagueInfoList) {leagueItem ->
+        mainActivityUI.recyclerViewLeagueList.adapter =
+            LeagueRecyclerViewAdapter(leagueInfoList) { leagueItem ->
 
-            mainActivityUI.constraintLayoutView.snackbar(leagueItem.leagueName.toString(), "Option") {
-                val options = listOf("Go to League Detail Info", "Go to League Match Info")
-                selector("Where do you want to go to?", options) { _, i ->
-                    if(i == 0) {
-                        startActivity<LeagueDetailActivity>("leagueName" to leagueItem.leagueName, "leagueId" to leagueItem.leagueId)
-                    } else {
-                        startActivity<MatchScheduleActivity>("leagueName" to leagueItem.leagueName, "leagueId" to leagueItem.leagueId)
+                mainActivityUI.constraintLayoutView.snackbar(
+                    leagueItem.leagueName.toString(),
+                    "Option"
+                ) {
+                    val options = listOf("Go to League Detail Info", "Go to League Match Info")
+                    selector("Where do you want to go to?", options) { _, i ->
+                        if (i == 0) {
+                            startActivity<LeagueDetailActivity>(
+                                "leagueName" to leagueItem.leagueName,
+                                "leagueId" to leagueItem.leagueId
+                            )
+                        } else {
+                            startActivity<MatchScheduleActivity>(
+                                "leagueName" to leagueItem.leagueName,
+                                "leagueId" to leagueItem.leagueId
+                            )
+                        }
+
                     }
-
                 }
-            }
 
-        }
+            }
         mainActivityUI.recyclerViewLeagueList.addItemDecoration(
             GridSpacingItemDecoration(
                 spanCount = spanCount,
@@ -109,21 +117,21 @@ class MainActivity : AppCompatActivity(), MainView {
     }
 
     class MainActivityUI : AnkoComponent<MainActivity> {
-        lateinit var recyclerViewLeagueList : RecyclerView
+        lateinit var recyclerViewLeagueList: RecyclerView
 
         lateinit var constraintLayoutView: View
 
-        lateinit var toolbarMain : Toolbar
+        lateinit var toolbarMain: Toolbar
 
         companion object {
             const val recyclerViewLeagueListId = 101
         }
 
 
-        override fun createView(ui: AnkoContext<MainActivity>): View = with(ui){
+        override fun createView(ui: AnkoContext<MainActivity>): View = with(ui) {
 
             coordinatorLayout {
-                themedAppBarLayout(R.style.ThemeOverlay_AppCompat_Dark_ActionBar){
+                themedAppBarLayout(R.style.ThemeOverlay_AppCompat_Dark_ActionBar) {
                     lparams(width = matchParent, height = wrapContent)
                     toolbarMain = toolbar {
                         lparams(width = matchParent, height = dimenAttr(R.attr.actionBarSize))

@@ -3,12 +3,12 @@ package com.example.footballapps.activity
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -27,30 +27,29 @@ import org.jetbrains.anko.constraint.layout.constraintLayout
 import org.jetbrains.anko.design.coordinatorLayout
 import org.jetbrains.anko.design.themedAppBarLayout
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
-import java.lang.StringBuilder
 
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
 
-    private lateinit var leagueName : String
-    private lateinit var leagueId : String
+    private lateinit var leagueName: String
+    private lateinit var leagueId: String
 
-    private lateinit var tvLeagueDetailName : TextView
-    private lateinit var tvLeagueDetailFormedYear : TextView
-    private lateinit var tvLeagueDetailCountry : TextView
-    private lateinit var ivLeagueDetailImage : ImageView
-    private lateinit var tvLeagueDetailDesc : TextView
-    private lateinit var tvDescTitle : TextView
+    private lateinit var tvLeagueDetailName: TextView
+    private lateinit var tvLeagueDetailFormedYear: TextView
+    private lateinit var tvLeagueDetailCountry: TextView
+    private lateinit var ivLeagueDetailImage: ImageView
+    private lateinit var tvLeagueDetailDesc: TextView
+    private lateinit var tvDescTitle: TextView
 
-    private lateinit var leagueDetailPresenter : LeagueDetailPresenter
+    private lateinit var leagueDetailPresenter: LeagueDetailPresenter
 
-    private lateinit var leagueDetailScrollView : ScrollView
-    private lateinit var toolbarLeagueDetail : Toolbar
-    private lateinit var leagueDetailSwipeRefreshLayout : SwipeRefreshLayout
+    private lateinit var leagueDetailScrollView: ScrollView
+    private lateinit var toolbarLeagueDetail: Toolbar
+    private lateinit var leagueDetailSwipeRefreshLayout: SwipeRefreshLayout
     private lateinit var leagueDetailLayout: RelativeLayout
-    private lateinit var leagueDetailErrorDataText : TextView
-    private lateinit var leagueDetailProgressBar : ProgressBar
+    private lateinit var leagueDetailErrorDataText: TextView
+    private lateinit var leagueDetailProgressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,10 +61,10 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
     }
 
     private fun initView() {
-        coordinatorLayout{
+        coordinatorLayout {
 
             verticalLayout {
-                themedAppBarLayout(R.style.ThemeOverlay_AppCompat_Dark_ActionBar){
+                themedAppBarLayout(R.style.ThemeOverlay_AppCompat_Dark_ActionBar) {
                     lparams(width = matchParent, height = wrapContent)
 
                     toolbarLeagueDetail = toolbar {
@@ -84,7 +83,7 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
                         leagueDetailScrollView = scrollView {
                             leagueDetailLayout = relativeLayout {
                                 padding = dip(16)
-                                ivLeagueDetailImage = imageView{
+                                ivLeagueDetailImage = imageView {
                                     id = R.id.iv_league_detail_image
                                 }.lparams {
                                     width = convertDpToPx(96f)
@@ -109,7 +108,7 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
                                     typeface = Typeface.DEFAULT_BOLD
                                     textSize = 16f
                                     textColor = Color.BLACK
-                                }.lparams{
+                                }.lparams {
                                     centerHorizontally()
                                     topMargin = dip(8)
                                     bottomOf(R.id.tv_league_detail_name)
@@ -120,7 +119,7 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
                                     typeface = Typeface.DEFAULT_BOLD
                                     textSize = 16f
                                     textColor = Color.BLACK
-                                }.lparams{
+                                }.lparams {
                                     centerHorizontally()
                                     topMargin = dip(8)
                                     bottomOf(R.id.tv_league_detail_formed_year)
@@ -146,9 +145,9 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
                         }
                     }
 
-                    leagueDetailProgressBar = progressBar{
+                    leagueDetailProgressBar = progressBar {
                         id = R.id.progress_bar
-                    }.lparams{
+                    }.lparams {
                         width = convertDpToPx(48f)
                         height = convertDpToPx(48f)
                         topToTop = R.id.container_layout_league_detail
@@ -157,9 +156,9 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
                         bottomToBottom = R.id.container_layout_league_detail
                     }
 
-                    leagueDetailErrorDataText = textView{
+                    leagueDetailErrorDataText = textView {
                         textColor = Color.BLACK
-                    }.lparams{
+                    }.lparams {
                         topToTop = R.id.container_layout_league_detail
                         startToStart = R.id.container_layout_league_detail
                         endToEnd = R.id.container_layout_league_detail
@@ -167,7 +166,6 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
                     }
                 }
             }
-
 
 
         }
@@ -203,7 +201,7 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
         leagueDetailLayout.visible()
     }
 
-    override fun dataFailedToLoad(errorText : String) {
+    override fun dataFailedToLoad(errorText: String) {
         leagueDetailSwipeRefreshLayout.isRefreshing = false
         leagueDetailProgressBar.gone()
         leagueDetailErrorDataText.visible()
@@ -218,7 +216,7 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
         supportActionBar?.title = leagueItem.leagueName
     }
 
-    private fun setToolbarBehavior(){
+    private fun setToolbarBehavior() {
         setSupportActionBar(toolbarLeagueDetail)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = leagueName
@@ -249,14 +247,17 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
         when {
             item?.itemId == android.R.id.home -> finish()
             item?.itemId == R.id.action_match_schedule -> {
-                startActivity<MatchScheduleActivity>("leagueName" to leagueName, "leagueId" to leagueId)
+                startActivity<MatchScheduleActivity>(
+                    "leagueName" to leagueName,
+                    "leagueId" to leagueId
+                )
                 finish()
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun convertDpToPx(dp : Float) : Int {
+    private fun convertDpToPx(dp: Float): Int {
         val r = resources
         val px = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
@@ -268,13 +269,17 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        outState?.putIntArray("leagueDetailScrollPosition", intArrayOf(leagueDetailScrollView.scrollX, leagueDetailScrollView.scrollY))
+        outState?.putIntArray(
+            "leagueDetailScrollPosition",
+            intArrayOf(leagueDetailScrollView.scrollX, leagueDetailScrollView.scrollY)
+        )
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
         super.onRestoreInstanceState(savedInstanceState)
-        val scrollPosition : IntArray? = savedInstanceState?.getIntArray("leagueDetailScrollPosition")
-        if(scrollPosition != null){
+        val scrollPosition: IntArray? =
+            savedInstanceState?.getIntArray("leagueDetailScrollPosition")
+        if (scrollPosition != null) {
             leagueDetailScrollView.post {
                 leagueDetailScrollView.scrollTo(scrollPosition[0], scrollPosition[1])
             }

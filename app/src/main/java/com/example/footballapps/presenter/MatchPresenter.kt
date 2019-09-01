@@ -6,19 +6,13 @@ import com.example.footballapps.application.FootballApps
 import com.example.footballapps.client.RetrofitClient
 import com.example.footballapps.model.MatchItem
 import com.example.footballapps.model.MatchResponse
-import com.example.footballapps.model.TeamResponse
 import com.example.footballapps.service.MatchService
-import com.example.footballapps.service.TeamService
 import com.example.footballapps.view.MatchView
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Function3
 import io.reactivex.schedulers.Schedulers
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class MatchPresenter(private val matchView: MatchView) {
 
@@ -35,7 +29,7 @@ class MatchPresenter(private val matchView: MatchView) {
         val retrofit = retrofitClient.getClient()
         val matchService = retrofit?.create(MatchService::class.java)
 
-        val nextMatchResponseObservable : Observable<MatchResponse>? = matchService
+        val nextMatchResponseObservable: Observable<MatchResponse>? = matchService
             ?.getNextMatchResponse(leagueId)
             ?.subscribeOn(Schedulers.newThread())
             ?.observeOn(AndroidSchedulers.mainThread())
@@ -48,7 +42,7 @@ class MatchPresenter(private val matchView: MatchView) {
             override fun onNext(matchResponse: MatchResponse) {
                 val nextMatches = matchResponse.events
 
-                if(nextMatches != null){
+                if (nextMatches != null) {
                     matchView.showMatchData(nextMatches)
 
                     matchView.dataLoadingFinished()
@@ -62,9 +56,9 @@ class MatchPresenter(private val matchView: MatchView) {
             override fun onError(error: Throwable) {
                 Log.d("nextMatchError", error.message!!)
 
-                if(error.message!!.contains("Unable to resolve host")){
+                if (error.message!!.contains("Unable to resolve host")) {
                     matchView.dataFailedToLoad(noConnectionText)
-                }  else {
+                } else {
                     matchView.dataFailedToLoad(failedToRetrieveText)
                 }
             }
@@ -79,12 +73,12 @@ class MatchPresenter(private val matchView: MatchView) {
         val retrofit = retrofitClient.getClient()
         val matchService = retrofit?.create(MatchService::class.java)
 
-        val previousMatchResponseObservable : Observable<MatchResponse>? = matchService
+        val previousMatchResponseObservable: Observable<MatchResponse>? = matchService
             ?.getPastMatchResponse(leagueId)
             ?.subscribeOn(Schedulers.newThread())
             ?.observeOn(AndroidSchedulers.mainThread())
 
-        previousMatchResponseObservable?.subscribe(object : Observer<MatchResponse>{
+        previousMatchResponseObservable?.subscribe(object : Observer<MatchResponse> {
             override fun onComplete() {}
 
             override fun onSubscribe(disposable: Disposable) {}
@@ -92,7 +86,7 @@ class MatchPresenter(private val matchView: MatchView) {
             override fun onNext(matchResponse: MatchResponse) {
                 val previousMatches = matchResponse.events
 
-                if(previousMatches != null){
+                if (previousMatches != null) {
                     matchView.showMatchData(previousMatches)
 
                     matchView.dataLoadingFinished()
@@ -105,9 +99,9 @@ class MatchPresenter(private val matchView: MatchView) {
             override fun onError(error: Throwable) {
                 Log.d("previousMatchError", error.message!!)
 
-                if(error.message!!.contains("Unable to resolve host")){
+                if (error.message!!.contains("Unable to resolve host")) {
                     matchView.dataFailedToLoad(noConnectionText)
-                }  else {
+                } else {
                     matchView.dataFailedToLoad(failedToRetrieveText)
                 }
             }
@@ -122,7 +116,7 @@ class MatchPresenter(private val matchView: MatchView) {
         val retrofit = retrofitClient.getClient()
         val matchService = retrofit?.create(MatchService::class.java)
 
-        val searchMatchResponseObservable : Observable<MatchResponse>? = matchService
+        val searchMatchResponseObservable: Observable<MatchResponse>? = matchService
             ?.getSearchMatchResponse(query)
             ?.subscribeOn(Schedulers.newThread())
             ?.observeOn(AndroidSchedulers.mainThread())
@@ -138,7 +132,7 @@ class MatchPresenter(private val matchView: MatchView) {
 
                 val filteredMatches = mutableListOf<MatchItem>()
 
-                if(searchResultMatches != null){
+                if (searchResultMatches != null) {
                     for (match in searchResultMatches) {
                         if (match.sportType.equals("Soccer")) {
                             filteredMatches.add(match)
@@ -146,7 +140,7 @@ class MatchPresenter(private val matchView: MatchView) {
                     }
                 }
 
-                if(filteredMatches.size > 0){
+                if (filteredMatches.size > 0) {
                     matchView.showMatchData(filteredMatches)
 
                     matchView.dataLoadingFinished()
@@ -159,9 +153,9 @@ class MatchPresenter(private val matchView: MatchView) {
             override fun onError(error: Throwable) {
                 Log.d("matchDetailError", error.message!!)
 
-                if(error.message!!.contains("Unable to resolve host")){
+                if (error.message!!.contains("Unable to resolve host")) {
                     matchView.dataFailedToLoad(noConnectionText)
-                }  else {
+                } else {
                     matchView.dataFailedToLoad(failedToRetrieveText)
                 }
             }

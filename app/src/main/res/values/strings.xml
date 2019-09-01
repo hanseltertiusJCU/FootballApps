@@ -43,7 +43,6 @@
     </array>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Data error -->
     <string name="no_data_to_show">No data to show</string>
@@ -61,13 +60,10 @@
     <string name="away_team_name">Away Team Name</string>
     <string name="spectators">Spectators</string>
     <string name="home_team_goal_scorers">Home Team Goal Scorers</string>
-    <string name="goal_scorers">Goal Scorers</string>
     <string name="away_team_goal_scorers">Away Team Goal Scorers</string>
     <string name="home_team_yellow_cards">Home Team Yellow Cards</string>
-    <string name="yellow_cards">Yellow Cards</string>
     <string name="away_team_yellow_cards">Away Team Yellow Cards</string>
     <string name="home_team_red_cards">Home Team Red Cards</string>
-    <string name="red_cards">Red Cards</string>
     <string name="away_team_red_cards">Away Team Red Cards</string>
     <string name="home_team_total_shots">Home Team Total Shots</string>
     <string name="total_shots">Total Shots</string>

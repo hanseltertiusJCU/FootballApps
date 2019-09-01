@@ -3,8 +3,6 @@ package com.example.footballapps.adapter
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.RecyclerView
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -12,7 +10,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.bumptech.glide.Glide
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.example.footballapps.R
 import com.example.footballapps.model.LeagueItem
 import com.squareup.picasso.Picasso
@@ -21,11 +20,21 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.cardview.v7.cardView
 
 
-class LeagueRecyclerViewAdapter(private val leagueItems : List<LeagueItem>, private val clickListener : (LeagueItem) -> Unit) :
-    RecyclerView.Adapter<LeagueRecyclerViewAdapter.ViewHolder>(){
+class LeagueRecyclerViewAdapter(
+    private val leagueItems: List<LeagueItem>,
+    private val clickListener: (LeagueItem) -> Unit
+) :
+    RecyclerView.Adapter<LeagueRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-        ViewHolder(LeagueItemListUI().createView(AnkoContext.Companion.create(parent.context, parent)))
+        ViewHolder(
+            LeagueItemListUI().createView(
+                AnkoContext.Companion.create(
+                    parent.context,
+                    parent
+                )
+            )
+        )
 
     override fun getItemCount(): Int = leagueItems.size
 
@@ -33,12 +42,13 @@ class LeagueRecyclerViewAdapter(private val leagueItems : List<LeagueItem>, priv
         holder.bindItem(leagueItems[position], clickListener)
     }
 
-    class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer{
+    class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
+        LayoutContainer {
 
-        private var leagueName : TextView = containerView.find(LeagueItemListUI.leagueNameTextViewId)
-        private var leagueImage : ImageView = containerView.find(LeagueItemListUI.leagueImageViewId)
+        private var leagueName: TextView = containerView.find(LeagueItemListUI.leagueNameTextViewId)
+        private var leagueImage: ImageView = containerView.find(LeagueItemListUI.leagueImageViewId)
 
-        fun bindItem(leagueItem: LeagueItem, clickListener: (LeagueItem) -> Unit){
+        fun bindItem(leagueItem: LeagueItem, clickListener: (LeagueItem) -> Unit) {
             leagueName.text = leagueItem.leagueName
             leagueItem.leagueImage?.let { Picasso.get().load(it).fit().into(leagueImage) }
             containerView.setOnClickListener {
@@ -47,14 +57,14 @@ class LeagueRecyclerViewAdapter(private val leagueItems : List<LeagueItem>, priv
         }
     }
 
-    class LeagueItemListUI : AnkoComponent<ViewGroup>{
+    class LeagueItemListUI : AnkoComponent<ViewGroup> {
 
         companion object {
             const val leagueImageViewId = 1
             const val leagueNameTextViewId = 2
         }
 
-        override fun createView(ui: AnkoContext<ViewGroup>): View = with(ui){
+        override fun createView(ui: AnkoContext<ViewGroup>): View = with(ui) {
             cardView {
                 background = GradientDrawable().apply {
                     shape = GradientDrawable.RECTANGLE
@@ -67,19 +77,20 @@ class LeagueRecyclerViewAdapter(private val leagueItems : List<LeagueItem>, priv
                 verticalLayout {
                     backgroundResource = attr(R.attr.selectableItemBackgroundBorderless).resourceId
 
-                    imageView{
+                    imageView {
                         id = leagueImageViewId
-                        layoutParams = LinearLayout.LayoutParams(matchParent, convertDpToPx(256f, context))
+                        layoutParams =
+                            LinearLayout.LayoutParams(matchParent, convertDpToPx(256f, context))
                         scaleType = ImageView.ScaleType.FIT_XY
                         contentDescription = R.string.league_image.toString()
                     }
 
-                    textView{
+                    textView {
                         id = leagueNameTextViewId
                         gravity = Gravity.CENTER
                         layoutParams = LinearLayout.LayoutParams(matchParent, wrapContent)
                         textColor = Color.BLACK
-                    }.lparams{
+                    }.lparams {
                         margin = dip(8)
                         width = matchParent
                         height = matchParent
@@ -89,8 +100,12 @@ class LeagueRecyclerViewAdapter(private val leagueItems : List<LeagueItem>, priv
             }
         }
 
-        private fun convertDpToPx(dp : Float, context : Context) : Int {
-            return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics).toInt()
+        private fun convertDpToPx(dp: Float, context: Context): Int {
+            return TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                dp,
+                context.resources.displayMetrics
+            ).toInt()
         }
 
     }

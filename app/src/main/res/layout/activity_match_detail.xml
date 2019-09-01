@@ -53,36 +53,36 @@
 
                             <TextView
                                 android:id="@+id/match_detail_league_name"
+                                style="@style/text_content"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                style="@style/text_content"
                                 android:text="@string/league_name" />
 
                             <TextView
                                 android:id="@+id/match_detail_match_week"
+                                style="@style/text_content"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_below="@id/match_detail_league_name"
                                 android:layout_marginTop="8dp"
-                                style="@style/text_content"
                                 android:text="@string/league_match_week" />
 
                             <TextView
                                 android:id="@+id/match_detail_event_date"
+                                style="@style/text_content"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
-                                style="@style/text_content"
                                 android:text="@string/event_date" />
 
                             <TextView
                                 android:id="@+id/match_detail_event_time"
+                                style="@style/text_content"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_below="@id/match_detail_event_date"
                                 android:layout_alignParentEnd="true"
                                 android:layout_marginTop="8dp"
-                                style="@style/text_content"
                                 android:text="@string/event_time" />
 
                         </RelativeLayout>
@@ -91,16 +91,15 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
-                            android:layout_marginEnd="16dp"
                             android:layout_marginTop="8dp"
+                            android:layout_marginEnd="16dp"
                             android:layout_marginBottom="8dp">
 
                             <LinearLayout
-                                android:id="@+id/layout_match_detail_home_team_info"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_toStartOf="@id/layout_match_detail_score"
                                 android:layout_alignParentStart="true"
+                                android:layout_toStartOf="@id/layout_match_detail_score"
                                 android:gravity="start"
                                 android:orientation="vertical">
 
@@ -113,12 +112,12 @@
 
                                 <TextView
                                     android:id="@+id/match_detail_home_team_name"
+                                    style="@style/text_content"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:gravity="center"
                                     android:layout_marginTop="8dp"
-                                    style="@style/text_content"
+                                    android:gravity="center"
                                     android:text="@string/home_team_name" />
 
                             </LinearLayout>
@@ -134,31 +133,31 @@
 
                                 <TextView
                                     android:id="@+id/match_detail_home_team_score"
+                                    style="@style/text_score"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/no_score"
-                                    style="@style/text_score"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintLeft_toRightOf="@id/match_detail_home_team_name" />
 
                                 <TextView
                                     android:id="@+id/match_detail_versus"
+                                    style="@style/text_score"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginStart="8dp"
                                     android:layout_marginEnd="8dp"
                                     android:text="@string/versus"
-                                    style="@style/text_score"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintLeft_toRightOf="@id/league_item_home_team_score" />
 
                                 <TextView
                                     android:id="@+id/match_detail_away_team_score"
+                                    style="@style/text_score"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/no_score"
-                                    style="@style/text_score"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintLeft_toRightOf="@id/match_detail_versus" />
 
@@ -166,11 +165,10 @@
                             </LinearLayout>
 
                             <LinearLayout
-                                android:id="@+id/layout_match_detail_away_team_info"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_toEndOf="@id/layout_match_detail_score"
                                 android:layout_alignParentEnd="true"
+                                android:layout_toEndOf="@id/layout_match_detail_score"
                                 android:gravity="end"
                                 android:orientation="vertical">
 
@@ -183,29 +181,27 @@
 
                                 <TextView
                                     android:id="@+id/match_detail_away_team_name"
+                                    style="@style/text_content"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="8dp"
                                     android:layout_gravity="center"
+                                    android:layout_marginTop="8dp"
                                     android:gravity="center"
-                                    style="@style/text_content"
                                     android:text="@string/away_team_name" />
 
                             </LinearLayout>
-
-
 
 
                         </RelativeLayout>
 
                         <TextView
                             android:id="@+id/tv_match_detail_spectators"
+                            style="@style/text_content"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginEnd="16dp"
                             android:layout_marginBottom="8dp"
-                            style="@style/text_content"
                             android:text="@string/spectators" />
 
                         <LinearLayout
@@ -228,13 +224,13 @@
 
                                 <TextView
                                     android:id="@+id/match_detail_home_goal_scorers"
+                                    style="@style/text_content"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentStart="true"
                                     android:layout_centerVertical="true"
                                     android:layout_toStartOf="@id/match_detail_goal_scorers"
                                     android:gravity="start"
-                                    style="@style/text_content"
                                     android:text="@string/home_team_goal_scorers" />
 
                                 <ImageView
@@ -248,13 +244,13 @@
 
                                 <TextView
                                     android:id="@+id/match_detail_away_goal_scorers"
+                                    style="@style/text_content"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentEnd="true"
                                     android:layout_centerVertical="true"
                                     android:layout_toEndOf="@id/match_detail_goal_scorers"
                                     android:gravity="end"
-                                    style="@style/text_content"
                                     android:text="@string/away_team_goal_scorers" />
 
 
@@ -282,13 +278,13 @@
 
                                 <TextView
                                     android:id="@+id/match_detail_home_yellow_cards"
+                                    style="@style/text_content"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentStart="true"
                                     android:layout_centerVertical="true"
                                     android:layout_toStartOf="@id/match_detail_yellow_cards"
                                     android:gravity="start"
-                                    style="@style/text_content"
                                     android:text="@string/home_team_yellow_cards" />
 
                                 <ImageView
@@ -302,13 +298,13 @@
 
                                 <TextView
                                     android:id="@+id/match_detail_away_yellow_cards"
+                                    style="@style/text_content"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentEnd="true"
                                     android:layout_centerVertical="true"
                                     android:layout_toEndOf="@id/match_detail_yellow_cards"
                                     android:gravity="end"
-                                    style="@style/text_content"
                                     android:text="@string/away_team_yellow_cards" />
 
 
@@ -336,13 +332,13 @@
 
                                 <TextView
                                     android:id="@+id/match_detail_home_red_cards"
+                                    style="@style/text_content"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentStart="true"
                                     android:layout_centerVertical="true"
                                     android:layout_toStartOf="@id/match_detail_red_cards"
                                     android:gravity="start"
-                                    style="@style/text_content"
                                     android:text="@string/home_team_red_cards" />
 
                                 <ImageView
@@ -356,13 +352,13 @@
 
                                 <TextView
                                     android:id="@+id/match_detail_away_red_cards"
+                                    style="@style/text_content"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentEnd="true"
                                     android:layout_centerVertical="true"
                                     android:layout_toEndOf="@id/match_detail_red_cards"
                                     android:gravity="end"
-                                    style="@style/text_content"
                                     android:text="@string/away_team_red_cards" />
 
 
@@ -390,34 +386,34 @@
 
                                 <TextView
                                     android:id="@+id/match_detail_home_total_shots"
+                                    style="@style/text_content"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentStart="true"
                                     android:layout_centerVertical="true"
                                     android:layout_toStartOf="@id/match_detail_total_shots"
                                     android:gravity="start"
-                                    style="@style/text_content"
                                     android:text="@string/home_team_total_shots" />
 
                                 <TextView
                                     android:id="@+id/match_detail_total_shots"
+                                    style="@style/text_section"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"
                                     android:layout_marginLeft="8dp"
                                     android:layout_marginRight="8dp"
-                                    style="@style/text_section"
                                     android:text="@string/total_shots" />
 
                                 <TextView
                                     android:id="@+id/match_detail_away_total_shots"
+                                    style="@style/text_content"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentEnd="true"
                                     android:layout_centerVertical="true"
                                     android:layout_toEndOf="@id/match_detail_total_shots"
                                     android:gravity="end"
-                                    style="@style/text_content"
                                     android:text="@string/away_team_total_shots" />
 
 
@@ -445,34 +441,34 @@
 
                                 <TextView
                                     android:id="@+id/match_detail_home_formation"
+                                    style="@style/text_content"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentStart="true"
                                     android:layout_centerVertical="true"
                                     android:layout_toStartOf="@id/match_detail_formation"
                                     android:gravity="start"
-                                    style="@style/text_content"
                                     android:text="@string/home_team_formation" />
 
                                 <TextView
                                     android:id="@+id/match_detail_formation"
+                                    style="@style/text_section"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"
                                     android:layout_marginLeft="8dp"
                                     android:layout_marginRight="8dp"
-                                    style="@style/text_section"
                                     android:text="@string/formation" />
 
                                 <TextView
                                     android:id="@+id/match_detail_away_formation"
+                                    style="@style/text_content"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentEnd="true"
                                     android:layout_centerVertical="true"
                                     android:layout_toEndOf="@id/match_detail_formation"
                                     android:gravity="end"
-                                    style="@style/text_content"
                                     android:text="@string/away_team_formation" />
 
 
@@ -500,34 +496,34 @@
 
                                 <TextView
                                     android:id="@+id/match_detail_home_goal_keeper"
+                                    style="@style/text_content"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentStart="true"
                                     android:layout_centerVertical="true"
                                     android:layout_toStartOf="@id/match_detail_goal_keeper"
                                     android:gravity="start"
-                                    style="@style/text_content"
                                     android:text="@string/home_team_goalkeeper" />
 
                                 <TextView
                                     android:id="@+id/match_detail_goal_keeper"
+                                    style="@style/text_section"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"
                                     android:layout_marginLeft="8dp"
                                     android:layout_marginRight="8dp"
-                                    style="@style/text_section"
                                     android:text="@string/goalkeeper" />
 
                                 <TextView
                                     android:id="@+id/match_detail_away_goal_keeper"
+                                    style="@style/text_content"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentEnd="true"
                                     android:layout_centerVertical="true"
                                     android:layout_toEndOf="@id/match_detail_goal_keeper"
                                     android:gravity="end"
-                                    style="@style/text_content"
                                     android:text="@string/away_team_goalkeeper" />
 
                             </RelativeLayout>
@@ -554,34 +550,34 @@
 
                                 <TextView
                                     android:id="@+id/match_detail_home_defenders"
+                                    style="@style/text_content"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentStart="true"
                                     android:layout_centerVertical="true"
                                     android:layout_toStartOf="@id/match_detail_defenders"
                                     android:gravity="start"
-                                    style="@style/text_content"
                                     android:text="@string/home_team_defenders" />
 
                                 <TextView
                                     android:id="@+id/match_detail_defenders"
+                                    style="@style/text_section"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"
                                     android:layout_marginLeft="8dp"
                                     android:layout_marginRight="8dp"
-                                    style="@style/text_section"
                                     android:text="@string/defenders" />
 
                                 <TextView
                                     android:id="@+id/match_detail_away_defenders"
+                                    style="@style/text_content"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentEnd="true"
                                     android:layout_centerVertical="true"
                                     android:layout_toEndOf="@id/match_detail_defenders"
                                     android:gravity="end"
-                                    style="@style/text_content"
                                     android:text="@string/away_team_defenders" />
 
 
@@ -609,34 +605,34 @@
 
                                 <TextView
                                     android:id="@+id/match_detail_home_midfielders"
+                                    style="@style/text_content"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentStart="true"
                                     android:layout_centerVertical="true"
                                     android:layout_toStartOf="@id/match_detail_midfielders"
                                     android:gravity="start"
-                                    style="@style/text_content"
                                     android:text="@string/home_team_midfielders" />
 
                                 <TextView
                                     android:id="@+id/match_detail_midfielders"
+                                    style="@style/text_section"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"
                                     android:layout_marginLeft="8dp"
                                     android:layout_marginRight="8dp"
-                                    style="@style/text_section"
                                     android:text="@string/midfielders" />
 
                                 <TextView
                                     android:id="@+id/match_detail_away_midfielders"
+                                    style="@style/text_content"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentEnd="true"
                                     android:layout_centerVertical="true"
                                     android:layout_toEndOf="@id/match_detail_midfielders"
                                     android:gravity="end"
-                                    style="@style/text_content"
                                     android:text="@string/away_team_midfielders" />
 
 
@@ -664,34 +660,34 @@
 
                                 <TextView
                                     android:id="@+id/match_detail_home_forwards"
+                                    style="@style/text_content"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentStart="true"
                                     android:layout_centerVertical="true"
                                     android:layout_toStartOf="@id/match_detail_forwards"
                                     android:gravity="start"
-                                    style="@style/text_content"
                                     android:text="@string/home_team_forwards" />
 
                                 <TextView
                                     android:id="@+id/match_detail_forwards"
+                                    style="@style/text_section"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"
                                     android:layout_marginLeft="8dp"
                                     android:layout_marginRight="8dp"
-                                    style="@style/text_section"
                                     android:text="@string/forwards" />
 
                                 <TextView
                                     android:id="@+id/match_detail_away_forwards"
+                                    style="@style/text_content"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentEnd="true"
                                     android:layout_centerVertical="true"
                                     android:layout_toEndOf="@id/match_detail_forwards"
                                     android:gravity="end"
-                                    style="@style/text_content"
                                     android:text="@string/away_team_forwards" />
 
 
@@ -720,34 +716,34 @@
 
                                 <TextView
                                     android:id="@+id/match_detail_home_substitutes"
+                                    style="@style/text_content"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentStart="true"
                                     android:layout_centerVertical="true"
                                     android:layout_toStartOf="@id/match_detail_substitutes"
                                     android:gravity="start"
-                                    style="@style/text_content"
                                     android:text="@string/home_team_substitutes" />
 
                                 <TextView
                                     android:id="@+id/match_detail_substitutes"
+                                    style="@style/text_section"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"
                                     android:layout_marginLeft="8dp"
                                     android:layout_marginRight="8dp"
-                                    style="@style/text_section"
                                     android:text="@string/substitutes" />
 
                                 <TextView
                                     android:id="@+id/match_detail_away_substitutes"
+                                    style="@style/text_content"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentEnd="true"
                                     android:layout_centerVertical="true"
                                     android:layout_toEndOf="@id/match_detail_substitutes"
                                     android:gravity="end"
-                                    style="@style/text_content"
                                     android:text="@string/away_team_substitutes" />
 
 
@@ -773,10 +769,10 @@
 
             <TextView
                 android:id="@+id/match_detail_error_data_text"
+                style="@style/text_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/no_data_to_show"
-                style="@style/text_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

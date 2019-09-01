@@ -7,11 +7,11 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 class RetrofitClient {
-    private var retrofit : Retrofit? = null
+    private var retrofit: Retrofit? = null
 
-    fun getClient() : Retrofit?{
+    fun getClient(): Retrofit? {
 
-        if(retrofit == null) {
+        if (retrofit == null) {
             val interceptor = HttpLoggingInterceptor()
             interceptor.level = HttpLoggingInterceptor.Level.BODY
             val okHttpClient = OkHttpClient.Builder()
