@@ -65,5 +65,9 @@ data class LeagueDetailItem(
     @SerializedName("strDescriptionEN")
     var leagueDescription : String?,
     @SerializedName("strBadge")
-    var leagueBadge : String?
+    var leagueBadge : String?,
+    @SerializedName("intFormedYear")
+    var leagueFormedYear : String?,
+    @SerializedName("strCountry")
+    var leagueCountry : String?
 )

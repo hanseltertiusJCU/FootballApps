@@ -27,6 +27,7 @@ import org.jetbrains.anko.constraint.layout.constraintLayout
 import org.jetbrains.anko.design.coordinatorLayout
 import org.jetbrains.anko.design.themedAppBarLayout
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
+import java.lang.StringBuilder
 
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -36,6 +37,8 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
     private lateinit var leagueId : String
 
     private lateinit var tvLeagueDetailName : TextView
+    private lateinit var tvLeagueDetailFormedYear : TextView
+    private lateinit var tvLeagueDetailCountry : TextView
     private lateinit var ivLeagueDetailImage : ImageView
     private lateinit var tvLeagueDetailDesc : TextView
     private lateinit var tvDescTitle : TextView
@@ -100,6 +103,29 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
                                     bottomOf(R.id.iv_league_detail_image)
                                 }
 
+                                // todo: established
+                                tvLeagueDetailFormedYear = textView {
+                                    id = R.id.tv_league_detail_formed_year
+                                    typeface = Typeface.DEFAULT_BOLD
+                                    textSize = 16f
+                                    textColor = Color.BLACK
+                                }.lparams{
+                                    centerHorizontally()
+                                    topMargin = dip(8)
+                                    bottomOf(R.id.tv_league_detail_name)
+                                }
+
+                                tvLeagueDetailCountry = textView {
+                                    id = R.id.tv_league_detail_country
+                                    typeface = Typeface.DEFAULT_BOLD
+                                    textSize = 16f
+                                    textColor = Color.BLACK
+                                }.lparams{
+                                    centerHorizontally()
+                                    topMargin = dip(8)
+                                    bottomOf(R.id.tv_league_detail_formed_year)
+                                }
+
                                 tvDescTitle = textView("Description : ") {
                                     id = R.id.tv_desc_title
                                     typeface = Typeface.DEFAULT_BOLD
@@ -107,7 +133,7 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
                                     textColor = Color.BLACK
                                 }.lparams {
                                     topMargin = dip(8)
-                                    bottomOf(R.id.tv_league_detail_name)
+                                    bottomOf(R.id.tv_league_detail_country)
                                 }
                                 tvLeagueDetailDesc = textView {
                                     id = R.id.tv_league_detail_desc
@@ -206,6 +232,9 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
             .load(leagueDetailItem.leagueBadge)
             .placeholder(R.drawable.empty_league_image_info)
             .into(ivLeagueDetailImage)
+
+        tvLeagueDetailFormedYear.text = StringBuilder("est. ${leagueDetailItem.leagueFormedYear}")
+        tvLeagueDetailCountry.text = StringBuilder("Based in ${leagueDetailItem.leagueCountry}")
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
