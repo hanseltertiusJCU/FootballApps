@@ -177,11 +177,13 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
         leagueDetailLayout.visible()
     }
 
-    override fun dataFailedToLoad() {
+    override fun dataFailedToLoad(errorText : String) {
         leagueDetailSwipeRefreshLayout.isRefreshing = false
         leagueDetailProgressBar.gone()
         leagueDetailErrorDataText.visible()
         leagueDetailLayout.invisible()
+
+        leagueDetailErrorDataText.text = errorText
     }
 
     override fun showLeagueDetailTitle(leagueItem: LeagueItem) {

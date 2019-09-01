@@ -164,13 +164,13 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
         nextMatchErrorText.gone()
     }
 
-    override fun dataFailedToLoad() {
+    override fun dataFailedToLoad(errorText : String) {
         nextMatchSwipeRefreshLayout.isRefreshing = false
         nextMatchProgressBar.gone()
         nextMatchRecyclerView.invisible()
         nextMatchErrorText.visible()
 
-        nextMatchErrorText.text = resources.getString(R.string.no_internet_connection)
+        nextMatchErrorText.text = errorText
     }
 
     override fun showMatchData(matchList: List<MatchItem>) {

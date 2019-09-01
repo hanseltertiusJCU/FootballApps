@@ -92,13 +92,13 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
         layout_match_detail_data.visible()
     }
 
-    override fun dataFailedToLoad() {
+    override fun dataFailedToLoad(errorText : String) {
         match_detail_swipe_refresh_layout.isRefreshing = false
         progress_bar_match_detail.gone()
         match_detail_error_data_text.visible()
         layout_match_detail_data.invisible()
 
-        match_detail_error_data_text.text = resources.getString(R.string.no_internet_connection)
+        match_detail_error_data_text.text = errorText
     }
 
     override fun showMatchData(matchItem: MatchItem) {

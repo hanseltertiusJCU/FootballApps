@@ -1,6 +1,8 @@
 package com.example.footballapps.presenter
 
 import android.util.Log
+import com.example.footballapps.R
+import com.example.footballapps.application.FootballApps
 import com.example.footballapps.client.RetrofitClient
 import com.example.footballapps.model.CombinedMatchTeamsResponse
 import com.example.footballapps.model.MatchResponse
@@ -16,6 +18,12 @@ import io.reactivex.functions.Function3
 import io.reactivex.schedulers.Schedulers
 
 class MatchDetailPresenter(private val matchDetailView: MatchDetailView) {
+
+    companion object {
+        val noDataText = FootballApps.res.getString(R.string.no_data_to_show)
+        val noConnectionText = FootballApps.res.getString(R.string.no_internet_connection)
+        val failedToRetrieveText = FootballApps.res.getString(R.string.failed_to_retrieve_data)
+    }
 
     fun getDetailMatchInfo(eventId: String, homeTeamId: String, awayTeamId: String) {
         matchDetailView.dataIsLoading()
@@ -78,7 +86,7 @@ class MatchDetailPresenter(private val matchDetailView: MatchDetailView) {
 
                     matchDetailView.dataLoadingFinished()
                 } else {
-                    matchDetailView.dataFailedToLoad()
+                    matchDetailView.dataFailedToLoad(noDataText)
                 }
 
             }
@@ -86,7 +94,11 @@ class MatchDetailPresenter(private val matchDetailView: MatchDetailView) {
             override fun onError(error: Throwable) {
                 Log.d("matchDetailError", error.message!!)
 
-                matchDetailView.dataFailedToLoad()
+                if(error.message!!.contains("Unable to resolve host")){
+                    matchDetailView.dataFailedToLoad(noConnectionText)
+                }  else {
+                    matchDetailView.dataFailedToLoad(failedToRetrieveText)
+                }
 
             }
 

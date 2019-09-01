@@ -1,6 +1,8 @@
 package com.example.footballapps.presenter
 
 import android.util.Log
+import com.example.footballapps.R
+import com.example.footballapps.application.FootballApps
 import com.example.footballapps.client.RetrofitClient
 import com.example.footballapps.model.MatchItem
 import com.example.footballapps.model.MatchResponse
@@ -19,6 +21,12 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MatchPresenter(private val matchView: MatchView) {
+
+    companion object {
+        val noDataText = FootballApps.res.getString(R.string.no_data_to_show)
+        val noConnectionText = FootballApps.res.getString(R.string.no_internet_connection)
+        val failedToRetrieveText = FootballApps.res.getString(R.string.failed_to_retrieve_data)
+    }
 
     fun getNextMatchInfo(leagueId: String) {
         matchView.dataIsLoading()
@@ -45,7 +53,7 @@ class MatchPresenter(private val matchView: MatchView) {
 
                     matchView.dataLoadingFinished()
                 } else {
-                    matchView.dataFailedToLoad()
+                    matchView.dataFailedToLoad(noDataText)
                 }
 
 
@@ -54,7 +62,11 @@ class MatchPresenter(private val matchView: MatchView) {
             override fun onError(error: Throwable) {
                 Log.d("nextMatchError", error.message!!)
 
-                matchView.dataFailedToLoad()
+                if(error.message!!.contains("Unable to resolve host")){
+                    matchView.dataFailedToLoad(noConnectionText)
+                }  else {
+                    matchView.dataFailedToLoad(failedToRetrieveText)
+                }
             }
 
         })
@@ -85,16 +97,19 @@ class MatchPresenter(private val matchView: MatchView) {
 
                     matchView.dataLoadingFinished()
                 } else {
-                    matchView.dataFailedToLoad()
+                    matchView.dataFailedToLoad(noDataText)
                 }
 
-                matchView.dataLoadingFinished()
             }
 
             override fun onError(error: Throwable) {
                 Log.d("previousMatchError", error.message!!)
 
-                matchView.dataFailedToLoad()
+                if(error.message!!.contains("Unable to resolve host")){
+                    matchView.dataFailedToLoad(noConnectionText)
+                }  else {
+                    matchView.dataFailedToLoad(failedToRetrieveText)
+                }
             }
 
         })
@@ -131,15 +146,24 @@ class MatchPresenter(private val matchView: MatchView) {
                     }
                 }
 
-                matchView.showMatchData(filteredMatches)
+                if(filteredMatches.size > 0){
+                    matchView.showMatchData(filteredMatches)
 
-                matchView.dataLoadingFinished()
+                    matchView.dataLoadingFinished()
+                } else {
+                    matchView.dataFailedToLoad(noDataText)
+                }
+
             }
 
             override fun onError(error: Throwable) {
                 Log.d("matchDetailError", error.message!!)
 
-                matchView.dataFailedToLoad()
+                if(error.message!!.contains("Unable to resolve host")){
+                    matchView.dataFailedToLoad(noConnectionText)
+                }  else {
+                    matchView.dataFailedToLoad(failedToRetrieveText)
+                }
             }
 
         })

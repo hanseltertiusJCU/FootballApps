@@ -1,6 +1,8 @@
 package com.example.footballapps.presenter
 
 import android.util.Log
+import com.example.footballapps.R
+import com.example.footballapps.application.FootballApps
 import com.example.footballapps.client.RetrofitClient
 import com.example.footballapps.model.LeagueDetailResponse
 import com.example.footballapps.model.LeagueItem
@@ -16,6 +18,12 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class LeagueDetailPresenter(private val leagueDetailView : LeagueDetailView){
+
+    companion object {
+        val noDataText = FootballApps.res.getString(R.string.no_data_to_show)
+        val noConnectionText = FootballApps.res.getString(R.string.no_internet_connection)
+        val failedToRetrieveText = FootballApps.res.getString(R.string.failed_to_retrieve_data)
+    }
 
     fun getLeagueDetailInfo(leagueId : String){
 
@@ -44,7 +52,7 @@ class LeagueDetailPresenter(private val leagueDetailView : LeagueDetailView){
 
                     leagueDetailView.dataLoadingFinished()
                 } else {
-                    leagueDetailView.dataFailedToLoad()
+                    leagueDetailView.dataFailedToLoad(noDataText)
                 }
 
             }
@@ -52,7 +60,12 @@ class LeagueDetailPresenter(private val leagueDetailView : LeagueDetailView){
             override fun onError(error: Throwable) {
                 Log.d("leagueDetailError", error.message!!)
 
-                leagueDetailView.dataFailedToLoad()
+                if(error.message!!.contains("Unable to resolve host")){
+                    leagueDetailView.dataFailedToLoad(noConnectionText)
+                }  else {
+                    leagueDetailView.dataFailedToLoad(failedToRetrieveText)
+                }
+
             }
 
         })

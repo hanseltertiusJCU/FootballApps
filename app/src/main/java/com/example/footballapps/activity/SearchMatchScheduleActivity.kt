@@ -140,12 +140,12 @@ class SearchMatchScheduleActivity : AppCompatActivity(), MatchView {
 
     }
 
-    override fun dataFailedToLoad() {
+    override fun dataFailedToLoad(errorText : String) {
         rv_search_match_schedule.invisible()
         search_match_error_data_text.visible()
         search_match_progress_bar.gone()
 
-        search_match_error_data_text.text = resources.getString(R.string.no_internet_connection)
+        search_match_error_data_text.text = errorText
     }
 
     override fun showMatchData(matchList: List<MatchItem>) {
