@@ -128,10 +128,13 @@ class MatchScheduleActivity : AppCompatActivity() {
                 invalidateOptionsMenu()
                 startActivity<SearchMatchScheduleActivity>()
             }
-            item?.itemId == R.id.action_league_detail -> startActivity<LeagueDetailActivity>(
-                "leagueName" to leagueName,
-                "leagueId" to leagueId
-            )
+            item?.itemId == R.id.action_league_detail -> {
+                startActivity<LeagueDetailActivity>(
+                    "leagueName" to leagueName,
+                    "leagueId" to leagueId
+                )
+                finish()
+            }
         }
         return super.onOptionsItemSelected(item!!)
     }

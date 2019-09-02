@@ -16,6 +16,9 @@ import com.example.footballapps.utils.invisible
 import com.example.footballapps.utils.visible
 import com.example.footballapps.view.MatchDetailView
 import kotlinx.android.synthetic.main.activity_match_detail.*
+import kotlinx.android.synthetic.main.layout_match_detail_event_info.*
+import kotlinx.android.synthetic.main.layout_match_detail_teams_info.*
+import kotlinx.android.synthetic.main.layout_match_detail_teams_stats.*
 import java.text.SimpleDateFormat
 import java.util.*
 
