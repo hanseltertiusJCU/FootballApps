@@ -26,12 +26,12 @@ import java.util.*
 @SuppressLint("SimpleDateFormat")
 class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
 
-    lateinit var eventId: String
-    lateinit var eventName: String
-    lateinit var homeTeamId: String
-    lateinit var awayTeamId: String
+    private lateinit var eventId: String
+    private lateinit var eventName: String
+    private lateinit var homeTeamId: String
+    private lateinit var awayTeamId: String
 
-    lateinit var matchDetailPresenter: MatchDetailPresenter
+    private lateinit var matchDetailPresenter: MatchDetailPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
