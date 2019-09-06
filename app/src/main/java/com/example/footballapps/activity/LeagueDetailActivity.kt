@@ -238,7 +238,7 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
         val menuInflater: MenuInflater = menuInflater
-        menuInflater.inflate(R.menu.menu_league_detail, menu)
+        menuInflater.inflate(R.menu.menu_schedule, menu)
 
         return super.onCreateOptionsMenu(menu)
     }

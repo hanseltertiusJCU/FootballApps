@@ -9,10 +9,4 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView" />
 
-    <item
-        android:id="@+id/action_league_detail"
-        android:icon="@drawable/ic_menu_info_white"
-        android:title="@string/info"
-        app:showAsAction="ifRoom|collapseActionView" />
-
 </menu>

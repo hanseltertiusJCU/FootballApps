@@ -98,6 +98,7 @@
 
     <!-- Menu item title -->
     <string name="search">Search</string>
+    <string name="match_schedule">Match Schedule</string>
     <string name="info">Info</string>
 
 </resources>

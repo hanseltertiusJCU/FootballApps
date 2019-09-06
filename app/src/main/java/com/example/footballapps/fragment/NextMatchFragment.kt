@@ -2,9 +2,7 @@ package com.example.footballapps.fragment
 
 import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -12,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.footballapps.R
+import com.example.footballapps.activity.LeagueDetailActivity
 import com.example.footballapps.activity.MatchDetailActivity
 import com.example.footballapps.activity.MatchScheduleActivity
 import com.example.footballapps.adapter.MatchRecyclerViewAdapter
@@ -43,7 +42,6 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
     private lateinit var nextMatchPresenter: MatchPresenter
 
     private var nextMatches: MutableList<MatchItem> = mutableListOf()
-
     private lateinit var nextMatchRvAdapter: MatchRecyclerViewAdapter
 
     override fun onCreateView(
@@ -51,6 +49,7 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true)
         return UI {
             constraintLayout {
                 id = R.id.next_match_parent_layout
@@ -105,7 +104,6 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initData()
     }
 
@@ -202,5 +200,21 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
             (activity as MatchScheduleActivity).leagueName = selectedLeagueOption.leagueName
         }
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.menu_info, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if(item?.itemId == R.id.action_info){
+            startActivity<LeagueDetailActivity>(
+                "leagueName" to (activity as MatchScheduleActivity).leagueName,
+                "leagueId" to  (activity as MatchScheduleActivity).leagueId
+            )
+            (activity as MatchScheduleActivity).finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

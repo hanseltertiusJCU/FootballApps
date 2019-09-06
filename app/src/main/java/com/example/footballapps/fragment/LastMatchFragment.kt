@@ -3,9 +3,7 @@ package com.example.footballapps.fragment
 
 import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -13,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.footballapps.R
+import com.example.footballapps.activity.LeagueDetailActivity
 import com.example.footballapps.activity.MatchDetailActivity
 import com.example.footballapps.activity.MatchScheduleActivity
 import com.example.footballapps.adapter.MatchRecyclerViewAdapter
@@ -47,11 +46,15 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
     private var lastMatches: MutableList<MatchItem> = mutableListOf()
     private lateinit var lastMatchRvAdapter: MatchRecyclerViewAdapter
 
+    private lateinit var lastMatchLeagueId : String
+    private lateinit var lastMatchLeagueName : String
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        setHasOptionsMenu(true)
         return UI {
             constraintLayout {
                 id = R.id.last_match_parent_layout
@@ -106,7 +109,6 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initData()
     }
 
@@ -158,16 +160,19 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
                 ) {
                     selectedLeagueOption = parent!!.selectedItem as LeagueOption
 
-                    (activity as MatchScheduleActivity).leagueId = selectedLeagueOption.leagueId
-                    (activity as MatchScheduleActivity).leagueName = selectedLeagueOption.leagueName
+                    lastMatchLeagueId = selectedLeagueOption.leagueId
+                    lastMatchLeagueName = selectedLeagueOption.leagueName
 
-                    lastMatchPresenter.getPreviousMatchInfo((activity as MatchScheduleActivity).leagueId)
+                    (activity as MatchScheduleActivity).leagueId = lastMatchLeagueId
+                    (activity as MatchScheduleActivity).leagueName = lastMatchLeagueName
+
+                    lastMatchPresenter.getPreviousMatchInfo(lastMatchLeagueId)
 
                 }
             }
 
         lastMatchSwipeRefreshLayout.onRefresh {
-            lastMatchPresenter.getPreviousMatchInfo((activity as MatchScheduleActivity).leagueId)
+            lastMatchPresenter.getPreviousMatchInfo(lastMatchLeagueId)
         }
     }
 
@@ -194,11 +199,9 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
     }
 
     override fun showMatchData(matchList: List<MatchItem>) {
-        lastMatchSwipeRefreshLayout.isRefreshing = false
         lastMatches.clear()
         lastMatches.addAll(matchList)
         lastMatchRvAdapter.notifyDataSetChanged()
-
     }
 
     override fun onPauseFragment() {}
@@ -207,10 +210,35 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
         if (::lastMatchLeagueSpinner.isInitialized) {
             val selectedLeagueOption = lastMatchLeagueSpinner.selectedItem as LeagueOption
 
-            (activity as MatchScheduleActivity).leagueId = selectedLeagueOption.leagueId
-            (activity as MatchScheduleActivity).leagueName = selectedLeagueOption.leagueName
+            lastMatchLeagueId = selectedLeagueOption.leagueId
+            lastMatchLeagueName = selectedLeagueOption.leagueName
+
+            (activity as MatchScheduleActivity).leagueId = lastMatchLeagueId
+            (activity as MatchScheduleActivity).leagueName = lastMatchLeagueName
         }
 
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?) {
+        super.onPrepareOptionsMenu(menu)
+        lastMatchLeagueId = (activity as MatchScheduleActivity).leagueId
+        lastMatchLeagueName = (activity as MatchScheduleActivity).leagueName
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.menu_info, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if(item?.itemId == R.id.action_info){
+            startActivity<LeagueDetailActivity>(
+                "leagueName" to lastMatchLeagueName,
+                "leagueId" to lastMatchLeagueId
+            )
+            (activity as MatchScheduleActivity).finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 

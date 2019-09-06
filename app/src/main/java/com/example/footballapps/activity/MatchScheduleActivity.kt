@@ -103,7 +103,7 @@ class MatchScheduleActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
         val menuInflater: MenuInflater = menuInflater
-        menuInflater.inflate(R.menu.menu_match_schedule, menu)
+        menuInflater.inflate(R.menu.menu_schedule, menu)
 
         val scheduleSearchItem: MenuItem? = menu!!.findItem(R.id.action_search)
 
@@ -127,13 +127,6 @@ class MatchScheduleActivity : AppCompatActivity() {
             item?.itemId == R.id.action_search -> {
                 invalidateOptionsMenu()
                 startActivity<SearchMatchScheduleActivity>()
-            }
-            item?.itemId == R.id.action_league_detail -> {
-                startActivity<LeagueDetailActivity>(
-                    "leagueName" to leagueName,
-                    "leagueId" to leagueId
-                )
-                finish()
             }
         }
         return super.onOptionsItemSelected(item!!)
