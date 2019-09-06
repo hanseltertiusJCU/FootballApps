@@ -103,7 +103,7 @@ class MatchScheduleActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
         val menuInflater: MenuInflater = menuInflater
-        menuInflater.inflate(R.menu.menu_schedule, menu)
+        menuInflater.inflate(R.menu.menu_search, menu)
 
         val scheduleSearchItem: MenuItem? = menu!!.findItem(R.id.action_search)
 
