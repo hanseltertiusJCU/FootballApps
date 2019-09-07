@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.footballapps.R
+import com.example.footballapps.activity.FootballGameInfoActivity
 import com.example.footballapps.activity.LeagueDetailActivity
 import com.example.footballapps.activity.MatchDetailActivity
 import com.example.footballapps.activity.MatchScheduleActivity
@@ -131,8 +132,8 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
         lastMatchLeagueSpinner.adapter = spinnerAdapter
 
         var selectedLeagueOption = LeagueOption(
-            (activity as MatchScheduleActivity).leagueId,
-            (activity as MatchScheduleActivity).leagueName
+            (activity as FootballGameInfoActivity).leagueId,
+            (activity as FootballGameInfoActivity).leagueName
         )
         lastMatchLeagueSpinner.setSelection(spinnerAdapter.getPosition(selectedLeagueOption))
 
@@ -163,8 +164,8 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
                     lastMatchLeagueId = selectedLeagueOption.leagueId
                     lastMatchLeagueName = selectedLeagueOption.leagueName
 
-                    (activity as MatchScheduleActivity).leagueId = lastMatchLeagueId
-                    (activity as MatchScheduleActivity).leagueName = lastMatchLeagueName
+                    (activity as FootballGameInfoActivity).leagueId = lastMatchLeagueId
+                    (activity as FootballGameInfoActivity).leagueName = lastMatchLeagueName
 
                     lastMatchPresenter.getPreviousMatchInfo(lastMatchLeagueId)
 
@@ -213,16 +214,16 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
             lastMatchLeagueId = selectedLeagueOption.leagueId
             lastMatchLeagueName = selectedLeagueOption.leagueName
 
-            (activity as MatchScheduleActivity).leagueId = lastMatchLeagueId
-            (activity as MatchScheduleActivity).leagueName = lastMatchLeagueName
+            (activity as FootballGameInfoActivity).leagueId = lastMatchLeagueId
+            (activity as FootballGameInfoActivity).leagueName = lastMatchLeagueName
         }
 
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?) {
         super.onPrepareOptionsMenu(menu)
-        lastMatchLeagueId = (activity as MatchScheduleActivity).leagueId
-        lastMatchLeagueName = (activity as MatchScheduleActivity).leagueName
+        lastMatchLeagueId = (activity as FootballGameInfoActivity).leagueId
+        lastMatchLeagueName = (activity as FootballGameInfoActivity).leagueName
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -236,7 +237,7 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
                 "leagueName" to lastMatchLeagueName,
                 "leagueId" to lastMatchLeagueId
             )
-            (activity as MatchScheduleActivity).finish()
+            (activity as FootballGameInfoActivity).finish()
         }
         return super.onOptionsItemSelected(item)
     }

@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity(), MainView {
                                 "leagueId" to leagueItem.leagueId
                             )
                         } else {
-                            startActivity<MatchScheduleActivity>(
+                            startActivity<FootballGameInfoActivity>(
                                 "leagueName" to leagueItem.leagueName,
                                 "leagueId" to leagueItem.leagueId
                             )

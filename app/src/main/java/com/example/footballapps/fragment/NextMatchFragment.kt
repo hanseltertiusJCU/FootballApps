@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.footballapps.R
+import com.example.footballapps.activity.FootballGameInfoActivity
 import com.example.footballapps.activity.LeagueDetailActivity
 import com.example.footballapps.activity.MatchDetailActivity
 import com.example.footballapps.activity.MatchScheduleActivity
@@ -149,16 +150,16 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
                 ) {
                     val selectedLeagueOption = parent!!.selectedItem as LeagueOption
 
-                    (activity as MatchScheduleActivity).leagueId = selectedLeagueOption.leagueId
-                    (activity as MatchScheduleActivity).leagueName = selectedLeagueOption.leagueName
+                    (activity as FootballGameInfoActivity).leagueId = selectedLeagueOption.leagueId
+                    (activity as FootballGameInfoActivity).leagueName = selectedLeagueOption.leagueName
 
-                    nextMatchPresenter.getNextMatchInfo((activity as MatchScheduleActivity).leagueId)
+                    nextMatchPresenter.getNextMatchInfo((activity as FootballGameInfoActivity).leagueId)
                 }
 
             }
 
         nextMatchSwipeRefreshLayout.onRefresh {
-            nextMatchPresenter.getNextMatchInfo((activity as MatchScheduleActivity).leagueId)
+            nextMatchPresenter.getNextMatchInfo((activity as FootballGameInfoActivity).leagueId)
         }
     }
 
@@ -196,8 +197,8 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
         if (::nextMatchLeagueSpinner.isInitialized) {
             val selectedLeagueOption = nextMatchLeagueSpinner.selectedItem as LeagueOption
 
-            (activity as MatchScheduleActivity).leagueId = selectedLeagueOption.leagueId
-            (activity as MatchScheduleActivity).leagueName = selectedLeagueOption.leagueName
+            (activity as FootballGameInfoActivity).leagueId = selectedLeagueOption.leagueId
+            (activity as FootballGameInfoActivity).leagueName = selectedLeagueOption.leagueName
         }
 
     }
@@ -210,10 +211,10 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if(item?.itemId == R.id.action_info){
             startActivity<LeagueDetailActivity>(
-                "leagueName" to (activity as MatchScheduleActivity).leagueName,
-                "leagueId" to  (activity as MatchScheduleActivity).leagueId
+                "leagueName" to (activity as FootballGameInfoActivity).leagueName,
+                "leagueId" to  (activity as FootballGameInfoActivity).leagueId
             )
-            (activity as MatchScheduleActivity).finish()
+            (activity as FootballGameInfoActivity).finish()
         }
         return super.onOptionsItemSelected(item)
     }

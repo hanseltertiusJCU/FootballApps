@@ -153,6 +153,8 @@ class SearchMatchScheduleActivity : AppCompatActivity(), MatchView {
         search_match_progress_bar.gone()
 
         search_match_error_data_text.text = errorText
+
+        isDataLoading = false
     }
 
     override fun showMatchData(matchList: List<MatchItem>) {

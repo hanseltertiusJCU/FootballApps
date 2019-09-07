@@ -3,10 +3,11 @@ package com.example.footballapps.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentStatePagerAdapter
 
 
 class MatchViewPagerAdapter(fragmentManager: FragmentManager) :
-    FragmentPagerAdapter(fragmentManager) {
+    FragmentStatePagerAdapter(fragmentManager) {
 
     private val mFragmentList: MutableList<Fragment> = mutableListOf()
     private val mFragmentTitleList: MutableList<String> = mutableListOf()

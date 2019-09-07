@@ -247,7 +247,7 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
         when {
             item?.itemId == android.R.id.home -> finish()
             item?.itemId == R.id.action_match_schedule -> {
-                startActivity<MatchScheduleActivity>(
+                startActivity<FootballGameInfoActivity>(
                     "leagueName" to leagueName,
                     "leagueId" to leagueId
                 )
