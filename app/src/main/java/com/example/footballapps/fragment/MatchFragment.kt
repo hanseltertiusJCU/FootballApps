@@ -11,16 +11,13 @@ import androidx.viewpager.widget.ViewPager
 
 import com.example.footballapps.R
 import com.example.footballapps.activity.FootballGameInfoActivity
-import com.example.footballapps.activity.SearchMatchScheduleActivity
+import com.example.footballapps.activity.SearchInfoActivity
 import com.example.footballapps.adapter.MatchViewPagerAdapter
 import com.example.footballapps.lifecycle.FragmentLifecycle
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.activity_match_schedule.*
-import kotlinx.android.synthetic.main.fragment_match.*
 import kotlinx.android.synthetic.main.fragment_match.tab_layout_match_schedule
 import kotlinx.android.synthetic.main.fragment_match.view_pager_match_schedule
 import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.support.v4.act
 
 class MatchFragment : Fragment() {
 
@@ -119,7 +116,7 @@ class MatchFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if(item?.itemId == R.id.action_search){
             activity?.invalidateOptionsMenu()
-            context?.startActivity<SearchMatchScheduleActivity>()
+            context?.startActivity<SearchInfoActivity>()
         }
         return super.onOptionsItemSelected(item)
     }

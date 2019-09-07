@@ -17,11 +17,11 @@ import com.example.footballapps.utils.gone
 import com.example.footballapps.utils.invisible
 import com.example.footballapps.utils.visible
 import com.example.footballapps.view.MatchView
-import kotlinx.android.synthetic.main.activity_search_match_schedule.*
+import kotlinx.android.synthetic.main.activity_search_info.*
 import org.jetbrains.anko.startActivity
 
 
-class SearchMatchScheduleActivity : AppCompatActivity(), MatchView {
+class SearchInfoActivity : AppCompatActivity(), MatchView {
 
     private lateinit var searchResultMatchPresenter: MatchPresenter
 
@@ -33,7 +33,7 @@ class SearchMatchScheduleActivity : AppCompatActivity(), MatchView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search_match_schedule)
+        setContentView(R.layout.activity_search_info)
 
         setSupportActionBar(toolbar_search_match_schedule)
 
@@ -65,7 +65,7 @@ class SearchMatchScheduleActivity : AppCompatActivity(), MatchView {
         searchScheduleSearchItem?.expandActionView()
 
         val searchScheduleSearchManager: SearchManager =
-            this@SearchMatchScheduleActivity.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+            this@SearchInfoActivity.getSystemService(Context.SEARCH_SERVICE) as SearchManager
 
         var searchScheduleSearchView: SearchView? = null
 
@@ -111,7 +111,7 @@ class SearchMatchScheduleActivity : AppCompatActivity(), MatchView {
 
         searchScheduleSearchView?.setSearchableInfo(
             searchScheduleSearchManager.getSearchableInfo(
-                this@SearchMatchScheduleActivity.componentName
+                this@SearchInfoActivity.componentName
             )
         )
 
