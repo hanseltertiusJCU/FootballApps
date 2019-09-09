@@ -35,7 +35,7 @@ class SearchInfoActivity : AppCompatActivity(), MatchView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_info)
 
-        setSupportActionBar(toolbar_search_match_schedule)
+        setSupportActionBar(toolbar_search_info)
 
         initData()
     }
@@ -50,8 +50,8 @@ class SearchInfoActivity : AppCompatActivity(), MatchView {
                 "awayTeamId" to it.awayTeamId
             )
         }
-        rv_search_match_schedule.adapter = searchResultMatchRvAdapter
-        rv_search_match_schedule.layoutManager = LinearLayoutManager(this)
+        rv_search_info.adapter = searchResultMatchRvAdapter
+        rv_search_info.layoutManager = LinearLayoutManager(this)
 
         searchResultMatchPresenter = MatchPresenter(this)
     }
@@ -120,26 +120,26 @@ class SearchInfoActivity : AppCompatActivity(), MatchView {
 
     override fun dataIsLoading() {
         isDataLoading = true
-        search_match_progress_bar.visible()
-        search_match_error_data_text.gone()
-        rv_search_match_schedule.invisible()
+        search_info_progress_bar.visible()
+        search_info_error_data_text.gone()
+        rv_search_info.invisible()
     }
 
     override fun dataLoadingFinished() {
         when {
             searchResultMatches.size == 0 -> {
-                rv_search_match_schedule.invisible()
-                search_match_error_data_text.visible()
-                search_match_progress_bar.gone()
+                rv_search_info.invisible()
+                search_info_error_data_text.visible()
+                search_info_progress_bar.gone()
 
-                search_match_error_data_text.text = resources.getString(R.string.no_data_to_show)
+                search_info_error_data_text.text = resources.getString(R.string.no_data_to_show)
 
                 isDataLoading = false
             }
             else -> {
-                rv_search_match_schedule.visible()
-                search_match_error_data_text.gone()
-                search_match_progress_bar.gone()
+                rv_search_info.visible()
+                search_info_error_data_text.gone()
+                search_info_progress_bar.gone()
 
                 isDataLoading = false
             }
@@ -148,11 +148,11 @@ class SearchInfoActivity : AppCompatActivity(), MatchView {
     }
 
     override fun dataFailedToLoad(errorText: String) {
-        rv_search_match_schedule.invisible()
-        search_match_error_data_text.visible()
-        search_match_progress_bar.gone()
+        rv_search_info.invisible()
+        search_info_error_data_text.visible()
+        search_info_progress_bar.gone()
 
-        search_match_error_data_text.text = errorText
+        search_info_error_data_text.text = errorText
 
         isDataLoading = false
     }

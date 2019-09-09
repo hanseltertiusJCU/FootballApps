@@ -1,6 +1,5 @@
 package com.example.footballapps.fragment
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.*
@@ -89,9 +88,7 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
                     bottomToBottom = R.id.next_match_parent_layout
                 }
 
-                nextMatchErrorText = textView {
-                    textColor = Color.BLACK
-                }.lparams {
+                nextMatchErrorText = themedTextView(R.style.text_content).lparams {
                     topToTop = R.id.next_match_parent_layout
                     leftToLeft = R.id.next_match_parent_layout
                     rightToRight = R.id.next_match_parent_layout
@@ -150,7 +147,8 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
                     val selectedLeagueOption = parent!!.selectedItem as LeagueOption
 
                     (activity as FootballGameInfoActivity).leagueId = selectedLeagueOption.leagueId
-                    (activity as FootballGameInfoActivity).leagueName = selectedLeagueOption.leagueName
+                    (activity as FootballGameInfoActivity).leagueName =
+                        selectedLeagueOption.leagueName
 
                     nextMatchPresenter.getNextMatchInfo((activity as FootballGameInfoActivity).leagueId)
                 }
@@ -208,10 +206,10 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if(item?.itemId == R.id.action_info){
+        if (item?.itemId == R.id.action_info) {
             startActivity<LeagueDetailActivity>(
                 "leagueName" to (activity as FootballGameInfoActivity).leagueName,
-                "leagueId" to  (activity as FootballGameInfoActivity).leagueId
+                "leagueId" to (activity as FootballGameInfoActivity).leagueId
             )
             (activity as FootballGameInfoActivity).finish()
         }

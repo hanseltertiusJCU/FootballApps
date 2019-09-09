@@ -42,7 +42,10 @@ class FavoriteMatchRecyclerViewAdapter(
             val timeUnknown = FootballApps.res.getString(R.string.time_unknown)
         }
 
-        fun bindItem(favoriteMatchItem: FavoriteMatchItem, clickListener: (FavoriteMatchItem) -> Unit) {
+        fun bindItem(
+            favoriteMatchItem: FavoriteMatchItem,
+            clickListener: (FavoriteMatchItem) -> Unit
+        ) {
             itemView.league_item_name.text = favoriteMatchItem.leagueName ?: leagueNameUnknown
             itemView.league_item_match_week.text = when {
                 favoriteMatchItem.leagueMatchWeek != null -> StringBuilder("Week ${favoriteMatchItem.leagueMatchWeek}")
@@ -52,13 +55,15 @@ class FavoriteMatchRecyclerViewAdapter(
             itemView.league_item_event_date.text = favoriteMatchItem.dateEvent ?: dateUnknown
             itemView.league_item_event_time.text = favoriteMatchItem.timeEvent ?: timeUnknown
 
-            itemView.league_item_home_team_name.text = favoriteMatchItem.homeTeamName ?: homeTeamNameUnknown
+            itemView.league_item_home_team_name.text =
+                favoriteMatchItem.homeTeamName ?: homeTeamNameUnknown
 
             itemView.league_item_home_team_score.text = favoriteMatchItem.homeTeamScore ?: "-"
 
             itemView.league_item_away_team_score.text = favoriteMatchItem.awayTeamScore ?: "-"
 
-            itemView.league_item_away_team_name.text = favoriteMatchItem.awayTeamName ?: awayTeamNameUnknown
+            itemView.league_item_away_team_name.text =
+                favoriteMatchItem.awayTeamName ?: awayTeamNameUnknown
 
             itemView.setOnClickListener {
                 clickListener(favoriteMatchItem)

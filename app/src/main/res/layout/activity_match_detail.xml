@@ -44,11 +44,11 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <include layout="@layout/layout_match_detail_event_info"/>
+                        <include layout="@layout/layout_match_detail_event_info" />
 
-                        <include layout="@layout/layout_match_detail_teams_stats"/>
+                        <include layout="@layout/layout_match_detail_teams_stats" />
 
-                        <include layout="@layout/layout_match_detail_teams_info"/>
+                        <include layout="@layout/layout_match_detail_teams_info" />
 
                     </LinearLayout>
 

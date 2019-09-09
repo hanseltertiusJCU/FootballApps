@@ -1,7 +1,6 @@
 package com.example.footballapps.adapter
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.util.TypedValue
 import android.view.Gravity
@@ -85,11 +84,10 @@ class LeagueRecyclerViewAdapter(
                         contentDescription = R.string.league_image.toString()
                     }
 
-                    textView {
+                    themedTextView(R.style.text_content) {
                         id = leagueNameTextViewId
                         gravity = Gravity.CENTER
                         layoutParams = LinearLayout.LayoutParams(matchParent, wrapContent)
-                        textColor = Color.BLACK
                     }.lparams {
                         margin = dip(8)
                         width = matchParent

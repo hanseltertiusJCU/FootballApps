@@ -1,7 +1,5 @@
 package com.example.footballapps.activity
 
-import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.Menu
@@ -91,51 +89,39 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
                                     centerHorizontally()
                                 }
 
-                                tvLeagueDetailName = textView {
+                                tvLeagueDetailName = themedTextView(R.style.text_title) {
                                     id = R.id.tv_league_detail_name
-                                    typeface = Typeface.DEFAULT_BOLD
-                                    textSize = 20f
-                                    textColor = Color.BLACK
                                 }.lparams {
                                     centerHorizontally()
                                     topMargin = dip(8)
                                     bottomOf(R.id.iv_league_detail_image)
                                 }
 
-                                tvLeagueDetailFormedYear = textView {
+                                tvLeagueDetailFormedYear = themedTextView(R.style.text_section) {
                                     id = R.id.tv_league_detail_formed_year
-                                    typeface = Typeface.DEFAULT_BOLD
-                                    textSize = 16f
-                                    textColor = Color.BLACK
                                 }.lparams {
                                     centerHorizontally()
                                     topMargin = dip(8)
                                     bottomOf(R.id.tv_league_detail_name)
                                 }
 
-                                tvLeagueDetailCountry = textView {
+                                tvLeagueDetailCountry = themedTextView(R.style.text_section) {
                                     id = R.id.tv_league_detail_country
-                                    typeface = Typeface.DEFAULT_BOLD
-                                    textSize = 16f
-                                    textColor = Color.BLACK
                                 }.lparams {
                                     centerHorizontally()
                                     topMargin = dip(8)
                                     bottomOf(R.id.tv_league_detail_formed_year)
                                 }
 
-                                tvDescTitle = textView("Description : ") {
-                                    id = R.id.tv_desc_title
-                                    typeface = Typeface.DEFAULT_BOLD
-                                    textSize = 16f
-                                    textColor = Color.BLACK
-                                }.lparams {
-                                    topMargin = dip(8)
-                                    bottomOf(R.id.tv_league_detail_country)
-                                }
-                                tvLeagueDetailDesc = textView {
+                                tvDescTitle =
+                                    themedTextView("Description : ", R.style.text_section) {
+                                        id = R.id.tv_desc_title
+                                    }.lparams {
+                                        topMargin = dip(8)
+                                        bottomOf(R.id.tv_league_detail_country)
+                                    }
+                                tvLeagueDetailDesc = themedTextView(R.style.text_content) {
                                     id = R.id.tv_league_detail_desc
-                                    textColor = Color.BLACK
                                 }.lparams {
                                     topMargin = dip(8)
                                     bottomOf(R.id.tv_desc_title)
@@ -155,9 +141,7 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
                         bottomToBottom = R.id.container_layout_league_detail
                     }
 
-                    leagueDetailErrorDataText = textView {
-                        textColor = Color.BLACK
-                    }.lparams {
+                    leagueDetailErrorDataText = themedTextView(R.style.text_content).lparams {
                         topToTop = R.id.container_layout_league_detail
                         startToStart = R.id.container_layout_league_detail
                         endToEnd = R.id.container_layout_league_detail

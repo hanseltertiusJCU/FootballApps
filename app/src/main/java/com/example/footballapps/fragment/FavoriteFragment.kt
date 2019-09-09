@@ -3,7 +3,6 @@ package com.example.footballapps.fragment
 
 import android.app.SearchManager
 import android.content.Context
-import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
@@ -66,7 +65,7 @@ class FavoriteFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchView {
 
     private fun initData() {
 
-        (activity as AppCompatActivity).supportActionBar!!.title = "Favorite"
+        (activity as AppCompatActivity).supportActionBar!!.title = "Favorites"
 
         favoriteMatchRvAdapter = FavoriteMatchRecyclerViewAdapter(context!!, favoriteMatches) {
             context?.startActivity<MatchDetailActivity>(
@@ -121,9 +120,7 @@ class FavoriteFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchView {
                 bottomToBottom = R.id.favorite_match_parent_layout
             }
 
-            favoriteMatchErrorText = textView {
-                textColor = Color.BLACK
-            }.lparams {
+            favoriteMatchErrorText = themedTextView(R.style.text_content).lparams {
                 topToTop = R.id.favorite_match_parent_layout
                 leftToLeft = R.id.favorite_match_parent_layout
                 rightToRight = R.id.favorite_match_parent_layout

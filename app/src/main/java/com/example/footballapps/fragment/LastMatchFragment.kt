@@ -1,7 +1,6 @@
 package com.example.footballapps.fragment
 
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.*
@@ -46,8 +45,8 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
     private var lastMatches: MutableList<MatchItem> = mutableListOf()
     private lateinit var lastMatchRvAdapter: MatchRecyclerViewAdapter
 
-    private lateinit var lastMatchLeagueId : String
-    private lateinit var lastMatchLeagueName : String
+    private lateinit var lastMatchLeagueId: String
+    private lateinit var lastMatchLeagueName: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -94,9 +93,7 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
                     bottomToBottom = R.id.last_match_parent_layout
                 }
 
-                lastMatchErrorText = textView {
-                    textColor = Color.BLACK
-                }.lparams {
+                lastMatchErrorText = themedTextView(R.style.text_content).lparams {
                     topToTop = R.id.last_match_parent_layout
                     leftToLeft = R.id.last_match_parent_layout
                     rightToRight = R.id.last_match_parent_layout
@@ -231,7 +228,7 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if(item?.itemId == R.id.action_info){
+        if (item?.itemId == R.id.action_info) {
             startActivity<LeagueDetailActivity>(
                 "leagueName" to lastMatchLeagueName,
                 "leagueId" to lastMatchLeagueId

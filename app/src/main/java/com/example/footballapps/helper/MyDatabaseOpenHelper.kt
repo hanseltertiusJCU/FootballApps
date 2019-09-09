@@ -5,14 +5,14 @@ import android.database.sqlite.SQLiteDatabase
 import com.example.footballapps.favorite.FavoriteMatchItem
 import org.jetbrains.anko.db.*
 
-class MyDatabaseOpenHelper(ctx : Context) : ManagedSQLiteOpenHelper(ctx, "Favorite.db", null, 1){
+class MyDatabaseOpenHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, "Favorite.db", null, 1) {
 
-    companion object{
-        private var instance : MyDatabaseOpenHelper? = null
+    companion object {
+        private var instance: MyDatabaseOpenHelper? = null
 
         @Synchronized
-        fun getInstance(ctx: Context) : MyDatabaseOpenHelper {
-            if(instance == null){
+        fun getInstance(ctx: Context): MyDatabaseOpenHelper {
+            if (instance == null) {
                 instance = MyDatabaseOpenHelper(ctx.applicationContext)
             }
             return instance as MyDatabaseOpenHelper
@@ -20,20 +20,22 @@ class MyDatabaseOpenHelper(ctx : Context) : ManagedSQLiteOpenHelper(ctx, "Favori
     }
 
     override fun onCreate(db: SQLiteDatabase) {
-        db.createTable(FavoriteMatchItem.TABLE_FAVORITE_MATCH, true,
+        db.createTable(
+            FavoriteMatchItem.TABLE_FAVORITE_MATCH, true,
             FavoriteMatchItem.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
             FavoriteMatchItem.EVENT_ID to TEXT + UNIQUE,
             FavoriteMatchItem.EVENT_NAME to TEXT,
-            FavoriteMatchItem.LEAGUE_NAME to TEXT,
             FavoriteMatchItem.EVENT_DATE to TEXT,
-            FavoriteMatchItem.LEAGUE_MATCH_WEEK to TEXT,
             FavoriteMatchItem.EVENT_TIME to TEXT,
+            FavoriteMatchItem.LEAGUE_NAME to TEXT,
+            FavoriteMatchItem.LEAGUE_MATCH_WEEK to TEXT,
             FavoriteMatchItem.HOME_TEAM_ID to TEXT,
             FavoriteMatchItem.AWAY_TEAM_ID to TEXT,
             FavoriteMatchItem.HOME_TEAM_NAME to TEXT,
             FavoriteMatchItem.AWAY_TEAM_NAME to TEXT,
             FavoriteMatchItem.HOME_TEAM_SCORE to TEXT,
-            FavoriteMatchItem.AWAY_TEAM_SCORE to TEXT)
+            FavoriteMatchItem.AWAY_TEAM_SCORE to TEXT
+        )
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -42,5 +44,5 @@ class MyDatabaseOpenHelper(ctx : Context) : ManagedSQLiteOpenHelper(ctx, "Favori
 
 }
 
-val Context.database : MyDatabaseOpenHelper
+val Context.database: MyDatabaseOpenHelper
     get() = MyDatabaseOpenHelper.getInstance(applicationContext)

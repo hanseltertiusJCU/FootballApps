@@ -27,10 +27,10 @@ import org.jetbrains.anko.startActivity
 
 class SearchFavoriteInfoActivity : AppCompatActivity(), FavoriteMatchView {
 
-    private lateinit var searchResultFavoriteMatchPresenter : FavoriteMatchPresenter
+    private lateinit var searchResultFavoriteMatchPresenter: FavoriteMatchPresenter
 
     private var searchResultFavoriteMatches: MutableList<FavoriteMatchItem> = mutableListOf()
-    private lateinit var searchResultFavoriteMatchRvAdapter : FavoriteMatchRecyclerViewAdapter
+    private lateinit var searchResultFavoriteMatchRvAdapter: FavoriteMatchRecyclerViewAdapter
 
     private var isDataLoading = false
 
@@ -43,16 +43,17 @@ class SearchFavoriteInfoActivity : AppCompatActivity(), FavoriteMatchView {
         initData()
     }
 
-    private fun initData(){
+    private fun initData() {
 
-        searchResultFavoriteMatchRvAdapter = FavoriteMatchRecyclerViewAdapter(this, searchResultFavoriteMatches){
-            startActivity<MatchDetailActivity>(
-                "eventId" to it.idEvent,
-                "eventName" to it.strEvent,
-                "homeTeamId" to it.homeTeamId,
-                "awayTeamId" to it.awayTeamId
-            )
-        }
+        searchResultFavoriteMatchRvAdapter =
+            FavoriteMatchRecyclerViewAdapter(this, searchResultFavoriteMatches) {
+                startActivity<MatchDetailActivity>(
+                    "eventId" to it.idEvent,
+                    "eventName" to it.strEvent,
+                    "homeTeamId" to it.homeTeamId,
+                    "awayTeamId" to it.awayTeamId
+                )
+            }
 
         rv_search_favorite_info.adapter = searchResultFavoriteMatchRvAdapter
         rv_search_favorite_info.layoutManager = LinearLayoutManager(this)
@@ -64,24 +65,26 @@ class SearchFavoriteInfoActivity : AppCompatActivity(), FavoriteMatchView {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
-        val menuInflater : MenuInflater = menuInflater
+        val menuInflater: MenuInflater = menuInflater
         menuInflater.inflate(R.menu.menu_search, menu)
 
-        val searchFavoriteInfoSearchItem : MenuItem? = menu!!.findItem(R.id.action_search)
+        val searchFavoriteInfoSearchItem: MenuItem? = menu!!.findItem(R.id.action_search)
         searchFavoriteInfoSearchItem?.expandActionView()
 
-        val searchFavoriteInfoSearchManager : SearchManager = this@SearchFavoriteInfoActivity.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchFavoriteInfoSearchManager: SearchManager =
+            this@SearchFavoriteInfoActivity.getSystemService(Context.SEARCH_SERVICE) as SearchManager
 
-        val searchFavoriteInfoSearchView : SearchView?
+        val searchFavoriteInfoSearchView: SearchView?
 
-        var isSearching : Boolean
+        var isSearching: Boolean
 
-        if(searchFavoriteInfoSearchItem != null){
+        if (searchFavoriteInfoSearchItem != null) {
             searchFavoriteInfoSearchView = searchFavoriteInfoSearchItem.actionView as SearchView
 
             getFavoriteDataFromQuery(searchFavoriteInfoSearchView.query.toString())
 
-            searchFavoriteInfoSearchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            searchFavoriteInfoSearchItem.setOnActionExpandListener(object :
+                MenuItem.OnActionExpandListener {
                 override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
                     isSearching = true
                     return true
@@ -89,7 +92,7 @@ class SearchFavoriteInfoActivity : AppCompatActivity(), FavoriteMatchView {
 
                 override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
                     isSearching = false
-                    if(!isSearching){
+                    if (!isSearching) {
                         finish()
                     }
                     return true
@@ -100,7 +103,7 @@ class SearchFavoriteInfoActivity : AppCompatActivity(), FavoriteMatchView {
             searchFavoriteInfoSearchView.setOnQueryTextListener(object :
                 SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    if(!isDataLoading){
+                    if (!isDataLoading) {
                         getFavoriteDataFromQuery(query!!)
                     }
                     return true
@@ -153,33 +156,40 @@ class SearchFavoriteInfoActivity : AppCompatActivity(), FavoriteMatchView {
         searchResultFavoriteMatchRvAdapter.notifyDataSetChanged()
     }
 
-    private fun getFavoriteDataFromQuery(query : String){
+    private fun getFavoriteDataFromQuery(query: String) {
         val isNetworkConnected = checkNetworkConnection()
-        searchResultFavoriteMatchPresenter.getFavoriteMatchInfoSearchResult(isNetworkConnected, query)
+        searchResultFavoriteMatchPresenter.getFavoriteMatchInfoSearchResult(
+            isNetworkConnected,
+            query
+        )
     }
 
     @Suppress("DEPRECATION")
-    private fun checkNetworkConnection() : Boolean {
+    private fun checkNetworkConnection(): Boolean {
 
-        val connectivityManager : ConnectivityManager? = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager: ConnectivityManager? =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-        if(connectivityManager != null){
-            if(Build.VERSION.SDK_INT < 23){
-                val networkInfo : NetworkInfo? = connectivityManager.activeNetworkInfo
+        if (connectivityManager != null) {
+            if (Build.VERSION.SDK_INT < 23) {
+                val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
 
-                if(networkInfo != null){
+                if (networkInfo != null) {
                     return (networkInfo.isConnected && (networkInfo.type == ConnectivityManager.TYPE_WIFI || networkInfo.type == ConnectivityManager.TYPE_MOBILE || networkInfo.type == ConnectivityManager.TYPE_VPN))
                 }
 
             } else {
-                val network : Network? = connectivityManager.activeNetwork
+                val network: Network? = connectivityManager.activeNetwork
 
-                if(network != null){
-                    val networkCapabilities : NetworkCapabilities = connectivityManager.getNetworkCapabilities(network)!!
+                if (network != null) {
+                    val networkCapabilities: NetworkCapabilities =
+                        connectivityManager.getNetworkCapabilities(network)!!
 
                     return (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || networkCapabilities.hasTransport(
-                        NetworkCapabilities.TRANSPORT_WIFI) || networkCapabilities.hasTransport(
-                        NetworkCapabilities.TRANSPORT_VPN))
+                        NetworkCapabilities.TRANSPORT_WIFI
+                    ) || networkCapabilities.hasTransport(
+                        NetworkCapabilities.TRANSPORT_VPN
+                    ))
                 }
             }
         }

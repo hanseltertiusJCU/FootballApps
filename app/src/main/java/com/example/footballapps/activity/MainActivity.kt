@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity(), MainView {
                     leagueItem.leagueName.toString(),
                     "Option"
                 ) {
-                    val options = listOf("Go to League Detail Info", "Go to League Match Info")
+                    val options = listOf("Go to League Detail Info", "Go to Football Game Info")
                     selector("Where do you want to go to?", options) { _, i ->
                         if (i == 0) {
                             startActivity<LeagueDetailActivity>(
@@ -131,23 +131,26 @@ class MainActivity : AppCompatActivity(), MainView {
         override fun createView(ui: AnkoContext<MainActivity>): View = with(ui) {
 
             coordinatorLayout {
-                themedAppBarLayout(R.style.ThemeOverlay_AppCompat_Dark_ActionBar) {
-                    lparams(width = matchParent, height = wrapContent)
-                    toolbarMain = toolbar {
-                        lparams(width = matchParent, height = dimenAttr(R.attr.actionBarSize))
-                        popupTheme = R.style.ThemeOverlay_AppCompat_Light
+
+                verticalLayout {
+                    themedAppBarLayout(R.style.ThemeOverlay_AppCompat_Dark_ActionBar) {
+                        lparams(width = matchParent, height = wrapContent)
+                        toolbarMain = toolbar {
+                            lparams(width = matchParent, height = dimenAttr(R.attr.actionBarSize))
+                            popupTheme = R.style.ThemeOverlay_AppCompat_Light
+                        }
                     }
+
+                    constraintLayoutView = constraintLayout {
+                        lparams(width = matchParent, height = wrapContent)
+                        recyclerViewLeagueList = recyclerView {
+                            id = recyclerViewLeagueListId
+                            isNestedScrollingEnabled = false
+                        }.lparams(width = matchParent, height = wrapContent)
+                    }
+
                 }
 
-                constraintLayoutView = constraintLayout {
-                    lparams(width = matchParent, height = wrapContent)
-                    recyclerViewLeagueList = recyclerView {
-                        id = recyclerViewLeagueListId
-                        isNestedScrollingEnabled = false
-                    }.lparams(width = matchParent, height = wrapContent)
-                }.lparams {
-                    topMargin = dimenAttr(R.attr.actionBarSize)
-                }
             }
         }
 

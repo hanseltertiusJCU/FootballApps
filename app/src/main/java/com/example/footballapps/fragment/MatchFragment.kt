@@ -8,20 +8,18 @@ import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
-
 import com.example.footballapps.R
 import com.example.footballapps.activity.FootballGameInfoActivity
 import com.example.footballapps.activity.SearchInfoActivity
 import com.example.footballapps.adapter.MatchViewPagerAdapter
 import com.example.footballapps.lifecycle.FragmentLifecycle
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.fragment_match.tab_layout_match_schedule
-import kotlinx.android.synthetic.main.fragment_match.view_pager_match_schedule
+import kotlinx.android.synthetic.main.fragment_match.*
 import org.jetbrains.anko.startActivity
 
 class MatchFragment : Fragment() {
 
-    private lateinit var matchViewPagerAdapter : MatchViewPagerAdapter
+    private lateinit var matchViewPagerAdapter: MatchViewPagerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,7 +38,7 @@ class MatchFragment : Fragment() {
         tab_layout_match_schedule.setupWithViewPager(view_pager_match_schedule)
     }
 
-    private fun setupViewPager(viewPager: ViewPager){
+    private fun setupViewPager(viewPager: ViewPager) {
         matchViewPagerAdapter = MatchViewPagerAdapter(childFragmentManager)
         matchViewPagerAdapter.addFragment(LastMatchFragment(), "Last Match")
         matchViewPagerAdapter.addFragment(NextMatchFragment(), "Next Match")
@@ -49,7 +47,7 @@ class MatchFragment : Fragment() {
         setListener()
     }
 
-    private fun setListener(){
+    private fun setListener() {
         view_pager_match_schedule.addOnPageChangeListener(
             TabLayout.TabLayoutOnPageChangeListener(
                 tab_layout_match_schedule
@@ -65,11 +63,13 @@ class MatchFragment : Fragment() {
                 when (tab?.position) {
                     1 -> {
                         view_pager_match_schedule.currentItem = 1
-                        (activity as FootballGameInfoActivity).supportActionBar?.title = matchViewPagerAdapter.getPageTitle(1)
+                        (activity as FootballGameInfoActivity).supportActionBar?.title =
+                            matchViewPagerAdapter.getPageTitle(1)
                     }
                     else -> {
                         view_pager_match_schedule.currentItem = 0
-                        (activity as FootballGameInfoActivity).supportActionBar?.title = matchViewPagerAdapter.getPageTitle(0)
+                        (activity as FootballGameInfoActivity).supportActionBar?.title =
+                            matchViewPagerAdapter.getPageTitle(0)
                     }
 
                 }
@@ -100,11 +100,12 @@ class MatchFragment : Fragment() {
 
         val scheduleSearchItem: MenuItem? = menu!!.findItem(R.id.action_search)
 
-        val scheduleSearchManager : SearchManager = context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val scheduleSearchManager: SearchManager =
+            context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
 
-        var scheduleSearchView : SearchView? = null
+        var scheduleSearchView: SearchView? = null
 
-        if (scheduleSearchItem != null){
+        if (scheduleSearchItem != null) {
             scheduleSearchView = scheduleSearchItem.actionView as SearchView
         }
 
@@ -114,7 +115,7 @@ class MatchFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if(item?.itemId == R.id.action_search){
+        if (item?.itemId == R.id.action_search) {
             activity?.invalidateOptionsMenu()
             context?.startActivity<SearchInfoActivity>()
         }
