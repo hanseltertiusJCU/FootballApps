@@ -1,14 +1,18 @@
 package com.example.footballapps.activity
 
 import android.annotation.SuppressLint
+import android.database.sqlite.SQLiteConstraintException
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.example.footballapps.R
 import com.example.footballapps.adapter.MatchRecyclerViewAdapter
+import com.example.footballapps.favorite.FavoriteMatch
+import com.example.footballapps.helper.database
 import com.example.footballapps.model.MatchItem
 import com.example.footballapps.presenter.MatchDetailPresenter
 import com.example.footballapps.utils.gone
@@ -19,6 +23,11 @@ import kotlinx.android.synthetic.main.activity_match_detail.*
 import kotlinx.android.synthetic.main.layout_match_detail_event_info.*
 import kotlinx.android.synthetic.main.layout_match_detail_teams_info.*
 import kotlinx.android.synthetic.main.layout_match_detail_teams_stats.*
+import org.jetbrains.anko.db.classParser
+import org.jetbrains.anko.db.delete
+import org.jetbrains.anko.db.insert
+import org.jetbrains.anko.db.select
+import org.jetbrains.anko.design.snackbar
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -32,6 +41,11 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
     private lateinit var awayTeamId: String
 
     private lateinit var matchDetailPresenter: MatchDetailPresenter
+
+    private var menuItem: Menu? = null
+    private var isEventFavorite: Boolean = false
+
+    private var favoriteMatchItem : MatchItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,19 +78,14 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
                 R.color.colorAccent
             )
         )
+
+        checkFavoriteMatchState()
     }
 
     private fun setToolbarBehavior() {
         setSupportActionBar(toolbar_detail_match)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = eventName
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            finish()
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun dataIsLoading() {
@@ -102,6 +111,9 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
     }
 
     override fun showMatchData(matchItem: MatchItem) {
+
+        favoriteMatchItem = matchItem
+
         match_detail_league_name.text = matchItem.leagueName ?: "-"
         match_detail_match_week.text = when {
             matchItem.leagueMatchWeek != null -> StringBuilder("Week ${matchItem.leagueMatchWeek}")
@@ -254,6 +266,94 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
         }
 
         return localTimeArray
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_favorite, menu)
+        menuItem = menu
+        setFavoriteMatchIcon()
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            R.id.action_add_to_favorite -> {
+                if(favoriteMatchItem != null){
+                    if(isEventFavorite) removeFromFavoriteEvent() else addToFavoriteEvent()
+
+                    isEventFavorite = !isEventFavorite
+                    setFavoriteMatchIcon()
+                }
+
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+
+        }
+    }
+
+    private fun addToFavoriteEvent(){
+        try{
+            val arrayLocalTimeDt = convertDateTimeToLocalTimeZone(
+                formatDate(favoriteMatchItem?.dateEvent),
+                formatTime(favoriteMatchItem?.timeEvent)
+            )
+            database.use {
+                insert(
+                    FavoriteMatch.TABLE_FAVORITE_MATCH,
+                    FavoriteMatch.EVENT_ID to favoriteMatchItem?.idEvent,
+                    FavoriteMatch.LEAGUE_NAME to favoriteMatchItem?.leagueName,
+                    FavoriteMatch.EVENT_DATE to arrayLocalTimeDt[0],
+                    FavoriteMatch.LEAGUE_MATCH_WEEK to favoriteMatchItem?.leagueMatchWeek,
+                    FavoriteMatch.EVENT_TIME to arrayLocalTimeDt[1],
+                    FavoriteMatch.HOME_TEAM_NAME to favoriteMatchItem?.homeTeamName,
+                    FavoriteMatch.AWAY_TEAM_NAME to favoriteMatchItem?.awayTeamName,
+                    FavoriteMatch.HOME_TEAM_SCORE to favoriteMatchItem?.homeTeamScore,
+                    FavoriteMatch.AWAY_TEAM_SCORE to favoriteMatchItem?.awayTeamScore
+                )
+            }
+            match_detail_swipe_refresh_layout.snackbar("Add an event into favorites").show()
+        } catch (e : SQLiteConstraintException) {
+            match_detail_swipe_refresh_layout.snackbar(e.localizedMessage).show()
+        }
+    }
+
+    private fun removeFromFavoriteEvent(){
+        try {
+            database.use {
+                delete(
+                    FavoriteMatch.TABLE_FAVORITE_MATCH,
+                    "(EVENT_ID = {eventId})",
+                    "eventId" to eventId
+                )
+
+            }
+            match_detail_swipe_refresh_layout.snackbar("Remove an event from favorites").show()
+        } catch (e : SQLiteConstraintException){
+            match_detail_swipe_refresh_layout.snackbar(e.localizedMessage).show()
+        }
+    }
+
+    private fun setFavoriteMatchIcon(){
+        if(isEventFavorite){
+            menuItem?.getItem(0)?.icon = ContextCompat.getDrawable(this, R.drawable.ic_added_to_favorites)
+        } else {
+            menuItem?.getItem(0)?.icon = ContextCompat.getDrawable(this, R.drawable.ic_add_to_favorites)
+        }
+    }
+
+    private fun checkFavoriteMatchState(){
+        database.use {
+            val result = select(FavoriteMatch.TABLE_FAVORITE_MATCH)
+                .whereArgs("(EVENT_ID = {eventId})", "eventId" to eventId)
+            val favorite = result.parseList(classParser<FavoriteMatch>())
+            if(favorite.isNotEmpty()) isEventFavorite = true
+
+        }
     }
 
 }

@@ -1,6 +1,6 @@
 package com.example.footballapps.favorite
 
-data class FavoriteMatch(val idEvent : String, val leagueName : String, val dateEvent : String, val leagueMatchWeek : String, val timeEvent : String, val homeTeamName : String, val awayTeamName : String, val homeTeamScore : String, val awayTeamScore : String){
+data class FavoriteMatch(val id : Long, val idEvent : String, val leagueName : String, val dateEvent : String, val leagueMatchWeek : String, val timeEvent : String, val homeTeamName : String, val awayTeamName : String, val homeTeamScore : String, val awayTeamScore : String){
     companion object {
         const val TABLE_FAVORITE_MATCH : String = "TABLE_FAVORITE_MATCH"
         const val ID : String = "ID_"
