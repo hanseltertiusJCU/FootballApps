@@ -1,25 +1,203 @@
 package com.example.footballapps.fragment
 
 
+import android.content.Context
+import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkInfo
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 import com.example.footballapps.R
+import com.example.footballapps.activity.MatchDetailActivity
+import com.example.footballapps.adapter.FavoriteMatchRecyclerViewAdapter
+import com.example.footballapps.favorite.FavoriteMatchItem
+import com.example.footballapps.helper.database
+import com.example.footballapps.model.MatchItem
+import com.example.footballapps.presenter.FavoriteMatchPresenter
+import com.example.footballapps.presenter.MatchPresenter
+import com.example.footballapps.utils.gone
+import com.example.footballapps.utils.invisible
+import com.example.footballapps.utils.visible
+import com.example.footballapps.view.FavoriteMatchView
+import kotlinx.coroutines.selects.select
+import org.jetbrains.anko.*
+import org.jetbrains.anko.constraint.layout.constraintLayout
+import org.jetbrains.anko.constraint.layout.matchConstraint
+import org.jetbrains.anko.db.classParser
+import org.jetbrains.anko.db.select
+import org.jetbrains.anko.recyclerview.v7.recyclerView
+import org.jetbrains.anko.support.v4.onRefresh
+import org.jetbrains.anko.support.v4.swipeRefreshLayout
+import androidx.appcompat.app.AppCompatActivity
 
-/**
- * A simple [Fragment] subclass.
- */
-class FavoriteFragment : Fragment() {
+
+class FavoriteFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchView {
+
+    private lateinit var favoriteMatchRecyclerView : RecyclerView
+    private lateinit var favoriteMatchProgressBar : ProgressBar
+    private lateinit var favoriteMatchSwipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var favoriteMatchErrorText : TextView
+
+    private var favoriteMatches : MutableList<FavoriteMatchItem> = mutableListOf()
+    private lateinit var favoriteMatchRvAdapter : FavoriteMatchRecyclerViewAdapter
+
+    private lateinit var favoriteMatchPresenter : FavoriteMatchPresenter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favorite, container, false)
+        setHasOptionsMenu(true)
+        return createView(AnkoContext.create(requireContext()))
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        initData()
+    }
+
+    private fun initData(){
+
+        (activity as AppCompatActivity).supportActionBar!!.title = "Favorite"
+
+        favoriteMatchRvAdapter = FavoriteMatchRecyclerViewAdapter(context!!, favoriteMatches){
+            context?.startActivity<MatchDetailActivity>(
+                "eventId" to it.idEvent,
+                "eventName" to it.strEvent,
+                "homeTeamId" to it.homeTeamId,
+                "awayTeamId" to it.awayTeamId
+            )
+        }
+
+        favoriteMatchRecyclerView.adapter = favoriteMatchRvAdapter
+
+        favoriteMatchPresenter = FavoriteMatchPresenter(this, context!!)
+
+        favoriteMatchSwipeRefreshLayout.onRefresh {
+            getFavoriteData()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getFavoriteData()
+    }
+
+    override fun createView(ui: AnkoContext<Context>): View = with(ui){
+        constraintLayout {
+            id = R.id.favorite_match_parent_layout
+            lparams(width = matchParent, height = matchParent)
+
+            favoriteMatchSwipeRefreshLayout = swipeRefreshLayout {
+
+                setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
+
+                favoriteMatchRecyclerView = recyclerView {
+                    lparams(width = matchParent, height = wrapContent)
+                    layoutManager = LinearLayoutManager(context)
+                }
+            }.lparams {
+                width = matchConstraint
+                height = matchConstraint
+                topToTop = R.id.favorite_match_parent_layout
+                leftToLeft = R.id.favorite_match_parent_layout
+                rightToRight = R.id.favorite_match_parent_layout
+                bottomToBottom = R.id.favorite_match_parent_layout
+                verticalBias = 0f
+            }
+
+            favoriteMatchProgressBar = progressBar().lparams {
+                topToTop = R.id.favorite_match_parent_layout
+                leftToLeft = R.id.favorite_match_parent_layout
+                rightToRight = R.id.favorite_match_parent_layout
+                bottomToBottom = R.id.favorite_match_parent_layout
+            }
+
+            favoriteMatchErrorText = textView {
+                textColor = Color.BLACK
+            }.lparams {
+                topToTop = R.id.favorite_match_parent_layout
+                leftToLeft = R.id.favorite_match_parent_layout
+                rightToRight = R.id.favorite_match_parent_layout
+                bottomToBottom = R.id.favorite_match_parent_layout
+            }
+        }
+    }
+
+
+    @Suppress("DEPRECATION")
+    private fun checkNetworkConnection() : Boolean {
+
+        val connectivityManager : ConnectivityManager? = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if(connectivityManager != null){
+            if(Build.VERSION.SDK_INT < 23){
+                val networkInfo : NetworkInfo? = connectivityManager.activeNetworkInfo
+
+                if(networkInfo != null){
+                    return (networkInfo.isConnected && (networkInfo.type == ConnectivityManager.TYPE_WIFI || networkInfo.type == ConnectivityManager.TYPE_MOBILE || networkInfo.type == ConnectivityManager.TYPE_VPN))
+                }
+
+            } else {
+                val network : Network? = connectivityManager.activeNetwork
+
+                if(network != null){
+                    val networkCapabilities : NetworkCapabilities = connectivityManager.getNetworkCapabilities(network)!!
+
+                    return (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN))
+                }
+            }
+        }
+        return false
+    }
+
+
+
+    override fun dataIsLoading() {
+        favoriteMatchProgressBar.visible()
+        favoriteMatchErrorText.gone()
+        favoriteMatchRecyclerView.invisible()
+    }
+
+    override fun dataLoadingFinished() {
+        favoriteMatchSwipeRefreshLayout.isRefreshing = false
+        favoriteMatchProgressBar.gone()
+        favoriteMatchErrorText.gone()
+        favoriteMatchRecyclerView.visible()
+    }
+
+    override fun dataFailedToLoad(errorText: String) {
+        favoriteMatchSwipeRefreshLayout.isRefreshing = false
+        favoriteMatchProgressBar.gone()
+        favoriteMatchErrorText.visible()
+        favoriteMatchRecyclerView.invisible()
+
+        favoriteMatchErrorText.text = errorText
+    }
+
+    override fun showMatchData(favoriteMatchList: List<FavoriteMatchItem>) {
+        favoriteMatches.clear()
+        favoriteMatches.addAll(favoriteMatchList)
+        favoriteMatchRvAdapter.notifyDataSetChanged()
+    }
+
+    private fun getFavoriteData(){
+        val isNetworkConnected = checkNetworkConnection()
+        favoriteMatchPresenter.getFavoriteMatchInfo(isNetworkConnected)
     }
 
 

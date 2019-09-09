@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.example.footballapps.R
 import com.example.footballapps.adapter.MatchRecyclerViewAdapter
-import com.example.footballapps.favorite.FavoriteMatch
+import com.example.footballapps.favorite.FavoriteMatchItem
 import com.example.footballapps.helper.database
 import com.example.footballapps.model.MatchItem
 import com.example.footballapps.presenter.MatchDetailPresenter
@@ -103,6 +103,7 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
 
     override fun dataFailedToLoad(errorText: String) {
         match_detail_swipe_refresh_layout.isRefreshing = false
+        favoriteMatchItem = null
         progress_bar_match_detail.gone()
         match_detail_error_data_text.visible()
         layout_match_detail_data.invisible()
@@ -304,16 +305,19 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
             )
             database.use {
                 insert(
-                    FavoriteMatch.TABLE_FAVORITE_MATCH,
-                    FavoriteMatch.EVENT_ID to favoriteMatchItem?.idEvent,
-                    FavoriteMatch.LEAGUE_NAME to favoriteMatchItem?.leagueName,
-                    FavoriteMatch.EVENT_DATE to arrayLocalTimeDt[0],
-                    FavoriteMatch.LEAGUE_MATCH_WEEK to favoriteMatchItem?.leagueMatchWeek,
-                    FavoriteMatch.EVENT_TIME to arrayLocalTimeDt[1],
-                    FavoriteMatch.HOME_TEAM_NAME to favoriteMatchItem?.homeTeamName,
-                    FavoriteMatch.AWAY_TEAM_NAME to favoriteMatchItem?.awayTeamName,
-                    FavoriteMatch.HOME_TEAM_SCORE to favoriteMatchItem?.homeTeamScore,
-                    FavoriteMatch.AWAY_TEAM_SCORE to favoriteMatchItem?.awayTeamScore
+                    FavoriteMatchItem.TABLE_FAVORITE_MATCH,
+                    FavoriteMatchItem.EVENT_ID to favoriteMatchItem?.idEvent,
+                    FavoriteMatchItem.EVENT_NAME to favoriteMatchItem?.strEvent,
+                    FavoriteMatchItem.LEAGUE_NAME to favoriteMatchItem?.leagueName,
+                    FavoriteMatchItem.EVENT_DATE to arrayLocalTimeDt[0],
+                    FavoriteMatchItem.LEAGUE_MATCH_WEEK to favoriteMatchItem?.leagueMatchWeek,
+                    FavoriteMatchItem.EVENT_TIME to arrayLocalTimeDt[1],
+                    FavoriteMatchItem.HOME_TEAM_ID to favoriteMatchItem?.homeTeamId,
+                    FavoriteMatchItem.AWAY_TEAM_ID to favoriteMatchItem?.awayTeamId,
+                    FavoriteMatchItem.HOME_TEAM_NAME to favoriteMatchItem?.homeTeamName,
+                    FavoriteMatchItem.AWAY_TEAM_NAME to favoriteMatchItem?.awayTeamName,
+                    FavoriteMatchItem.HOME_TEAM_SCORE to favoriteMatchItem?.homeTeamScore,
+                    FavoriteMatchItem.AWAY_TEAM_SCORE to favoriteMatchItem?.awayTeamScore
                 )
             }
             match_detail_swipe_refresh_layout.snackbar("Add an event into favorites").show()
@@ -326,7 +330,7 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
         try {
             database.use {
                 delete(
-                    FavoriteMatch.TABLE_FAVORITE_MATCH,
+                    FavoriteMatchItem.TABLE_FAVORITE_MATCH,
                     "(EVENT_ID = {eventId})",
                     "eventId" to eventId
                 )
@@ -348,9 +352,9 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
 
     private fun checkFavoriteMatchState(){
         database.use {
-            val result = select(FavoriteMatch.TABLE_FAVORITE_MATCH)
+            val result = select(FavoriteMatchItem.TABLE_FAVORITE_MATCH)
                 .whereArgs("(EVENT_ID = {eventId})", "eventId" to eventId)
-            val favorite = result.parseList(classParser<FavoriteMatch>())
+            val favorite = result.parseList(classParser<FavoriteMatchItem>())
             if(favorite.isNotEmpty()) isEventFavorite = true
 
         }

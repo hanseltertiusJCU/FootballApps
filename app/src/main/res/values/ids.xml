@@ -19,4 +19,7 @@
     <item name="next_match_parent_layout" type="id" />
     <item name="next_match_league_spinner" type="id" />
 
+    <!-- Favorite match fragment -->
+    <item name="favorite_match_parent_layout" type="id" />
+
 </resources>

@@ -13,12 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.FootballGameInfoActivity"></activity>
-        <activity
-            android:name=".activity.MatchDetailActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.SearchInfoActivity"
+        <activity android:name=".activity.FootballGameInfoActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -32,7 +27,10 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".activity.MatchScheduleActivity"
+            android:name=".activity.MatchDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SearchInfoActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />

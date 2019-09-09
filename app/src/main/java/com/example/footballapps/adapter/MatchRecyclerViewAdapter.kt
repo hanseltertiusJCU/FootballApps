@@ -16,7 +16,7 @@ import java.util.*
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class MatchRecyclerViewAdapter(
     private val context: Context,
-    private val matchList: List<MatchItem>,
+    private val matchItemList: List<MatchItem>,
     private val clickListener: (MatchItem) -> Unit
 ) :
     RecyclerView.Adapter<MatchRecyclerViewAdapter.MatchViewHolder>() {
@@ -30,10 +30,10 @@ class MatchRecyclerViewAdapter(
             )
         )
 
-    override fun getItemCount(): Int = matchList.size
+    override fun getItemCount(): Int = matchItemList.size
 
     override fun onBindViewHolder(holder: MatchViewHolder, position: Int) {
-        holder.bindItem(matchList[position], clickListener)
+        holder.bindItem(matchItemList[position], clickListener)
     }
 
     @SuppressLint("SimpleDateFormat")

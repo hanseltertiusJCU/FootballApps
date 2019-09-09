@@ -102,7 +102,6 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
                                     bottomOf(R.id.iv_league_detail_image)
                                 }
 
-                                // todo: established
                                 tvLeagueDetailFormedYear = textView {
                                     id = R.id.tv_league_detail_formed_year
                                     typeface = Typeface.DEFAULT_BOLD
