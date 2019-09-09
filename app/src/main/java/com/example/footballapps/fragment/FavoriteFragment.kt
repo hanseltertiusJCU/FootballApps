@@ -1,6 +1,7 @@
 package com.example.footballapps.fragment
 
 
+import android.app.SearchManager
 import android.content.Context
 import android.graphics.Color
 import android.net.ConnectivityManager
@@ -9,52 +10,45 @@ import android.net.NetworkCapabilities
 import android.net.NetworkInfo
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-
 import com.example.footballapps.R
 import com.example.footballapps.activity.MatchDetailActivity
+import com.example.footballapps.activity.SearchFavoriteInfoActivity
 import com.example.footballapps.adapter.FavoriteMatchRecyclerViewAdapter
 import com.example.footballapps.favorite.FavoriteMatchItem
-import com.example.footballapps.helper.database
-import com.example.footballapps.model.MatchItem
 import com.example.footballapps.presenter.FavoriteMatchPresenter
-import com.example.footballapps.presenter.MatchPresenter
 import com.example.footballapps.utils.gone
 import com.example.footballapps.utils.invisible
 import com.example.footballapps.utils.visible
 import com.example.footballapps.view.FavoriteMatchView
-import kotlinx.coroutines.selects.select
 import org.jetbrains.anko.*
 import org.jetbrains.anko.constraint.layout.constraintLayout
 import org.jetbrains.anko.constraint.layout.matchConstraint
-import org.jetbrains.anko.db.classParser
-import org.jetbrains.anko.db.select
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
-import androidx.appcompat.app.AppCompatActivity
 
 
 class FavoriteFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchView {
 
-    private lateinit var favoriteMatchRecyclerView : RecyclerView
-    private lateinit var favoriteMatchProgressBar : ProgressBar
+    private lateinit var favoriteMatchRecyclerView: RecyclerView
+    private lateinit var favoriteMatchProgressBar: ProgressBar
     private lateinit var favoriteMatchSwipeRefreshLayout: SwipeRefreshLayout
-    private lateinit var favoriteMatchErrorText : TextView
+    private lateinit var favoriteMatchErrorText: TextView
 
-    private var favoriteMatches : MutableList<FavoriteMatchItem> = mutableListOf()
-    private lateinit var favoriteMatchRvAdapter : FavoriteMatchRecyclerViewAdapter
+    private var favoriteMatches: MutableList<FavoriteMatchItem> = mutableListOf()
+    private lateinit var favoriteMatchRvAdapter: FavoriteMatchRecyclerViewAdapter
 
-    private lateinit var favoriteMatchPresenter : FavoriteMatchPresenter
+    private lateinit var favoriteMatchPresenter: FavoriteMatchPresenter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,11 +64,11 @@ class FavoriteFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchView {
         initData()
     }
 
-    private fun initData(){
+    private fun initData() {
 
         (activity as AppCompatActivity).supportActionBar!!.title = "Favorite"
 
-        favoriteMatchRvAdapter = FavoriteMatchRecyclerViewAdapter(context!!, favoriteMatches){
+        favoriteMatchRvAdapter = FavoriteMatchRecyclerViewAdapter(context!!, favoriteMatches) {
             context?.startActivity<MatchDetailActivity>(
                 "eventId" to it.idEvent,
                 "eventName" to it.strEvent,
@@ -97,7 +91,7 @@ class FavoriteFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchView {
         getFavoriteData()
     }
 
-    override fun createView(ui: AnkoContext<Context>): View = with(ui){
+    override fun createView(ui: AnkoContext<Context>): View = with(ui) {
         constraintLayout {
             id = R.id.favorite_match_parent_layout
             lparams(width = matchParent, height = matchParent)
@@ -140,31 +134,34 @@ class FavoriteFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchView {
 
 
     @Suppress("DEPRECATION")
-    private fun checkNetworkConnection() : Boolean {
+    private fun checkNetworkConnection(): Boolean {
 
-        val connectivityManager : ConnectivityManager? = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager: ConnectivityManager? =
+            context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-        if(connectivityManager != null){
-            if(Build.VERSION.SDK_INT < 23){
-                val networkInfo : NetworkInfo? = connectivityManager.activeNetworkInfo
+        if (connectivityManager != null) {
+            if (Build.VERSION.SDK_INT < 23) {
+                val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
 
-                if(networkInfo != null){
+                if (networkInfo != null) {
                     return (networkInfo.isConnected && (networkInfo.type == ConnectivityManager.TYPE_WIFI || networkInfo.type == ConnectivityManager.TYPE_MOBILE || networkInfo.type == ConnectivityManager.TYPE_VPN))
                 }
 
             } else {
-                val network : Network? = connectivityManager.activeNetwork
+                val network: Network? = connectivityManager.activeNetwork
 
-                if(network != null){
-                    val networkCapabilities : NetworkCapabilities = connectivityManager.getNetworkCapabilities(network)!!
+                if (network != null) {
+                    val networkCapabilities: NetworkCapabilities =
+                        connectivityManager.getNetworkCapabilities(network)!!
 
-                    return (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN))
+                    return (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || networkCapabilities.hasTransport(
+                        NetworkCapabilities.TRANSPORT_WIFI
+                    ) || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN))
                 }
             }
         }
         return false
     }
-
 
 
     override fun dataIsLoading() {
@@ -195,9 +192,37 @@ class FavoriteFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchView {
         favoriteMatchRvAdapter.notifyDataSetChanged()
     }
 
-    private fun getFavoriteData(){
+    private fun getFavoriteData() {
         val isNetworkConnected = checkNetworkConnection()
         favoriteMatchPresenter.getFavoriteMatchInfo(isNetworkConnected)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+
+        inflater?.inflate(R.menu.menu_search, menu)
+
+        val favoriteSearchItem: MenuItem? = menu!!.findItem(R.id.action_search)
+
+        val favoriteSearchManager: SearchManager =
+            context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+
+        var favoriteSearchView: SearchView? = null
+
+        if (favoriteSearchItem != null) {
+            favoriteSearchView = favoriteSearchItem.actionView as SearchView
+        }
+
+        favoriteSearchView?.setSearchableInfo(favoriteSearchManager.getSearchableInfo(activity?.componentName))
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == R.id.action_search) {
+            activity?.invalidateOptionsMenu()
+            context?.startActivity<SearchFavoriteInfoActivity>()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 

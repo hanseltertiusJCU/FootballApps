@@ -13,7 +13,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.FootballGameInfoActivity"
+        <activity
+            android:name=".activity.SearchFavoriteInfoActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+        <activity
+            android:name=".activity.FootballGameInfoActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
