@@ -32,6 +32,8 @@ class SearchFavoriteInfoActivity : AppCompatActivity(), FavoriteMatchView {
     private var searchResultFavoriteMatches: MutableList<FavoriteMatchItem> = mutableListOf()
     private lateinit var searchResultFavoriteMatchRvAdapter: FavoriteMatchRecyclerViewAdapter
 
+    private var searchFavoriteInfoSearchView: SearchView? = null
+
     private var isDataLoading = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +62,16 @@ class SearchFavoriteInfoActivity : AppCompatActivity(), FavoriteMatchView {
 
         searchResultFavoriteMatchPresenter = FavoriteMatchPresenter(this, this)
 
+        this.dataFailedToLoad(getString(R.string.no_data_to_show))
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (searchFavoriteInfoSearchView != null) {
+            getFavoriteDataFromQuery(searchFavoriteInfoSearchView?.query.toString())
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -74,14 +85,10 @@ class SearchFavoriteInfoActivity : AppCompatActivity(), FavoriteMatchView {
         val searchFavoriteInfoSearchManager: SearchManager =
             this@SearchFavoriteInfoActivity.getSystemService(Context.SEARCH_SERVICE) as SearchManager
 
-        val searchFavoriteInfoSearchView: SearchView?
-
         var isSearching: Boolean
 
         if (searchFavoriteInfoSearchItem != null) {
             searchFavoriteInfoSearchView = searchFavoriteInfoSearchItem.actionView as SearchView
-
-            getFavoriteDataFromQuery(searchFavoriteInfoSearchView.query.toString())
 
             searchFavoriteInfoSearchItem.setOnActionExpandListener(object :
                 MenuItem.OnActionExpandListener {
@@ -100,7 +107,7 @@ class SearchFavoriteInfoActivity : AppCompatActivity(), FavoriteMatchView {
 
             })
 
-            searchFavoriteInfoSearchView.setOnQueryTextListener(object :
+            searchFavoriteInfoSearchView?.setOnQueryTextListener(object :
                 SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     if (!isDataLoading) {
@@ -115,7 +122,7 @@ class SearchFavoriteInfoActivity : AppCompatActivity(), FavoriteMatchView {
 
             })
 
-            searchFavoriteInfoSearchView.setSearchableInfo(
+            searchFavoriteInfoSearchView?.setSearchableInfo(
                 searchFavoriteInfoSearchManager.getSearchableInfo(
                     this@SearchFavoriteInfoActivity.componentName
                 )
