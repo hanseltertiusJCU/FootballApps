@@ -219,6 +219,13 @@ class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchV
         )
     }
 
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (hidden) {
+            favoriteMatchSearchItem?.collapseActionView()
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
 
         inflater?.inflate(R.menu.menu_search, menu)
