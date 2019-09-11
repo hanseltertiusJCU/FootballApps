@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.*
 import android.widget.*
 import androidx.appcompat.widget.SearchView
-import androidx.core.app.ActivityCompat.invalidateOptionsMenu
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager

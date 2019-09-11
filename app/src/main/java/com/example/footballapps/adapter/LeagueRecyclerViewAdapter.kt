@@ -80,7 +80,7 @@ class LeagueRecyclerViewAdapter(
                         id = leagueImageViewId
                         scaleType = ImageView.ScaleType.FIT_XY
                         contentDescription = R.string.league_image.toString()
-                    }.lparams{
+                    }.lparams {
                         width = matchParent
                         height = convertDpToPx(256f, context)
                     }
