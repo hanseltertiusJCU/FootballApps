@@ -43,6 +43,10 @@ class MainActivity : AppCompatActivity(), MainView {
     }
 
     private fun initData() {
+
+        setSupportActionBar(mainActivityUI.toolbarMain)
+        supportActionBar?.title = "Leagues"
+
         val leagueId = resources.getStringArray(R.array.league_id)
         val leagueName = resources.getStringArray(R.array.league_name)
         val leagueImage = resources.obtainTypedArray(R.array.league_image)
@@ -74,28 +78,10 @@ class MainActivity : AppCompatActivity(), MainView {
             GridLayoutManager(this, spanCount)
         mainActivityUI.recyclerViewLeagueList.adapter =
             LeagueRecyclerViewAdapter(leagueInfoList) { leagueItem ->
-
-                mainActivityUI.constraintLayoutView.snackbar(
-                    leagueItem.leagueName.toString(),
-                    "Option"
-                ) {
-                    val options = listOf("Go to League Detail Info", "Go to Football Game Info")
-                    selector("Where do you want to go to?", options) { _, i ->
-                        if (i == 0) {
-                            startActivity<LeagueDetailActivity>(
-                                "leagueName" to leagueItem.leagueName,
-                                "leagueId" to leagueItem.leagueId
-                            )
-                        } else {
-                            startActivity<FootballGameInfoActivity>(
-                                "leagueName" to leagueItem.leagueName,
-                                "leagueId" to leagueItem.leagueId
-                            )
-                        }
-
-                    }
-                }
-
+                startActivity<LeagueDetailActivity>(
+                    "leagueName" to leagueItem.leagueName,
+                    "leagueId" to leagueItem.leagueId
+                )
             }
         mainActivityUI.recyclerViewLeagueList.addItemDecoration(
             GridSpacingItemDecoration(
