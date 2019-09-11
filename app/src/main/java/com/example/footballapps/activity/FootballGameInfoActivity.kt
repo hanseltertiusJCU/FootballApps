@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.example.footballapps.R
-import com.example.footballapps.fragment.FavoriteFragment
+import com.example.footballapps.fragment.FavoriteMatchFragment
 import com.example.footballapps.fragment.MatchFragment
 import kotlinx.android.synthetic.main.activity_football_game_info.*
 
@@ -29,22 +29,22 @@ class FootballGameInfoActivity : AppCompatActivity() {
 
         setListener(savedInstanceState)
 
-        initData()
+        loadMatchFragment(savedInstanceState)
 
-    }
-
-    private fun initData() {
-        football_game_info_bottom_navigation.selectedItemId = R.id.menu_item_match_schedule
     }
 
     private fun setListener(savedInstanceState: Bundle?) {
         football_game_info_bottom_navigation.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.menu_item_match_schedule -> {
-                    loadMatchFragment(savedInstanceState)
-                }
-                R.id.menu_item_favorite -> {
-                    loadFavoritesFragment(savedInstanceState)
+            val previousItem = football_game_info_bottom_navigation.selectedItemId
+            val nextItem = item.itemId
+            if (previousItem != nextItem) {
+                when (nextItem) {
+                    R.id.menu_item_match_schedule -> {
+                        loadMatchFragment(savedInstanceState)
+                    }
+                    R.id.menu_item_favorite -> {
+                        loadFavoritesFragment(savedInstanceState)
+                    }
                 }
             }
             true
@@ -70,8 +70,8 @@ class FootballGameInfoActivity : AppCompatActivity() {
                 .beginTransaction()
                 .replace(
                     R.id.fragment_football_game_info_container,
-                    FavoriteFragment(),
-                    FavoriteFragment::class.java.simpleName
+                    FavoriteMatchFragment(),
+                    FavoriteMatchFragment::class.java.simpleName
                 )
                 .commit()
         }

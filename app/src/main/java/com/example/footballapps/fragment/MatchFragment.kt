@@ -1,21 +1,18 @@
 package com.example.footballapps.fragment
 
 
-import android.app.SearchManager
-import android.content.Context
 import android.os.Bundle
-import android.view.*
-import androidx.appcompat.widget.SearchView
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.example.footballapps.R
 import com.example.footballapps.activity.FootballGameInfoActivity
-import com.example.footballapps.activity.SearchInfoActivity
 import com.example.footballapps.adapter.MatchViewPagerAdapter
 import com.example.footballapps.lifecycle.FragmentLifecycle
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_match.*
-import org.jetbrains.anko.startActivity
 
 class MatchFragment : Fragment() {
 
@@ -93,34 +90,6 @@ class MatchFragment : Fragment() {
 
         })
     }
-
-//    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-//
-//        inflater?.inflate(R.menu.menu_search, menu)
-//
-//        val scheduleSearchItem: MenuItem? = menu!!.findItem(R.id.action_search)
-//
-//        val scheduleSearchManager: SearchManager =
-//            context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
-//
-//        var scheduleSearchView: SearchView? = null
-//
-//        if (scheduleSearchItem != null) {
-//            scheduleSearchView = scheduleSearchItem.actionView as SearchView
-//        }
-//
-//        scheduleSearchView?.setSearchableInfo(scheduleSearchManager.getSearchableInfo(activity?.componentName))
-//
-//        super.onCreateOptionsMenu(menu, inflater)
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-//        if (item?.itemId == R.id.action_search) {
-//            activity?.invalidateOptionsMenu()
-//            context?.startActivity<SearchInfoActivity>()
-//        }
-//        return super.onOptionsItemSelected(item)
-//    }
 
 
 }

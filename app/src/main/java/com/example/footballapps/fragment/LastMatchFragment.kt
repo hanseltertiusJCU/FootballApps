@@ -113,11 +113,6 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
         }.view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initData()
-    }
-
     private fun initData() {
 
         val leagueIdList = resources.getStringArray(R.array.league_id)
@@ -223,6 +218,11 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
 
     override fun onPauseFragment() {
         lastMatchSearchItem?.collapseActionView()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initData()
     }
 
     override fun onResumeFragment() {

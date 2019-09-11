@@ -7,6 +7,7 @@ import com.example.footballapps.application.FootballApps
 import com.example.footballapps.favorite.FavoriteMatchItem
 import com.example.footballapps.helper.database
 import com.example.footballapps.view.FavoriteMatchView
+import org.jetbrains.anko.db.SqlOrderDirection
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.select
 
@@ -26,6 +27,7 @@ class FavoriteMatchPresenter(
         if (isNetworkActive) {
             context.database.use {
                 val favoriteMatchResult = select(FavoriteMatchItem.TABLE_FAVORITE_MATCH)
+                    .orderBy("ID_", SqlOrderDirection.DESC)
                 val favoriteMatchList =
                     favoriteMatchResult.parseList(classParser<FavoriteMatchItem>())
                 if (favoriteMatchList.isNotEmpty()) {
@@ -53,6 +55,7 @@ class FavoriteMatchPresenter(
                         "HOME_TEAM_NAME = {query} OR AWAY_TEAM_NAME = {query} OR LEAGUE_NAME LIKE '%$capitalizedQuery%'",
                         "query" to capitalizedQuery
                     )
+                    .orderBy("ID_", SqlOrderDirection.DESC)
                 val favoriteMatchList =
                     favoriteMatchResult.parseList(classParser<FavoriteMatchItem>())
                 if (favoriteMatchList.isNotEmpty()) {

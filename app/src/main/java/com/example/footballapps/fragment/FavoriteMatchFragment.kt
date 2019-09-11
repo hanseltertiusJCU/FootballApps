@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.footballapps.R
 import com.example.footballapps.activity.MatchDetailActivity
-import com.example.footballapps.activity.SearchFavoriteInfoActivity
 import com.example.footballapps.adapter.FavoriteMatchRecyclerViewAdapter
 import com.example.footballapps.favorite.FavoriteMatchItem
 import com.example.footballapps.presenter.FavoriteMatchPresenter
@@ -37,7 +36,7 @@ import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 
 
-class FavoriteFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchView {
+class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchView {
 
     private lateinit var favoriteMatchRecyclerView: RecyclerView
     private lateinit var favoriteMatchProgressBar: ProgressBar
@@ -48,6 +47,12 @@ class FavoriteFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchView {
     private lateinit var favoriteMatchRvAdapter: FavoriteMatchRecyclerViewAdapter
 
     private lateinit var favoriteMatchPresenter: FavoriteMatchPresenter
+
+    private var favoriteMatchSearchView: SearchView? = null
+    private var favoriteMatchSearchItem: MenuItem? = null
+
+    private var isDataLoading = false
+    private var isSearching = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -81,13 +86,22 @@ class FavoriteFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchView {
         favoriteMatchPresenter = FavoriteMatchPresenter(this, context!!)
 
         favoriteMatchSwipeRefreshLayout.onRefresh {
-            getFavoriteData()
+            if (isSearching) {
+                getFavoriteDataFromQuery(favoriteMatchSearchView?.query.toString())
+            } else {
+                getFavoriteData()
+            }
+
         }
     }
 
     override fun onResume() {
         super.onResume()
-        getFavoriteData()
+        if (isSearching) {
+            getFavoriteDataFromQuery(favoriteMatchSearchView?.query.toString())
+        } else {
+            getFavoriteData()
+        }
     }
 
     override fun createView(ui: AnkoContext<Context>): View = with(ui) {
@@ -165,6 +179,8 @@ class FavoriteFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchView {
         favoriteMatchProgressBar.visible()
         favoriteMatchErrorText.gone()
         favoriteMatchRecyclerView.invisible()
+
+        isDataLoading = true
     }
 
     override fun dataLoadingFinished() {
@@ -172,6 +188,8 @@ class FavoriteFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchView {
         favoriteMatchProgressBar.gone()
         favoriteMatchErrorText.gone()
         favoriteMatchRecyclerView.visible()
+
+        isDataLoading = false
     }
 
     override fun dataFailedToLoad(errorText: String) {
@@ -179,6 +197,8 @@ class FavoriteFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchView {
         favoriteMatchProgressBar.gone()
         favoriteMatchErrorText.visible()
         favoriteMatchRecyclerView.invisible()
+
+        isDataLoading = false
 
         favoriteMatchErrorText.text = errorText
     }
@@ -194,35 +214,63 @@ class FavoriteFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchView {
         favoriteMatchPresenter.getFavoriteMatchInfo(isNetworkConnected)
     }
 
+    private fun getFavoriteDataFromQuery(query: String) {
+        val isNetworkConnected = checkNetworkConnection()
+        favoriteMatchPresenter.getFavoriteMatchInfoSearchResult(
+            isNetworkConnected,
+            query
+        )
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
 
         inflater?.inflate(R.menu.menu_search, menu)
 
-        val favoriteSearchItem: MenuItem? = menu!!.findItem(R.id.action_search)
+        favoriteMatchSearchItem = menu!!.findItem(R.id.action_search)
 
         val favoriteSearchManager: SearchManager =
             context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
 
-        var favoriteSearchView: SearchView? = null
+        if (favoriteMatchSearchItem != null) {
+            favoriteMatchSearchView = favoriteMatchSearchItem?.actionView as SearchView
 
-        if (favoriteSearchItem != null) {
-            favoriteSearchView = favoriteSearchItem.actionView as SearchView
+            favoriteMatchSearchItem?.setOnActionExpandListener(object :
+                MenuItem.OnActionExpandListener {
+                override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+                    isSearching = true
+                    getFavoriteDataFromQuery(favoriteMatchSearchView?.query.toString())
+                    return true
+                }
+
+                override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+                    isSearching = false
+                    getFavoriteData()
+                    return true
+                }
+
+            })
+
+            favoriteMatchSearchView?.setOnQueryTextListener(object :
+                SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    if (!isDataLoading) {
+                        getFavoriteDataFromQuery(query!!)
+                    }
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    return false
+                }
+
+            })
+
+
         }
 
-        favoriteSearchView?.setSearchableInfo(favoriteSearchManager.getSearchableInfo(activity?.componentName))
-
-        //todo: tinggal pake search view nya gmn, itu aja
+        favoriteMatchSearchView?.setSearchableInfo(favoriteSearchManager.getSearchableInfo(activity?.componentName))
 
         super.onCreateOptionsMenu(menu, inflater)
     }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item?.itemId == R.id.action_search) {
-            activity?.invalidateOptionsMenu()
-            context?.startActivity<SearchFavoriteInfoActivity>()
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
 
 }
