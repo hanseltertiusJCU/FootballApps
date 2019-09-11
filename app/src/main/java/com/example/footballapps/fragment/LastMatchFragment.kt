@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.*
 import androidx.appcompat.widget.SearchView
+import androidx.core.app.ActivityCompat.invalidateOptionsMenu
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -250,6 +251,8 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
 
         lastMatchSearchItem = menu?.findItem(R.id.action_search)
 
+        val lastMatchLeagueInfoItem = menu?.findItem(R.id.action_info)
+
         val lastMatchSearchManager: SearchManager =
             context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
 
@@ -264,6 +267,7 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
                     isSearching = true
                     lastMatchLeagueSpinner.gone()
                     lastMatchPresenter.getSearchMatchInfo(lastMatchSearchView?.query.toString())
+                    lastMatchLeagueInfoItem?.isVisible = false
                     return true
                 }
 
@@ -271,6 +275,7 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
                     isSearching = false
                     lastMatchLeagueSpinner.visible()
                     lastMatchPresenter.getPreviousMatchInfo(lastMatchLeagueId)
+                    activity?.invalidateOptionsMenu()
                     return true
                 }
 

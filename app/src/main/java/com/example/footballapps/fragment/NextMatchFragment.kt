@@ -233,7 +233,9 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.menu_search_with_info, menu)
 
-        nextMatchSearchItem = menu!!.findItem(R.id.action_search)
+        nextMatchSearchItem = menu?.findItem(R.id.action_search)
+
+        val nextMatchLeagueInfoItem = menu?.findItem(R.id.action_info)
 
         val lastMatchSearchManager: SearchManager =
             context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
@@ -249,6 +251,7 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
                     isSearching = true
                     nextMatchLeagueSpinner.gone()
                     nextMatchPresenter.getSearchMatchInfo(nextMatchSearchView?.query.toString())
+                    nextMatchLeagueInfoItem?.isVisible = false
                     return true
                 }
 
@@ -256,6 +259,7 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
                     isSearching = false
                     nextMatchLeagueSpinner.visible()
                     nextMatchPresenter.getNextMatchInfo(nextMatchLeagueId)
+                    activity?.invalidateOptionsMenu()
                     return true
                 }
 

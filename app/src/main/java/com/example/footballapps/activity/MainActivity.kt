@@ -66,6 +66,8 @@ class MainActivity : AppCompatActivity(), MainView {
         mainPresenter.displayLeagueInfoListToRecyclerView(leagueItems)
 
         setSupportActionBar(mainActivityUI.toolbarMain)
+
+        supportActionBar?.title = "Leagues"
     }
 
     override fun displayRecyclerViewItem(leagueInfoList: MutableList<LeagueItem>) {
@@ -123,12 +125,11 @@ class MainActivity : AppCompatActivity(), MainView {
                     }
 
                     constraintLayoutView = constraintLayout {
-                        lparams(width = matchParent, height = wrapContent)
                         recyclerViewLeagueList = recyclerView {
                             id = recyclerViewLeagueListId
                             isNestedScrollingEnabled = false
-                        }.lparams(width = matchParent, height = wrapContent)
-                    }
+                        }
+                    }.lparams(width = matchParent, height = wrapContent)
 
                 }
 
