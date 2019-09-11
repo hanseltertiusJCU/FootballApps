@@ -17,7 +17,6 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.constraint.layout.constraintLayout
 import org.jetbrains.anko.design.coordinatorLayout
-import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.design.themedAppBarLayout
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 
@@ -44,9 +43,6 @@ class MainActivity : AppCompatActivity(), MainView {
 
     private fun initData() {
 
-        setSupportActionBar(mainActivityUI.toolbarMain)
-        supportActionBar?.title = "Leagues"
-
         val leagueId = resources.getStringArray(R.array.league_id)
         val leagueName = resources.getStringArray(R.array.league_name)
         val leagueImage = resources.obtainTypedArray(R.array.league_image)
@@ -70,7 +66,6 @@ class MainActivity : AppCompatActivity(), MainView {
         mainPresenter.displayLeagueInfoListToRecyclerView(leagueItems)
 
         setSupportActionBar(mainActivityUI.toolbarMain)
-
     }
 
     override fun displayRecyclerViewItem(leagueInfoList: MutableList<LeagueItem>) {
@@ -105,7 +100,7 @@ class MainActivity : AppCompatActivity(), MainView {
     class MainActivityUI : AnkoComponent<MainActivity> {
         lateinit var recyclerViewLeagueList: RecyclerView
 
-        lateinit var constraintLayoutView: View
+        private lateinit var constraintLayoutView: View
 
         lateinit var toolbarMain: Toolbar
 
@@ -117,7 +112,7 @@ class MainActivity : AppCompatActivity(), MainView {
         override fun createView(ui: AnkoContext<MainActivity>): View = with(ui) {
 
             coordinatorLayout {
-
+                lparams(width = matchParent, height = matchParent)
                 verticalLayout {
                     themedAppBarLayout(R.style.ThemeOverlay_AppCompat_Dark_ActionBar) {
                         lparams(width = matchParent, height = wrapContent)

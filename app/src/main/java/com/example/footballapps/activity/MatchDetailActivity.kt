@@ -3,7 +3,6 @@ package com.example.footballapps.activity
 import android.annotation.SuppressLint
 import android.database.sqlite.SQLiteConstraintException
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -178,19 +177,19 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
 
     override fun showHomeTeamBadge(homeTeamBadgeUrl: String?) {
         Glide
-            .with(this)
+            .with(applicationContext)
             .load(homeTeamBadgeUrl)
             .centerCrop()
-            .error(Glide.with(this).load(R.drawable.team_badge_placeholder))
+            .error(Glide.with(applicationContext).load(R.drawable.team_badge_placeholder))
             .into(match_detail_home_team_logo)
     }
 
     override fun showAwayTeamBadge(awayTeamBadgeUrl: String?) {
         Glide
-            .with(this)
+            .with(applicationContext)
             .load(awayTeamBadgeUrl)
             .centerCrop()
-            .error(Glide.with(this).load(R.drawable.team_badge_placeholder))
+            .error(Glide.with(applicationContext).load(R.drawable.team_badge_placeholder))
             .into(match_detail_away_team_logo)
     }
 
@@ -257,12 +256,10 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
             val dateTime = dateTimeFormat.parse(dateTimeStr)
             dateTimeFormat.timeZone = TimeZone.getDefault()
             val localTimeDtFormat = dateTimeFormat.format(dateTime)
-            Log.d("local date time", localTimeDtFormat)
             localTimeArray = localTimeDtFormat.split(",")
 
         } else {
             val localTimeDtFormat = "$date,$time"
-            Log.d("local date time", localTimeDtFormat)
             localTimeArray = localTimeDtFormat.split(",")
         }
 

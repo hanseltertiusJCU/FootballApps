@@ -16,7 +16,8 @@ import kotlinx.android.synthetic.main.fragment_match.*
 
 class MatchFragment : Fragment() {
 
-    private lateinit var matchViewPagerAdapter: MatchViewPagerAdapter
+    lateinit var matchViewPagerAdapter: MatchViewPagerAdapter
+    var currentPosition = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,8 +54,6 @@ class MatchFragment : Fragment() {
 
         tab_layout_match_schedule.addOnTabSelectedListener(object :
             TabLayout.OnTabSelectedListener {
-
-            var currentPosition = 0
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab?.position) {

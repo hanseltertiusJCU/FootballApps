@@ -226,6 +226,7 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
     }
 
     override fun onResumeFragment() {
+
         if (::lastMatchLeagueSpinner.isInitialized) {
             val selectedLeagueOption = lastMatchLeagueSpinner.selectedItem as LeagueOption
 
@@ -247,7 +248,7 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.menu_search_with_info, menu)
 
-        lastMatchSearchItem = menu!!.findItem(R.id.action_search)
+        lastMatchSearchItem = menu?.findItem(R.id.action_search)
 
         val lastMatchSearchManager: SearchManager =
             context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager

@@ -3,6 +3,7 @@ package com.example.footballapps.activity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.example.footballapps.R
 import com.example.footballapps.fragment.FavoriteMatchFragment
 import com.example.footballapps.fragment.MatchFragment
@@ -13,6 +14,11 @@ class FootballGameInfoActivity : AppCompatActivity() {
 
     lateinit var leagueName: String
     lateinit var leagueId: String
+
+    private var matchFragment = MatchFragment()
+    private var favoriteFragment = FavoriteMatchFragment()
+
+    private var activeFragment: Fragment = matchFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,23 +33,23 @@ class FootballGameInfoActivity : AppCompatActivity() {
         leagueName = intent.getStringExtra("leagueName")
         leagueId = intent.getStringExtra("leagueId")
 
-        setListener(savedInstanceState)
+        setListener()
 
-        loadMatchFragment(savedInstanceState)
+        initializeFragments()
 
     }
 
-    private fun setListener(savedInstanceState: Bundle?) {
+    private fun setListener() {
         football_game_info_bottom_navigation.setOnNavigationItemSelectedListener { item ->
             val previousItem = football_game_info_bottom_navigation.selectedItemId
             val nextItem = item.itemId
             if (previousItem != nextItem) {
                 when (nextItem) {
                     R.id.menu_item_match_schedule -> {
-                        loadMatchFragment(savedInstanceState)
+                        loadMatchFragment()
                     }
                     R.id.menu_item_favorite -> {
-                        loadFavoritesFragment(savedInstanceState)
+                        loadFavoritesFragment()
                     }
                 }
             }
@@ -51,30 +57,45 @@ class FootballGameInfoActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadMatchFragment(savedInstanceState: Bundle?) {
-        if (savedInstanceState == null) {
-            supportFragmentManager
-                .beginTransaction()
-                .replace(
-                    R.id.fragment_football_game_info_container,
-                    MatchFragment(),
-                    MatchFragment::class.java.simpleName
-                )
-                .commit()
-        }
+    private fun initializeFragments() {
+        supportFragmentManager.beginTransaction()
+            .add(
+                R.id.fragment_football_game_info_container,
+                matchFragment,
+                matchFragment::class.java.simpleName
+            )
+            .commit()
+
+        supportFragmentManager.beginTransaction()
+            .add(
+                R.id.fragment_football_game_info_container,
+                favoriteFragment,
+                favoriteFragment::class.java.simpleName
+            )
+            .hide(favoriteFragment)
+            .commit()
     }
 
-    private fun loadFavoritesFragment(savedInstanceState: Bundle?) {
-        if (savedInstanceState == null) {
-            supportFragmentManager
-                .beginTransaction()
-                .replace(
-                    R.id.fragment_football_game_info_container,
-                    FavoriteMatchFragment(),
-                    FavoriteMatchFragment::class.java.simpleName
-                )
-                .commit()
-        }
+    private fun loadMatchFragment() {
+        supportFragmentManager.beginTransaction()
+            .hide(activeFragment)
+            .show(matchFragment)
+            .commit()
+        activeFragment = matchFragment
+
+        supportActionBar?.title =
+            matchFragment.matchViewPagerAdapter.getPageTitle(matchFragment.currentPosition)
+
+    }
+
+    private fun loadFavoritesFragment() {
+        supportFragmentManager.beginTransaction()
+            .hide(activeFragment)
+            .show(favoriteFragment)
+            .commit()
+        activeFragment = favoriteFragment
+
+        supportActionBar?.title = "Favorites"
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

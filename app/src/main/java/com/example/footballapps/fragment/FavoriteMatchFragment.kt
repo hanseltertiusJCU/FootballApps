@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.view.*
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -69,8 +68,6 @@ class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchV
     }
 
     private fun initData() {
-
-        (activity as AppCompatActivity).supportActionBar!!.title = "Favorites"
 
         favoriteMatchRvAdapter = FavoriteMatchRecyclerViewAdapter(context!!, favoriteMatches) {
             context?.startActivity<MatchDetailActivity>(
