@@ -94,33 +94,33 @@ class MatchFragment : Fragment() {
         })
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-
-        inflater?.inflate(R.menu.menu_search, menu)
-
-        val scheduleSearchItem: MenuItem? = menu!!.findItem(R.id.action_search)
-
-        val scheduleSearchManager: SearchManager =
-            context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
-
-        var scheduleSearchView: SearchView? = null
-
-        if (scheduleSearchItem != null) {
-            scheduleSearchView = scheduleSearchItem.actionView as SearchView
-        }
-
-        scheduleSearchView?.setSearchableInfo(scheduleSearchManager.getSearchableInfo(activity?.componentName))
-
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item?.itemId == R.id.action_search) {
-            activity?.invalidateOptionsMenu()
-            context?.startActivity<SearchInfoActivity>()
-        }
-        return super.onOptionsItemSelected(item)
-    }
+//    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+//
+//        inflater?.inflate(R.menu.menu_search, menu)
+//
+//        val scheduleSearchItem: MenuItem? = menu!!.findItem(R.id.action_search)
+//
+//        val scheduleSearchManager: SearchManager =
+//            context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+//
+//        var scheduleSearchView: SearchView? = null
+//
+//        if (scheduleSearchItem != null) {
+//            scheduleSearchView = scheduleSearchItem.actionView as SearchView
+//        }
+//
+//        scheduleSearchView?.setSearchableInfo(scheduleSearchManager.getSearchableInfo(activity?.componentName))
+//
+//        super.onCreateOptionsMenu(menu, inflater)
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+//        if (item?.itemId == R.id.action_search) {
+//            activity?.invalidateOptionsMenu()
+//            context?.startActivity<SearchInfoActivity>()
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
 
 
 }

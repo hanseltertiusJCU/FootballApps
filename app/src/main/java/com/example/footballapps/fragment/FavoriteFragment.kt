@@ -211,6 +211,8 @@ class FavoriteFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchView {
 
         favoriteSearchView?.setSearchableInfo(favoriteSearchManager.getSearchableInfo(activity?.componentName))
 
+        //todo: tinggal pake search view nya gmn, itu aja
+
         super.onCreateOptionsMenu(menu, inflater)
     }
 

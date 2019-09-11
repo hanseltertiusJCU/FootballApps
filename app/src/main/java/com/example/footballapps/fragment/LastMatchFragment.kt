@@ -1,9 +1,12 @@
 package com.example.footballapps.fragment
 
 
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.*
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -47,6 +50,12 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
 
     private lateinit var lastMatchLeagueId: String
     private lateinit var lastMatchLeagueName: String
+
+    private var lastMatchSearchItem: MenuItem? = null
+    private var lastMatchSearchView: SearchView? = null
+
+    private var isDataLoading = false
+    private var isSearching = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -169,7 +178,12 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
             }
 
         lastMatchSwipeRefreshLayout.onRefresh {
-            lastMatchPresenter.getPreviousMatchInfo(lastMatchLeagueId)
+            if (!isSearching) {
+                lastMatchPresenter.getPreviousMatchInfo(lastMatchLeagueId)
+            } else {
+                lastMatchPresenter.getSearchMatchInfo(lastMatchSearchView?.query.toString())
+            }
+
         }
     }
 
@@ -177,6 +191,8 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
         lastMatchProgressBar.visible()
         lastMatchErrorText.gone()
         lastMatchRecyclerView.invisible()
+
+        isDataLoading = true
     }
 
     override fun dataLoadingFinished() {
@@ -184,6 +200,8 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
         lastMatchProgressBar.gone()
         lastMatchErrorText.gone()
         lastMatchRecyclerView.visible()
+
+        isDataLoading = false
     }
 
     override fun dataFailedToLoad(errorText: String) {
@@ -191,6 +209,8 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
         lastMatchProgressBar.gone()
         lastMatchErrorText.visible()
         lastMatchRecyclerView.invisible()
+
+        isDataLoading = false
 
         lastMatchErrorText.text = errorText
     }
@@ -201,7 +221,9 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
         lastMatchRvAdapter.notifyDataSetChanged()
     }
 
-    override fun onPauseFragment() {}
+    override fun onPauseFragment() {
+        lastMatchSearchItem?.collapseActionView()
+    }
 
     override fun onResumeFragment() {
         if (::lastMatchLeagueSpinner.isInitialized) {
@@ -223,7 +245,51 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.menu_info, menu)
+        inflater?.inflate(R.menu.menu_search_with_info, menu)
+
+        lastMatchSearchItem = menu!!.findItem(R.id.action_search)
+
+        val lastMatchSearchManager: SearchManager =
+            context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+
+        if (lastMatchSearchItem != null) {
+            lastMatchSearchView = lastMatchSearchItem?.actionView as SearchView
+
+            lastMatchSearchView?.setSearchableInfo(lastMatchSearchManager.getSearchableInfo(activity?.componentName))
+
+            lastMatchSearchItem?.setOnActionExpandListener(object :
+                MenuItem.OnActionExpandListener {
+                override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+                    isSearching = true
+                    lastMatchLeagueSpinner.gone()
+                    lastMatchPresenter.getSearchMatchInfo(lastMatchSearchView?.query.toString())
+                    return true
+                }
+
+                override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+                    isSearching = false
+                    lastMatchLeagueSpinner.visible()
+                    lastMatchPresenter.getPreviousMatchInfo(lastMatchLeagueId)
+                    return true
+                }
+
+            })
+
+            lastMatchSearchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    if (!isDataLoading) {
+                        lastMatchPresenter.getSearchMatchInfo(query!!)
+                    }
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    return false
+                }
+
+            })
+        }
+
         super.onCreateOptionsMenu(menu, inflater)
     }
 

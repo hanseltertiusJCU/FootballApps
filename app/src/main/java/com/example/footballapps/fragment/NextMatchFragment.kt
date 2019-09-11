@@ -1,8 +1,11 @@
 package com.example.footballapps.fragment
 
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.*
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -42,6 +45,15 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
 
     private var nextMatches: MutableList<MatchItem> = mutableListOf()
     private lateinit var nextMatchRvAdapter: MatchRecyclerViewAdapter
+
+    private lateinit var nextMatchLeagueId: String
+    private lateinit var nextMatchLeagueName: String
+
+    private var nextMatchSearchItem: MenuItem? = null
+    private var nextMatchSearchView: SearchView? = null
+
+    private var isDataLoading = false
+    private var isSearching = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -146,9 +158,11 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
                 ) {
                     val selectedLeagueOption = parent!!.selectedItem as LeagueOption
 
-                    (activity as FootballGameInfoActivity).leagueId = selectedLeagueOption.leagueId
-                    (activity as FootballGameInfoActivity).leagueName =
-                        selectedLeagueOption.leagueName
+                    nextMatchLeagueId = selectedLeagueOption.leagueId
+                    nextMatchLeagueName = selectedLeagueOption.leagueName
+
+                    (activity as FootballGameInfoActivity).leagueId = nextMatchLeagueId
+                    (activity as FootballGameInfoActivity).leagueName = nextMatchLeagueName
 
                     nextMatchPresenter.getNextMatchInfo((activity as FootballGameInfoActivity).leagueId)
                 }
@@ -156,7 +170,12 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
             }
 
         nextMatchSwipeRefreshLayout.onRefresh {
-            nextMatchPresenter.getNextMatchInfo((activity as FootballGameInfoActivity).leagueId)
+            if (!isSearching) {
+                nextMatchPresenter.getNextMatchInfo(nextMatchLeagueId)
+            } else {
+                nextMatchPresenter.getSearchMatchInfo(nextMatchSearchView?.query.toString())
+            }
+
         }
     }
 
@@ -164,6 +183,8 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
         nextMatchProgressBar.visible()
         nextMatchRecyclerView.invisible()
         nextMatchErrorText.gone()
+
+        isDataLoading = true
     }
 
     override fun dataLoadingFinished() {
@@ -171,6 +192,8 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
         nextMatchProgressBar.gone()
         nextMatchRecyclerView.visible()
         nextMatchErrorText.gone()
+
+        isDataLoading = false
     }
 
     override fun dataFailedToLoad(errorText: String) {
@@ -178,6 +201,8 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
         nextMatchProgressBar.gone()
         nextMatchRecyclerView.invisible()
         nextMatchErrorText.visible()
+
+        isDataLoading = false
 
         nextMatchErrorText.text = errorText
     }
@@ -188,28 +213,77 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
         nextMatchRvAdapter.notifyDataSetChanged()
     }
 
-    override fun onPauseFragment() {}
+    override fun onPauseFragment() {
+        nextMatchSearchItem?.collapseActionView()
+    }
 
     override fun onResumeFragment() {
         if (::nextMatchLeagueSpinner.isInitialized) {
             val selectedLeagueOption = nextMatchLeagueSpinner.selectedItem as LeagueOption
 
-            (activity as FootballGameInfoActivity).leagueId = selectedLeagueOption.leagueId
-            (activity as FootballGameInfoActivity).leagueName = selectedLeagueOption.leagueName
+            nextMatchLeagueId = selectedLeagueOption.leagueId
+            nextMatchLeagueName = selectedLeagueOption.leagueName
+
+            (activity as FootballGameInfoActivity).leagueId = nextMatchLeagueId
+            (activity as FootballGameInfoActivity).leagueName = nextMatchLeagueName
         }
 
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.menu_info, menu)
+        inflater?.inflate(R.menu.menu_search_with_info, menu)
+
+        nextMatchSearchItem = menu!!.findItem(R.id.action_search)
+
+        val lastMatchSearchManager: SearchManager =
+            context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+
+        if (nextMatchSearchItem != null) {
+            nextMatchSearchView = nextMatchSearchItem?.actionView as SearchView
+
+            nextMatchSearchView?.setSearchableInfo(lastMatchSearchManager.getSearchableInfo(activity?.componentName))
+
+            nextMatchSearchItem?.setOnActionExpandListener(object :
+                MenuItem.OnActionExpandListener {
+                override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+                    isSearching = true
+                    nextMatchLeagueSpinner.gone()
+                    nextMatchPresenter.getSearchMatchInfo(nextMatchSearchView?.query.toString())
+                    return true
+                }
+
+                override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+                    isSearching = false
+                    nextMatchLeagueSpinner.visible()
+                    nextMatchPresenter.getNextMatchInfo(nextMatchLeagueId)
+                    return true
+                }
+
+            })
+
+            nextMatchSearchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    if (!isDataLoading) {
+                        nextMatchPresenter.getSearchMatchInfo(query!!)
+                    }
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    return false
+                }
+
+            })
+        }
+
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item?.itemId == R.id.action_info) {
             startActivity<LeagueDetailActivity>(
-                "leagueName" to (activity as FootballGameInfoActivity).leagueName,
-                "leagueId" to (activity as FootballGameInfoActivity).leagueId
+                "leagueName" to nextMatchLeagueName,
+                "leagueId" to nextMatchLeagueId
             )
             (activity as FootballGameInfoActivity).finish()
         }
