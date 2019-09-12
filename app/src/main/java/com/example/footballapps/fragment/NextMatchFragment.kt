@@ -164,7 +164,7 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
                     (activity as FootballGameInfoActivity).leagueId = nextMatchLeagueId
                     (activity as FootballGameInfoActivity).leagueName = nextMatchLeagueName
 
-                    nextMatchPresenter.getNextMatchInfo((activity as FootballGameInfoActivity).leagueId)
+                    nextMatchPresenter.getNextMatchInfo(nextMatchLeagueId)
                 }
 
             }
