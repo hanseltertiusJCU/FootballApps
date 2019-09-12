@@ -51,7 +51,7 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
     private lateinit var lastMatchLeagueId: String
     private lateinit var lastMatchLeagueName: String
 
-    private var lastMatchSearchItem: MenuItem? = null
+    var lastMatchSearchItem: MenuItem? = null
     private var lastMatchSearchView: SearchView? = null
 
     private var isDataLoading = false

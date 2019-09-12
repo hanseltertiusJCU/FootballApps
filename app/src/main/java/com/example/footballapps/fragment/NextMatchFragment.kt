@@ -49,7 +49,7 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
     private lateinit var nextMatchLeagueId: String
     private lateinit var nextMatchLeagueName: String
 
-    private var nextMatchSearchItem: MenuItem? = null
+    var nextMatchSearchItem: MenuItem? = null
     private var nextMatchSearchView: SearchView? = null
 
     private var isDataLoading = false
@@ -237,13 +237,13 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
 
         val nextMatchLeagueInfoItem = menu?.findItem(R.id.action_info)
 
-        val lastMatchSearchManager: SearchManager =
+        val nextMatchSearchManager: SearchManager =
             context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
 
         if (nextMatchSearchItem != null) {
             nextMatchSearchView = nextMatchSearchItem?.actionView as SearchView
 
-            nextMatchSearchView?.setSearchableInfo(lastMatchSearchManager.getSearchableInfo(activity?.componentName))
+            nextMatchSearchView?.setSearchableInfo(nextMatchSearchManager.getSearchableInfo(activity?.componentName))
 
             nextMatchSearchItem?.setOnActionExpandListener(object :
                 MenuItem.OnActionExpandListener {

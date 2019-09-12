@@ -19,6 +19,9 @@ class MatchFragment : Fragment() {
     lateinit var matchViewPagerAdapter: MatchViewPagerAdapter
     var currentPosition = 0
 
+    var lastMatchFragment = LastMatchFragment()
+    var nextMatchFragment = NextMatchFragment()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,8 +41,8 @@ class MatchFragment : Fragment() {
 
     private fun setupViewPager(viewPager: ViewPager) {
         matchViewPagerAdapter = MatchViewPagerAdapter(childFragmentManager)
-        matchViewPagerAdapter.addFragment(LastMatchFragment(), "Last Match")
-        matchViewPagerAdapter.addFragment(NextMatchFragment(), "Next Match")
+        matchViewPagerAdapter.addFragment(lastMatchFragment, "Last Match")
+        matchViewPagerAdapter.addFragment(nextMatchFragment, "Next Match")
         viewPager.adapter = matchViewPagerAdapter
 
         setListener()
@@ -88,6 +91,16 @@ class MatchFragment : Fragment() {
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
 
         })
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (hidden) {
+            when (currentPosition) {
+                1 -> nextMatchFragment.nextMatchSearchItem?.collapseActionView()
+                else -> lastMatchFragment.lastMatchSearchItem?.collapseActionView()
+            }
+        }
     }
 
 
