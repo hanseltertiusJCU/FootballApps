@@ -162,9 +162,10 @@ class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchV
                     val networkCapabilities: NetworkCapabilities =
                         connectivityManager.getNetworkCapabilities(network)!!
 
-                    return (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || networkCapabilities.hasTransport(
-                        NetworkCapabilities.TRANSPORT_WIFI
-                    ) || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN))
+
+                    return (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                            || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                            || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN))
                 }
             }
         }

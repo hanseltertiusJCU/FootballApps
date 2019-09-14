@@ -104,5 +104,10 @@
     <string name="schedule">Schedule</string>
     <string name="favorites">Favorites</string>
 
+    <!-- Content Description -->
+    <string name="soccer_ball">Soccer Ball</string>
+    <string name="yellow_cards">Yellow Cards</string>
+    <string name="red_cards">Red Cards</string>
+
 
 </resources>

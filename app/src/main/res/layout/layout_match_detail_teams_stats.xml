@@ -35,7 +35,8 @@
             android:layout_centerInParent="true"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:src="@drawable/ic_soccer_ball" />
+            android:src="@drawable/ic_soccer_ball"
+            android:contentDescription="@string/soccer_ball"/>
 
         <TextView
             android:id="@+id/match_detail_away_goal_scorers"
@@ -80,7 +81,8 @@
             android:layout_centerInParent="true"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:src="@drawable/ic_yellow_card" />
+            android:src="@drawable/ic_yellow_card"
+            android:contentDescription="@string/yellow_cards"/>
 
         <TextView
             android:id="@+id/match_detail_away_yellow_cards"
@@ -125,7 +127,8 @@
             android:layout_centerInParent="true"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:src="@drawable/ic_red_card" />
+            android:src="@drawable/ic_red_card"
+            android:contentDescription="@string/red_cards"/>
 
         <TextView
             android:id="@+id/match_detail_away_red_cards"

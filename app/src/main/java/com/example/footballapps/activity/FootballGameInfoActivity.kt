@@ -30,8 +30,8 @@ class FootballGameInfoActivity : AppCompatActivity() {
 
         val intent = intent
 
-        leagueName = intent.getStringExtra("leagueName")
-        leagueId = intent.getStringExtra("leagueId")
+        leagueName = intent.getStringExtra("leagueName") ?: "English Premier League"
+        leagueId = intent.getStringExtra("leagueId") ?: "4328"
 
         setListener()
 
