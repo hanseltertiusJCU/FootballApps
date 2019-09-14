@@ -1,5 +1,6 @@
 package com.example.footballapps.presenter
 
+import android.content.res.Resources
 import android.util.Log
 import com.example.footballapps.R
 import com.example.footballapps.application.FootballApps
@@ -15,11 +16,15 @@ import io.reactivex.schedulers.Schedulers
 
 class LeagueDetailPresenter(private val leagueDetailView: LeagueDetailView) {
 
-    companion object {
-        val noDataText = FootballApps.res.getString(R.string.no_data_to_show)
-        val noConnectionText = FootballApps.res.getString(R.string.no_internet_connection)
-        val failedToRetrieveText = FootballApps.res.getString(R.string.failed_to_retrieve_data)
-    }
+//    companion object {
+//        val noDataText = Resources.getSystem().getString(R.string.no_data_to_show)
+//        val noConnectionText = Resources.getSystem().getString(R.string.no_internet_connection)
+//        val failedToRetrieveText = Resources.getSystem().getString(R.string.failed_to_retrieve_data)
+//    }
+
+    val noDataText = "No data to show"
+    val noConnectionText = "No internet connection"
+    val failedToRetrieveText = "Failed to retrieve data from server"
 
     fun getLeagueDetailInfo(leagueId: String) {
 
