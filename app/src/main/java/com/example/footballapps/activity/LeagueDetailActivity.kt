@@ -80,6 +80,7 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
 
                         leagueDetailScrollView = scrollView {
                             leagueDetailLayout = relativeLayout {
+                                id = R.id.league_detail_layout
                                 padding = dip(16)
                                 ivLeagueDetailImage = imageView {
                                     id = R.id.iv_league_detail_image

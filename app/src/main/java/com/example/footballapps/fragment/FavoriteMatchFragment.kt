@@ -111,6 +111,7 @@ class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchV
                 setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
 
                 favoriteMatchRecyclerView = recyclerView {
+                    id = R.id.rv_favorite_match
                     lparams(width = matchParent, height = wrapContent)
                     layoutManager = LinearLayoutManager(context)
                 }

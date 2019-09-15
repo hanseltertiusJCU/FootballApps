@@ -79,6 +79,7 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
                     setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
 
                     nextMatchRecyclerView = recyclerView {
+                        id = R.id.rv_next_match
                         lparams(width = matchParent, height = wrapContent)
                         layoutManager = LinearLayoutManager(context)
                     }

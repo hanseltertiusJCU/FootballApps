@@ -106,10 +106,6 @@ class MainActivity : AppCompatActivity(), MainView {
 
         lateinit var toolbarMain: Toolbar
 
-        companion object {
-            const val recyclerViewLeagueListId = 101
-        }
-
 
         override fun createView(ui: AnkoContext<MainActivity>): View = with(ui) {
 
@@ -126,7 +122,7 @@ class MainActivity : AppCompatActivity(), MainView {
 
                     constraintLayoutView = constraintLayout {
                         recyclerViewLeagueList = recyclerView {
-                            id = recyclerViewLeagueListId
+                            id = R.id.rv_league_list
                             isNestedScrollingEnabled = false
                         }
                     }.lparams(width = matchParent, height = wrapContent)

@@ -69,7 +69,8 @@ class LeagueDetailPresenterTest {
 
         val inOrder = inOrder(leagueDetailView)
         inOrder.verify(leagueDetailView, times(1)).dataIsLoading()
-//        inOrder.verify(leagueDetailView, times(1)).showLeagueDetailInfo(leagueDetailResponse.leagues?.first()!!)
+        // todo: solve empty data
+        inOrder.verify(leagueDetailView, times(1)).showLeagueDetailInfo(leagueDetailResponse.leagues?.first()!!)
         inOrder.verify(leagueDetailView, times(1)).dataLoadingFinished()
 
     }
