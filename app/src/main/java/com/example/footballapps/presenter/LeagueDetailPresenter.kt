@@ -1,10 +1,8 @@
 package com.example.footballapps.presenter
 
-import android.content.res.Resources
 import android.util.Log
-import com.example.footballapps.R
-import com.example.footballapps.application.FootballApps
 import com.example.footballapps.client.RetrofitClient
+import com.example.footballapps.model.LeagueDetailItem
 import com.example.footballapps.model.LeagueDetailResponse
 import com.example.footballapps.service.LeagueDetailService
 import com.example.footballapps.view.LeagueDetailView
@@ -16,15 +14,10 @@ import io.reactivex.schedulers.Schedulers
 
 class LeagueDetailPresenter(private val leagueDetailView: LeagueDetailView) {
 
-//    companion object {
-//        val noDataText = Resources.getSystem().getString(R.string.no_data_to_show)
-//        val noConnectionText = Resources.getSystem().getString(R.string.no_internet_connection)
-//        val failedToRetrieveText = Resources.getSystem().getString(R.string.failed_to_retrieve_data)
-//    }
-
     val noDataText = "No data to show"
     val noConnectionText = "No internet connection"
     val failedToRetrieveText = "Failed to retrieve data from server"
+    var leaguesData : List<LeagueDetailItem> = mutableListOf()
 
     fun getLeagueDetailInfo(leagueId: String) {
 
@@ -49,7 +42,9 @@ class LeagueDetailPresenter(private val leagueDetailView: LeagueDetailView) {
                 val leagues = leagueDetailResponse.leagues
 
                 if (leagues != null) {
-                    leagueDetailView.showLeagueDetailInfo(leagues.first())
+                    leaguesData = leagues
+
+                    leagueDetailView.showLeagueDetailInfo(leaguesData.first())
 
                     leagueDetailView.dataLoadingFinished()
                 } else {
