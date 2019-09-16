@@ -5,6 +5,7 @@ import com.example.footballapps.R
 import com.example.footballapps.application.FootballApps
 import com.example.footballapps.client.RetrofitClient
 import com.example.footballapps.model.CombinedMatchTeamsResponse
+import com.example.footballapps.model.MatchItem
 import com.example.footballapps.model.MatchResponse
 import com.example.footballapps.model.TeamResponse
 import com.example.footballapps.service.MatchService
@@ -19,11 +20,16 @@ import io.reactivex.schedulers.Schedulers
 
 class MatchDetailPresenter(private val matchDetailView: MatchDetailView) {
 
-    companion object {
-        val noDataText = FootballApps.res.getString(R.string.no_data_to_show)
-        val noConnectionText = FootballApps.res.getString(R.string.no_internet_connection)
-        val failedToRetrieveText = FootballApps.res.getString(R.string.failed_to_retrieve_data)
-    }
+//    companion object {
+//        val noDataText = FootballApps.res.getString(R.string.no_data_to_show)
+//        val noConnectionText = FootballApps.res.getString(R.string.no_internet_connection)
+//        val failedToRetrieveText = FootballApps.res.getString(R.string.failed_to_retrieve_data)
+//    }
+
+    val noDataText = "No data to show"
+    val noConnectionText = "No internet connection"
+    val failedToRetrieveText = "Failed to retrieve data from server"
+    lateinit var combinedMatchHomaAwayTeamsResponse : CombinedMatchTeamsResponse
 
     fun getDetailMatchInfo(eventId: String, homeTeamId: String, awayTeamId: String) {
         matchDetailView.dataIsLoading()
@@ -64,6 +70,7 @@ class MatchDetailPresenter(private val matchDetailView: MatchDetailView) {
             override fun onSubscribe(disposable: Disposable) {}
 
             override fun onNext(combinedMatchTeamsResponse: CombinedMatchTeamsResponse) {
+                combinedMatchHomaAwayTeamsResponse = combinedMatchTeamsResponse
                 val matchDetailResponse = combinedMatchTeamsResponse.matchDetailResponse
                 val matchDetail = matchDetailResponse.events?.first()
 
