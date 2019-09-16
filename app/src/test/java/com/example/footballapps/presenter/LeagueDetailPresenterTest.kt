@@ -5,6 +5,7 @@ import com.example.footballapps.rule.RxImmediateSchedulerRule
 import com.example.footballapps.service.LeagueDetailService
 import com.example.footballapps.view.LeagueDetailView
 import io.reactivex.Observable
+import io.reactivex.observers.TestObserver
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -37,7 +38,6 @@ class LeagueDetailPresenterTest {
     private lateinit var leagueDetailPresenter: LeagueDetailPresenter
 
 
-
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
@@ -46,7 +46,7 @@ class LeagueDetailPresenterTest {
     }
 
     @Test
-    fun getLeagueDetailInfo() {
+    fun getLeagueDetailInfoTest() {
         Mockito.`when`(
             leagueDetailService
                 .getLeagueDetailResponse("4328")
@@ -57,7 +57,7 @@ class LeagueDetailPresenterTest {
         val inOrder = inOrder(leagueDetailView)
         inOrder.verify(leagueDetailView, times(1)).dataIsLoading()
 //        inOrder.verify(leagueDetailView, times(1))
-//            .showLeagueDetailInfo(leagueDetailResponse.leagues?.first()!!)
+//            .showLeagueDetailInfo(testObserverLeague.values().first().leagues?.first()!!)
         inOrder.verify(leagueDetailView, times(1))
             .showLeagueDetailInfo(leagueDetailPresenter.leaguesData.first())
         inOrder.verify(leagueDetailView, times(1)).dataLoadingFinished()

@@ -13,14 +13,23 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import org.reactivestreams.Subscription
 
 class MatchPresenter(private val matchView: MatchView) {
 
-    companion object {
-        val noDataText = FootballApps.res.getString(R.string.no_data_to_show)
-        val noConnectionText = FootballApps.res.getString(R.string.no_internet_connection)
-        val failedToRetrieveText = FootballApps.res.getString(R.string.failed_to_retrieve_data)
-    }
+//    companion object {
+//        val noDataText = FootballApps.res.getString(R.string.no_data_to_show)
+//        val noConnectionText = FootballApps.res.getString(R.string.no_internet_connection)
+//        val failedToRetrieveText = FootballApps.res.getString(R.string.failed_to_retrieve_data)
+//    }
+
+    val noDataText = "No data to show"
+    val noConnectionText = "No internet connection"
+    val failedToRetrieveText = "Failed to retrieve data from server"
+    var lastMatchesData : List<MatchItem> = mutableListOf()
+    var nextMatchesData : List<MatchItem> = mutableListOf()
+    var filteredSearchMatchesData : List<MatchItem> = mutableListOf()
+
 
     fun getNextMatchInfo(leagueId: String) {
         matchView.dataIsLoading()
@@ -43,7 +52,11 @@ class MatchPresenter(private val matchView: MatchView) {
                 val nextMatches = matchResponse.events
 
                 if (nextMatches != null) {
-                    matchView.showMatchData(nextMatches)
+
+                    // todo: pake cara cheat
+                    nextMatchesData = nextMatches
+
+                    matchView.showMatchData(nextMatchesData)
 
                     matchView.dataLoadingFinished()
                 } else {
@@ -87,7 +100,10 @@ class MatchPresenter(private val matchView: MatchView) {
                 val previousMatches = matchResponse.events
 
                 if (previousMatches != null) {
-                    matchView.showMatchData(previousMatches)
+
+                    lastMatchesData = previousMatches
+
+                    matchView.showMatchData(lastMatchesData)
 
                     matchView.dataLoadingFinished()
                 } else {
@@ -141,7 +157,9 @@ class MatchPresenter(private val matchView: MatchView) {
                 }
 
                 if (filteredMatches.size > 0) {
-                    matchView.showMatchData(filteredMatches)
+                    filteredSearchMatchesData = filteredMatches
+
+                    matchView.showMatchData(filteredSearchMatchesData)
 
                     matchView.dataLoadingFinished()
                 } else {
