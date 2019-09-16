@@ -3,18 +3,16 @@ package com.example.footballapps.presenter
 import com.example.footballapps.callback.LeagueDetailRepositoryCallback
 import com.example.footballapps.model.LeagueDetailResponse
 import com.example.footballapps.repository.LeagueDetailRepository
-import com.example.footballapps.rule.RxImmediateSchedulerRule
 import com.example.footballapps.view.LeagueDetailView
 import com.nhaarman.mockito_kotlin.argumentCaptor
 import com.nhaarman.mockito_kotlin.eq
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito.*
+import org.mockito.Mockito.inOrder
+import org.mockito.Mockito.times
 import org.mockito.MockitoAnnotations
-import org.mockito.junit.MockitoJUnit
 
 
 class LeagueDetailPresenterTest {
