@@ -19,7 +19,9 @@ import com.example.footballapps.adapter.MatchRecyclerViewAdapter
 import com.example.footballapps.lifecycle.FragmentLifecycle
 import com.example.footballapps.model.LeagueOption
 import com.example.footballapps.model.MatchItem
+import com.example.footballapps.model.MatchResponse
 import com.example.footballapps.presenter.MatchPresenter
+import com.example.footballapps.repository.MatchesRepository
 import com.example.footballapps.utils.gone
 import com.example.footballapps.utils.invisible
 import com.example.footballapps.utils.visible
@@ -145,7 +147,7 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
         }
         nextMatchRecyclerView.adapter = nextMatchRvAdapter
 
-        nextMatchPresenter = MatchPresenter(this)
+        nextMatchPresenter = MatchPresenter(this, MatchesRepository())
 
         nextMatchLeagueSpinner.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
@@ -197,7 +199,7 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
         isDataLoading = false
     }
 
-    override fun dataFailedToLoad(errorText: String) {
+    override fun dataFailedToLoad() {
         nextMatchSwipeRefreshLayout.isRefreshing = false
         nextMatchProgressBar.gone()
         nextMatchRecyclerView.invisible()
@@ -205,12 +207,22 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
 
         isDataLoading = false
 
-        nextMatchErrorText.text = errorText
+        nextMatchErrorText.text = resources.getString(R.string.no_data_to_show)
     }
 
-    override fun showMatchData(matchList: List<MatchItem>) {
+    override fun showMatchesData(matchResponse: MatchResponse) {
         nextMatches.clear()
-        nextMatches.addAll(matchList)
+        if(isSearching){
+            val searchResultMatchesList = matchResponse.searchResultEvents
+            if(searchResultMatchesList != null){
+                nextMatches.addAll(searchResultMatchesList)
+            }
+        } else {
+            val nextMatchesList = matchResponse.events
+            if (nextMatchesList != null) {
+                nextMatches.addAll(nextMatchesList)
+            }
+        }
         nextMatchRvAdapter.notifyDataSetChanged()
     }
 

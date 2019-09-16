@@ -6,10 +6,10 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitClient {
+object RetrofitClient {
     private var retrofit: Retrofit? = null
 
-    fun getClient(): Retrofit? {
+    private fun getRetrofit(): Retrofit? {
 
         if (retrofit == null) {
             val interceptor = HttpLoggingInterceptor()
@@ -27,5 +27,9 @@ class RetrofitClient {
         }
 
         return retrofit
+    }
+
+    fun <T> createService(service : Class<T>) : T {
+        return getRetrofit()!!.create(service)
     }
 }

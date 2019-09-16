@@ -12,8 +12,12 @@ import com.example.footballapps.R
 import com.example.footballapps.adapter.MatchRecyclerViewAdapter
 import com.example.footballapps.favorite.FavoriteMatchItem
 import com.example.footballapps.helper.database
+import com.example.footballapps.model.CombinedMatchTeamsResponse
 import com.example.footballapps.model.MatchItem
+import com.example.footballapps.model.MatchResponse
+import com.example.footballapps.model.TeamResponse
 import com.example.footballapps.presenter.MatchDetailPresenter
+import com.example.footballapps.repository.MatchDetailRepository
 import com.example.footballapps.utils.gone
 import com.example.footballapps.utils.invisible
 import com.example.footballapps.utils.visible
@@ -63,7 +67,7 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
 
         setToolbarBehavior()
 
-        matchDetailPresenter = MatchDetailPresenter(this)
+        matchDetailPresenter = MatchDetailPresenter(this, MatchDetailRepository())
 
         matchDetailPresenter.getDetailMatchInfo(eventId, homeTeamId, awayTeamId)
 
@@ -100,94 +104,100 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
         layout_match_detail_data.visible()
     }
 
-    override fun dataFailedToLoad(errorText: String) {
+    override fun dataFailedToLoad() {
         match_detail_swipe_refresh_layout.isRefreshing = false
         favoriteMatchItem = null
         progress_bar_match_detail.gone()
         match_detail_error_data_text.visible()
         layout_match_detail_data.invisible()
 
-        match_detail_error_data_text.text = errorText
+        match_detail_error_data_text.text = resources.getString(R.string.no_data_to_show)
     }
 
-    override fun showMatchData(matchItem: MatchItem) {
+    override fun showMatchDetailData(combinedMatchTeamsResponse: CombinedMatchTeamsResponse) {
+        // todo: pertama pake show match data
+        val matchDetailResponse = combinedMatchTeamsResponse.matchDetailResponse
+        val matchDetailItem = matchDetailResponse.events?.first()
+        favoriteMatchItem = matchDetailItem
 
-        favoriteMatchItem = matchItem
-
-        match_detail_league_name.text = matchItem.leagueName ?: "-"
+        match_detail_league_name.text = matchDetailItem?.leagueName ?: "-"
         match_detail_match_week.text = when {
-            matchItem.leagueMatchWeek != null -> StringBuilder("Week ${matchItem.leagueMatchWeek}")
+            matchDetailItem?.leagueMatchWeek != null -> StringBuilder("Week ${matchDetailItem.leagueMatchWeek}")
             else -> resources.getString(R.string.match_week_unknown)
         }
 
         val localizedDateTime = convertDateTimeToLocalTimeZone(
-            formatDate(matchItem.dateEvent),
-            formatTime(matchItem.timeEvent)
+            formatDate(matchDetailItem?.dateEvent),
+            formatTime(matchDetailItem?.timeEvent)
         )
 
         match_detail_event_date.text = localizedDateTime[0]
         match_detail_event_time.text = localizedDateTime[1]
 
-        match_detail_home_team_name.text = matchItem.homeTeamName ?: "-"
-        match_detail_home_team_score.text = matchItem.homeTeamScore ?: "-"
-        match_detail_away_team_score.text = matchItem.awayTeamScore ?: "-"
-        match_detail_away_team_name.text = matchItem.awayTeamName ?: "-"
+        match_detail_home_team_name.text = matchDetailItem?.homeTeamName ?: "-"
+        match_detail_home_team_score.text = matchDetailItem?.homeTeamScore ?: "-"
+        match_detail_away_team_score.text = matchDetailItem?.awayTeamScore ?: "-"
+        match_detail_away_team_name.text = matchDetailItem?.awayTeamName ?: "-"
 
         tv_match_detail_spectators.text = when {
-            matchItem.spectators != null -> StringBuilder("Spectators : ${matchItem.spectators}")
+            matchDetailItem?.spectators != null -> StringBuilder("Spectators : ${matchDetailItem?.spectators}")
             else -> resources.getString(R.string.spectators_unknown)
         }
 
         match_detail_home_goal_scorers.text =
-            createTextFromStringValue(matchItem.homeTeamGoalDetails)
+            createTextFromStringValue(matchDetailItem?.homeTeamGoalDetails)
         match_detail_away_goal_scorers.text =
-            createTextFromStringValue(matchItem.awayTeamGoalDetails)
+            createTextFromStringValue(matchDetailItem?.awayTeamGoalDetails)
 
         match_detail_home_yellow_cards.text =
-            createTextFromStringValue(matchItem.homeTeamYellowCards)
+            createTextFromStringValue(matchDetailItem?.homeTeamYellowCards)
         match_detail_away_yellow_cards.text =
-            createTextFromStringValue(matchItem.awayTeamYellowCards)
+            createTextFromStringValue(matchDetailItem?.awayTeamYellowCards)
 
-        match_detail_home_red_cards.text = createTextFromStringValue(matchItem.homeTeamRedCards)
-        match_detail_away_red_cards.text = createTextFromStringValue(matchItem.awayTeamRedCards)
+        match_detail_home_red_cards.text = createTextFromStringValue(matchDetailItem?.homeTeamRedCards)
+        match_detail_away_red_cards.text = createTextFromStringValue(matchDetailItem?.awayTeamRedCards)
 
-        match_detail_home_total_shots.text = createTextFromStringValue(matchItem.homeTeamShots)
-        match_detail_away_total_shots.text = createTextFromStringValue(matchItem.awayTeamShots)
+        match_detail_home_total_shots.text = createTextFromStringValue(matchDetailItem?.homeTeamShots)
+        match_detail_away_total_shots.text = createTextFromStringValue(matchDetailItem?.awayTeamShots)
 
-        match_detail_home_formation.text = createTextFromStringValue(matchItem.homeTeamFormation)
-        match_detail_away_formation.text = createTextFromStringValue(matchItem.awayTeamFormation)
+        match_detail_home_formation.text = createTextFromStringValue(matchDetailItem?.homeTeamFormation)
+        match_detail_away_formation.text = createTextFromStringValue(matchDetailItem?.awayTeamFormation)
 
-        match_detail_home_goal_keeper.text = createTextFromStringValue(matchItem.homeTeamGoalkeeper)
-        match_detail_away_goal_keeper.text = createTextFromStringValue(matchItem.awayTeamGoalkeeper)
+        match_detail_home_goal_keeper.text = createTextFromStringValue(matchDetailItem?.homeTeamGoalkeeper)
+        match_detail_away_goal_keeper.text = createTextFromStringValue(matchDetailItem?.awayTeamGoalkeeper)
 
-        match_detail_home_defenders.text = createTextFromStringValue(matchItem.homeTeamDefense)
-        match_detail_away_defenders.text = createTextFromStringValue(matchItem.awayTeamDefense)
+        match_detail_home_defenders.text = createTextFromStringValue(matchDetailItem?.homeTeamDefense)
+        match_detail_away_defenders.text = createTextFromStringValue(matchDetailItem?.awayTeamDefense)
 
-        match_detail_home_midfielders.text = createTextFromStringValue(matchItem.homeTeamMidfield)
-        match_detail_away_midfielders.text = createTextFromStringValue(matchItem.awayTeamMidfield)
+        match_detail_home_midfielders.text = createTextFromStringValue(matchDetailItem?.homeTeamMidfield)
+        match_detail_away_midfielders.text = createTextFromStringValue(matchDetailItem?.awayTeamMidfield)
 
-        match_detail_home_forwards.text = createTextFromStringValue(matchItem.homeTeamForward)
-        match_detail_away_forwards.text = createTextFromStringValue(matchItem.awayTeamForward)
+        match_detail_home_forwards.text = createTextFromStringValue(matchDetailItem?.homeTeamForward)
+        match_detail_away_forwards.text = createTextFromStringValue(matchDetailItem?.awayTeamForward)
 
         match_detail_home_substitutes.text =
-            createTextFromStringValue(matchItem.homeTeamSubstitutes)
+            createTextFromStringValue(matchDetailItem?.homeTeamSubstitutes)
         match_detail_away_substitutes.text =
-            createTextFromStringValue(matchItem.awayTeamSubstitutes)
-    }
+            createTextFromStringValue(matchDetailItem?.awayTeamSubstitutes)
 
-    override fun showHomeTeamBadge(homeTeamBadgeUrl: String?) {
+        val homeTeamResponse = combinedMatchTeamsResponse.homeTeamResponse
+        val homeTeamItem = homeTeamResponse.teams?.first()
+        val homeTeamItemBadgeUrl = homeTeamItem?.teamBadge
+
         Glide
             .with(applicationContext)
-            .load(homeTeamBadgeUrl)
+            .load(homeTeamItemBadgeUrl)
             .centerCrop()
             .error(Glide.with(applicationContext).load(R.drawable.team_badge_placeholder))
             .into(match_detail_home_team_logo)
-    }
 
-    override fun showAwayTeamBadge(awayTeamBadgeUrl: String?) {
+        val awayTeamResponse = combinedMatchTeamsResponse.awayTeamResponse
+        val awayTeamItem = awayTeamResponse.teams?.first()
+        val awayTeamItemBadgeUrl = awayTeamItem?.teamBadge
+
         Glide
             .with(applicationContext)
-            .load(awayTeamBadgeUrl)
+            .load(awayTeamItemBadgeUrl)
             .centerCrop()
             .error(Glide.with(applicationContext).load(R.drawable.team_badge_placeholder))
             .into(match_detail_away_team_logo)

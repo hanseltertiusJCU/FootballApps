@@ -1,7 +1,15 @@
 package com.example.footballapps.presenter
 
+import com.example.footballapps.callback.MatchDetailRepositoryCallback
+import com.example.footballapps.model.CombinedMatchTeamsResponse
+import com.example.footballapps.model.MatchResponse
+import com.example.footballapps.repository.LeagueDetailRepository
+import com.example.footballapps.repository.MatchDetailRepository
 import com.example.footballapps.rule.RxImmediateSchedulerRule
 import com.example.footballapps.view.MatchDetailView
+import com.nhaarman.mockito_kotlin.argumentCaptor
+import com.nhaarman.mockito_kotlin.eq
+import com.nhaarman.mockito_kotlin.verify
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -15,16 +23,14 @@ import org.mockito.junit.MockitoJUnit
 
 class MatchDetailPresenterTest {
 
-    @Rule
-    @JvmField
-    val rule = MockitoJUnit.rule()!!
-
-    @Rule
-    @JvmField
-    var testSchedulerRule = RxImmediateSchedulerRule()
-
     @Mock
     lateinit var matchDetailView: MatchDetailView
+
+    @Mock
+    private lateinit var matchDetailRepository: MatchDetailRepository
+
+    @Mock
+    private lateinit var combinedMatchTeamsResponse: CombinedMatchTeamsResponse
 
     private lateinit var matchDetailPresenter: MatchDetailPresenter
 
@@ -32,19 +38,27 @@ class MatchDetailPresenterTest {
     fun setUp(){
         MockitoAnnotations.initMocks(this)
 
-        matchDetailPresenter = MatchDetailPresenter(matchDetailView)
+        matchDetailPresenter = MatchDetailPresenter(matchDetailView, matchDetailRepository)
     }
 
     @Test
     fun getDetailMatchInfoTest() {
 
-        matchDetailPresenter.getDetailMatchInfo("602162", "133604", "133616")
+        val eventId = "602162"
+        val homeTeamId = "133604"
+        val awayTeamId = "133616"
+
+        matchDetailPresenter.getDetailMatchInfo(eventId, homeTeamId, awayTeamId)
+
+        argumentCaptor<MatchDetailRepositoryCallback<CombinedMatchTeamsResponse?>>().apply {
+            verify(matchDetailRepository).getMatchDetail(eq(eventId), eq(homeTeamId), eq(awayTeamId), capture())
+            firstValue.onDataLoaded(combinedMatchTeamsResponse)
+        }
 
         val inOrder = inOrder(matchDetailView)
+
         inOrder.verify(matchDetailView, Mockito.times(1)).dataIsLoading()
-        inOrder.verify(matchDetailView, Mockito.times(1)).showMatchData(matchDetailPresenter.combinedMatchHomaAwayTeamsResponse.matchDetailResponse.events?.first()!!)
-        inOrder.verify(matchDetailView, Mockito.times(1)).showHomeTeamBadge(matchDetailPresenter.combinedMatchHomaAwayTeamsResponse.homeTeamResponse.teams?.first()?.teamBadge)
-        inOrder.verify(matchDetailView, Mockito.times(1)).showAwayTeamBadge(matchDetailPresenter.combinedMatchHomaAwayTeamsResponse.awayTeamResponse.teams?.first()?.teamBadge)
+        inOrder.verify(matchDetailView, Mockito.times(1)).showMatchDetailData(combinedMatchTeamsResponse)
         inOrder.verify(matchDetailView, Mockito.times(1)).dataLoadingFinished()
 
 

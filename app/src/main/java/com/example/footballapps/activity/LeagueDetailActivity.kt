@@ -12,9 +12,10 @@ import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.example.footballapps.R
-import com.example.footballapps.model.LeagueDetailItem
+import com.example.footballapps.model.LeagueDetailResponse
 import com.example.footballapps.model.LeagueItem
 import com.example.footballapps.presenter.LeagueDetailPresenter
+import com.example.footballapps.repository.LeagueDetailRepository
 import com.example.footballapps.utils.gone
 import com.example.footballapps.utils.invisible
 import com.example.footballapps.utils.visible
@@ -162,7 +163,7 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
 
         setToolbarBehavior()
 
-        leagueDetailPresenter = LeagueDetailPresenter(this)
+        leagueDetailPresenter = LeagueDetailPresenter(this, LeagueDetailRepository())
 
         leagueDetailPresenter.getLeagueDetailInfo(leagueId)
 
@@ -185,13 +186,13 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
         leagueDetailLayout.visible()
     }
 
-    override fun dataFailedToLoad(errorText: String) {
+    override fun dataFailedToLoad() {
         leagueDetailSwipeRefreshLayout.isRefreshing = false
         leagueDetailProgressBar.gone()
         leagueDetailErrorDataText.visible()
         leagueDetailLayout.invisible()
 
-        leagueDetailErrorDataText.text = errorText
+        leagueDetailErrorDataText.text = resources.getString(R.string.no_data_to_show)
     }
 
     override fun showLeagueDetailTitle(leagueItem: LeagueItem) {
@@ -206,17 +207,25 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
         supportActionBar?.title = leagueName
     }
 
-    override fun showLeagueDetailInfo(leagueDetailItem: LeagueDetailItem) {
-        tvLeagueDetailName.text = leagueDetailItem.leagueName
-        tvLeagueDetailDesc.text = leagueDetailItem.leagueDescription
+    override fun showLeagueDetailInfo(leagueDetailResponse: LeagueDetailResponse) {
+        val leagueItemList = leagueDetailResponse.leagues
 
-        Glide.with(applicationContext)
-            .load(leagueDetailItem.leagueBadge)
-            .placeholder(R.drawable.empty_league_image_info)
-            .into(ivLeagueDetailImage)
+        if (leagueItemList != null) {
+            val leagueDetailItem = leagueItemList.first()
 
-        tvLeagueDetailFormedYear.text = StringBuilder("est. ${leagueDetailItem.leagueFormedYear}")
-        tvLeagueDetailCountry.text = StringBuilder("Based in ${leagueDetailItem.leagueCountry}")
+            tvLeagueDetailName.text = leagueDetailItem.leagueName
+            tvLeagueDetailDesc.text = leagueDetailItem.leagueDescription
+
+            Glide.with(applicationContext)
+                .load(leagueDetailItem.leagueBadge)
+                .placeholder(R.drawable.empty_league_image_info)
+                .into(ivLeagueDetailImage)
+
+            tvLeagueDetailFormedYear.text =
+                StringBuilder("est. ${leagueDetailItem.leagueFormedYear}")
+            tvLeagueDetailCountry.text = StringBuilder("Based in ${leagueDetailItem.leagueCountry}")
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

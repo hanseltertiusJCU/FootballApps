@@ -20,7 +20,9 @@ import com.example.footballapps.adapter.MatchRecyclerViewAdapter
 import com.example.footballapps.lifecycle.FragmentLifecycle
 import com.example.footballapps.model.LeagueOption
 import com.example.footballapps.model.MatchItem
+import com.example.footballapps.model.MatchResponse
 import com.example.footballapps.presenter.MatchPresenter
+import com.example.footballapps.repository.MatchesRepository
 import com.example.footballapps.utils.gone
 import com.example.footballapps.utils.invisible
 import com.example.footballapps.utils.visible
@@ -148,7 +150,7 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
         }
         lastMatchRecyclerView.adapter = lastMatchRvAdapter
 
-        lastMatchPresenter = MatchPresenter(this)
+        lastMatchPresenter = MatchPresenter(this, MatchesRepository())
 
         lastMatchLeagueSpinner.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
@@ -200,7 +202,7 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
         isDataLoading = false
     }
 
-    override fun dataFailedToLoad(errorText: String) {
+    override fun dataFailedToLoad() {
         lastMatchSwipeRefreshLayout.isRefreshing = false
         lastMatchProgressBar.gone()
         lastMatchErrorText.visible()
@@ -208,12 +210,22 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
 
         isDataLoading = false
 
-        lastMatchErrorText.text = errorText
+        lastMatchErrorText.text = resources.getString(R.string.no_data_to_show)
     }
 
-    override fun showMatchData(matchList: List<MatchItem>) {
+    override fun showMatchesData(matchResponse: MatchResponse) {
         lastMatches.clear()
-        lastMatches.addAll(matchList)
+        if (isSearching) {
+            val searchResultMatchesList = matchResponse.searchResultEvents
+            if(searchResultMatchesList != null){
+                lastMatches.addAll(searchResultMatchesList)
+            }
+        } else {
+            val lastMatchesList = matchResponse.events
+            if (lastMatchesList != null) {
+                lastMatches.addAll(lastMatchesList)
+            }
+        }
         lastMatchRvAdapter.notifyDataSetChanged()
     }
 

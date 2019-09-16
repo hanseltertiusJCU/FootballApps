@@ -1,10 +1,10 @@
 package com.example.footballapps.view
 
-import com.example.footballapps.model.MatchItem
+import com.example.footballapps.model.MatchResponse
 
 interface MatchView {
     fun dataIsLoading()
     fun dataLoadingFinished()
-    fun dataFailedToLoad(errorText: String)
-    fun showMatchData(matchList: List<MatchItem>)
+    fun dataFailedToLoad()
+    fun showMatchesData(matchResponse: MatchResponse)
 }
