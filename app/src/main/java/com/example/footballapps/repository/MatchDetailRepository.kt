@@ -16,9 +16,6 @@ import io.reactivex.schedulers.Schedulers
 
 class MatchDetailRepository {
 
-    val noConnectionText = "No internet connection"
-    val failedToRetrieveText = "Failed to retrieve data from server"
-
     fun getMatchDetail(eventId : String, homeTeamId : String, awayTeamId : String, callback: MatchDetailRepositoryCallback<CombinedMatchTeamsResponse?>) {
         val matchDetailResponseObservable : Observable<MatchResponse>? =
             RetrofitClient

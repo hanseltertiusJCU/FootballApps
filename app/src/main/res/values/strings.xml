@@ -45,7 +45,6 @@
     <!-- Data error -->
     <string name="no_data_to_show">No data to show</string>
     <string name="no_internet_connection">No internet connection</string>
-    <string name="failed_to_retrieve_data">Failed to retrieve data from server</string>
 
     <!-- Info -->
     <string name="league_name">League Name</string>

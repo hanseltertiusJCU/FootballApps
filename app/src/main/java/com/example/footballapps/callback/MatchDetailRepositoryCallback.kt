@@ -1,7 +1,7 @@
 package com.example.footballapps.callback
 
-interface MatchDetailRepositoryCallback <T> {
+interface MatchDetailRepositoryCallback<T> {
 
-    fun onDataLoaded(data : T?)
+    fun onDataLoaded(data: T?)
     fun onDataError()
 }

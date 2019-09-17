@@ -3,6 +3,11 @@ package com.example.footballapps.fragment
 
 import android.app.SearchManager
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkInfo
+import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.*
@@ -210,14 +215,19 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
 
         isDataLoading = false
 
-        lastMatchErrorText.text = resources.getString(R.string.no_data_to_show)
+        val isNetworkConnected = checkNetworkConnection()
+        if (isNetworkConnected) {
+            lastMatchErrorText.text = resources.getString(R.string.no_data_to_show)
+        } else {
+            lastMatchErrorText.text = resources.getString(R.string.no_internet_connection)
+        }
     }
 
     override fun showMatchesData(matchResponse: MatchResponse) {
         lastMatches.clear()
         if (isSearching) {
             val searchResultMatchesList = matchResponse.searchResultEvents
-            if(searchResultMatchesList != null){
+            if (searchResultMatchesList != null) {
                 lastMatches.addAll(searchResultMatchesList)
             }
         } else {
@@ -322,5 +332,35 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
         return super.onOptionsItemSelected(item)
     }
 
+    @Suppress("DEPRECATION")
+    private fun checkNetworkConnection(): Boolean {
+
+        val connectivityManager: ConnectivityManager? =
+            context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (connectivityManager != null) {
+            if (Build.VERSION.SDK_INT < 23) {
+                val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
+
+                if (networkInfo != null) {
+                    return (networkInfo.isConnected && (networkInfo.type == ConnectivityManager.TYPE_WIFI || networkInfo.type == ConnectivityManager.TYPE_MOBILE || networkInfo.type == ConnectivityManager.TYPE_VPN))
+                }
+
+            } else {
+                val network: Network? = connectivityManager.activeNetwork
+
+                if (network != null) {
+                    val networkCapabilities: NetworkCapabilities =
+                        connectivityManager.getNetworkCapabilities(network)!!
+
+
+                    return (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                            || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                            || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN))
+                }
+            }
+        }
+        return false
+    }
 
 }

@@ -1,5 +1,11 @@
 package com.example.footballapps.activity
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkInfo
+import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.Menu
@@ -192,7 +198,13 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
         leagueDetailErrorDataText.visible()
         leagueDetailLayout.invisible()
 
-        leagueDetailErrorDataText.text = resources.getString(R.string.no_data_to_show)
+        val isNetworkConnected = checkNetworkConnection()
+        if (isNetworkConnected) {
+            leagueDetailErrorDataText.text = resources.getString(R.string.no_data_to_show)
+        } else {
+            leagueDetailErrorDataText.text = resources.getString(R.string.no_internet_connection)
+        }
+
     }
 
     override fun showLeagueDetailTitle(leagueItem: LeagueItem) {
@@ -260,22 +272,34 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
         return px.toInt()
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
-        super.onSaveInstanceState(outState)
-        outState?.putIntArray(
-            "leagueDetailScrollPosition",
-            intArrayOf(leagueDetailScrollView.scrollX, leagueDetailScrollView.scrollY)
-        )
-    }
+    @Suppress("DEPRECATION")
+    private fun checkNetworkConnection(): Boolean {
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        super.onRestoreInstanceState(savedInstanceState)
-        val scrollPosition: IntArray? =
-            savedInstanceState?.getIntArray("leagueDetailScrollPosition")
-        if (scrollPosition != null) {
-            leagueDetailScrollView.post {
-                leagueDetailScrollView.scrollTo(scrollPosition[0], scrollPosition[1])
+        val connectivityManager: ConnectivityManager? =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (connectivityManager != null) {
+            if (Build.VERSION.SDK_INT < 23) {
+                val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
+
+                if (networkInfo != null) {
+                    return (networkInfo.isConnected && (networkInfo.type == ConnectivityManager.TYPE_WIFI || networkInfo.type == ConnectivityManager.TYPE_MOBILE || networkInfo.type == ConnectivityManager.TYPE_VPN))
+                }
+
+            } else {
+                val network: Network? = connectivityManager.activeNetwork
+
+                if (network != null) {
+                    val networkCapabilities: NetworkCapabilities =
+                        connectivityManager.getNetworkCapabilities(network)!!
+
+
+                    return (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                            || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                            || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN))
+                }
             }
         }
+        return false
     }
 }

@@ -60,6 +60,30 @@ class MatchDetailPresenterTest {
             .showMatchDetailData(combinedMatchTeamsResponse)
         inOrder.verify(matchDetailView, Mockito.times(1)).dataLoadingFinished()
 
+    }
 
+    @Test
+    fun getFailedDetailMatchInfoTest() {
+
+        val eventId = ""
+        val homeTeamId = ""
+        val awayTeamId = ""
+
+        matchDetailPresenter.getDetailMatchInfo(eventId, homeTeamId, awayTeamId)
+
+        argumentCaptor<MatchDetailRepositoryCallback<CombinedMatchTeamsResponse?>>().apply {
+            verify(matchDetailRepository).getMatchDetail(
+                eq(eventId),
+                eq(homeTeamId),
+                eq(awayTeamId),
+                capture()
+            )
+            firstValue.onDataError()
+        }
+
+        val inOrder = inOrder(matchDetailView)
+
+        inOrder.verify(matchDetailView, Mockito.times(1)).dataIsLoading()
+        inOrder.verify(matchDetailView, Mockito.times(1)).dataFailedToLoad()
     }
 }

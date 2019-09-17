@@ -54,4 +54,23 @@ class LeagueDetailPresenterTest {
         inOrder.verify(leagueDetailView, times(1)).dataLoadingFinished()
 
     }
+
+    @Test
+    fun getFailedLeagueDetailInfoTest() {
+
+        val id = ""
+
+        leagueDetailPresenter.getLeagueDetailInfo(id)
+
+        argumentCaptor<LeagueDetailRepositoryCallback<LeagueDetailResponse?>>().apply {
+
+            verify(leagueDetailRepository).getLeagueDetail(eq(id), capture())
+            firstValue.onDataError()
+        }
+
+        val inOrder = inOrder(leagueDetailView)
+        inOrder.verify(leagueDetailView, times(1)).dataIsLoading()
+        inOrder.verify(leagueDetailView, times(1)).dataFailedToLoad()
+
+    }
 }

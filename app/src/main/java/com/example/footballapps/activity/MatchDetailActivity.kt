@@ -1,7 +1,13 @@
 package com.example.footballapps.activity
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.database.sqlite.SQLiteConstraintException
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkInfo
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -14,8 +20,6 @@ import com.example.footballapps.favorite.FavoriteMatchItem
 import com.example.footballapps.helper.database
 import com.example.footballapps.model.CombinedMatchTeamsResponse
 import com.example.footballapps.model.MatchItem
-import com.example.footballapps.model.MatchResponse
-import com.example.footballapps.model.TeamResponse
 import com.example.footballapps.presenter.MatchDetailPresenter
 import com.example.footballapps.repository.MatchDetailRepository
 import com.example.footballapps.utils.gone
@@ -111,11 +115,16 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
         match_detail_error_data_text.visible()
         layout_match_detail_data.invisible()
 
-        match_detail_error_data_text.text = resources.getString(R.string.no_data_to_show)
+        val isNetworkConnected = checkNetworkConnection()
+        if (isNetworkConnected) {
+            match_detail_error_data_text.text = resources.getString(R.string.no_data_to_show)
+        } else {
+            match_detail_error_data_text.text = resources.getString(R.string.no_internet_connection)
+        }
+
     }
 
     override fun showMatchDetailData(combinedMatchTeamsResponse: CombinedMatchTeamsResponse) {
-        // todo: pertama pake show match data
         val matchDetailResponse = combinedMatchTeamsResponse.matchDetailResponse
         val matchDetailItem = matchDetailResponse.events?.first()
         favoriteMatchItem = matchDetailItem
@@ -140,7 +149,7 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
         match_detail_away_team_name.text = matchDetailItem?.awayTeamName ?: "-"
 
         tv_match_detail_spectators.text = when {
-            matchDetailItem?.spectators != null -> StringBuilder("Spectators : ${matchDetailItem?.spectators}")
+            matchDetailItem?.spectators != null -> StringBuilder("Spectators : ${matchDetailItem.spectators}")
             else -> resources.getString(R.string.spectators_unknown)
         }
 
@@ -154,26 +163,40 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
         match_detail_away_yellow_cards.text =
             createTextFromStringValue(matchDetailItem?.awayTeamYellowCards)
 
-        match_detail_home_red_cards.text = createTextFromStringValue(matchDetailItem?.homeTeamRedCards)
-        match_detail_away_red_cards.text = createTextFromStringValue(matchDetailItem?.awayTeamRedCards)
+        match_detail_home_red_cards.text =
+            createTextFromStringValue(matchDetailItem?.homeTeamRedCards)
+        match_detail_away_red_cards.text =
+            createTextFromStringValue(matchDetailItem?.awayTeamRedCards)
 
-        match_detail_home_total_shots.text = createTextFromStringValue(matchDetailItem?.homeTeamShots)
-        match_detail_away_total_shots.text = createTextFromStringValue(matchDetailItem?.awayTeamShots)
+        match_detail_home_total_shots.text =
+            createTextFromStringValue(matchDetailItem?.homeTeamShots)
+        match_detail_away_total_shots.text =
+            createTextFromStringValue(matchDetailItem?.awayTeamShots)
 
-        match_detail_home_formation.text = createTextFromStringValue(matchDetailItem?.homeTeamFormation)
-        match_detail_away_formation.text = createTextFromStringValue(matchDetailItem?.awayTeamFormation)
+        match_detail_home_formation.text =
+            createTextFromStringValue(matchDetailItem?.homeTeamFormation)
+        match_detail_away_formation.text =
+            createTextFromStringValue(matchDetailItem?.awayTeamFormation)
 
-        match_detail_home_goal_keeper.text = createTextFromStringValue(matchDetailItem?.homeTeamGoalkeeper)
-        match_detail_away_goal_keeper.text = createTextFromStringValue(matchDetailItem?.awayTeamGoalkeeper)
+        match_detail_home_goal_keeper.text =
+            createTextFromStringValue(matchDetailItem?.homeTeamGoalkeeper)
+        match_detail_away_goal_keeper.text =
+            createTextFromStringValue(matchDetailItem?.awayTeamGoalkeeper)
 
-        match_detail_home_defenders.text = createTextFromStringValue(matchDetailItem?.homeTeamDefense)
-        match_detail_away_defenders.text = createTextFromStringValue(matchDetailItem?.awayTeamDefense)
+        match_detail_home_defenders.text =
+            createTextFromStringValue(matchDetailItem?.homeTeamDefense)
+        match_detail_away_defenders.text =
+            createTextFromStringValue(matchDetailItem?.awayTeamDefense)
 
-        match_detail_home_midfielders.text = createTextFromStringValue(matchDetailItem?.homeTeamMidfield)
-        match_detail_away_midfielders.text = createTextFromStringValue(matchDetailItem?.awayTeamMidfield)
+        match_detail_home_midfielders.text =
+            createTextFromStringValue(matchDetailItem?.homeTeamMidfield)
+        match_detail_away_midfielders.text =
+            createTextFromStringValue(matchDetailItem?.awayTeamMidfield)
 
-        match_detail_home_forwards.text = createTextFromStringValue(matchDetailItem?.homeTeamForward)
-        match_detail_away_forwards.text = createTextFromStringValue(matchDetailItem?.awayTeamForward)
+        match_detail_home_forwards.text =
+            createTextFromStringValue(matchDetailItem?.homeTeamForward)
+        match_detail_away_forwards.text =
+            createTextFromStringValue(matchDetailItem?.awayTeamForward)
 
         match_detail_home_substitutes.text =
             createTextFromStringValue(matchDetailItem?.homeTeamSubstitutes)
@@ -367,6 +390,37 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
             if (favorite.isNotEmpty()) isEventFavorite = true
 
         }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun checkNetworkConnection(): Boolean {
+
+        val connectivityManager: ConnectivityManager? =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (connectivityManager != null) {
+            if (Build.VERSION.SDK_INT < 23) {
+                val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
+
+                if (networkInfo != null) {
+                    return (networkInfo.isConnected && (networkInfo.type == ConnectivityManager.TYPE_WIFI || networkInfo.type == ConnectivityManager.TYPE_MOBILE || networkInfo.type == ConnectivityManager.TYPE_VPN))
+                }
+
+            } else {
+                val network: Network? = connectivityManager.activeNetwork
+
+                if (network != null) {
+                    val networkCapabilities: NetworkCapabilities =
+                        connectivityManager.getNetworkCapabilities(network)!!
+
+
+                    return (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                            || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                            || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN))
+                }
+            }
+        }
+        return false
     }
 
 }

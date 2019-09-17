@@ -55,6 +55,25 @@ class MatchPresenterTest {
     }
 
     @Test
+    fun getFailedNextMatchInfoTest() {
+
+        val id = ""
+
+        matchPresenter.getNextMatchInfo(id)
+
+        argumentCaptor<MatchesRepositoryCallback<MatchResponse?>>().apply {
+            verify(matchesRepository).getNextMatches(eq(id), capture())
+            firstValue.onDataError()
+        }
+
+        val inOrder = inOrder(matchView)
+
+        inOrder.verify(matchView, times(1)).dataIsLoading()
+        inOrder.verify(matchView, times(1)).dataFailedToLoad()
+
+    }
+
+    @Test
     fun getPreviousMatchInfoTest() {
 
         val id = "4328"
@@ -73,6 +92,24 @@ class MatchPresenterTest {
     }
 
     @Test
+    fun getFailedPreviousMatchInfoTest() {
+
+        val id = ""
+
+        matchPresenter.getPreviousMatchInfo(id)
+
+        argumentCaptor<MatchesRepositoryCallback<MatchResponse?>>().apply {
+            verify(matchesRepository).getLastMatches(eq(id), capture())
+            firstValue.onDataError()
+        }
+
+        val inOrder = inOrder(matchView)
+        inOrder.verify(matchView, times(1)).dataIsLoading()
+        inOrder.verify(matchView, times(1)).dataFailedToLoad()
+
+    }
+
+    @Test
     fun getSearchMatchInfoTest() {
 
         val query = "man united"
@@ -88,5 +125,22 @@ class MatchPresenterTest {
         inOrder.verify(matchView, times(1)).dataIsLoading()
         inOrder.verify(matchView, times(1)).showMatchesData(matchResponse)
         inOrder.verify(matchView, times(1)).dataLoadingFinished()
+    }
+
+    @Test
+    fun getFailedSearchMatchInfoTest() {
+
+        val query = "abracadabra"
+
+        matchPresenter.getSearchMatchInfo(query)
+
+        argumentCaptor<MatchesRepositoryCallback<MatchResponse?>>().apply {
+            verify(matchesRepository).getSearchResultMatches(eq(query), capture())
+            firstValue.onDataError()
+        }
+
+        val inOrder = inOrder(matchView)
+        inOrder.verify(matchView, times(1)).dataIsLoading()
+        inOrder.verify(matchView, times(1)).dataFailedToLoad()
     }
 }
