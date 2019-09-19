@@ -228,11 +228,11 @@ class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchV
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
 
-        inflater?.inflate(R.menu.menu_search, menu)
+        inflater.inflate(R.menu.menu_search, menu)
 
-        favoriteMatchSearchItem = menu!!.findItem(R.id.action_search)
+        favoriteMatchSearchItem = menu.findItem(R.id.action_search)
 
         val favoriteSearchManager: SearchManager =
             context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager

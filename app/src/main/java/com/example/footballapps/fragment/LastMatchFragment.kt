@@ -22,6 +22,7 @@ import com.example.footballapps.activity.FootballGameInfoActivity
 import com.example.footballapps.activity.LeagueDetailActivity
 import com.example.footballapps.activity.MatchDetailActivity
 import com.example.footballapps.adapter.MatchRecyclerViewAdapter
+import com.example.footballapps.espresso.EspressoIdlingResource
 import com.example.footballapps.lifecycle.FragmentLifecycle
 import com.example.footballapps.model.LeagueOption
 import com.example.footballapps.model.MatchItem
@@ -175,6 +176,7 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
                     (activity as FootballGameInfoActivity).leagueId = lastMatchLeagueId
                     (activity as FootballGameInfoActivity).leagueName = lastMatchLeagueName
 
+                    EspressoIdlingResource.increment()
                     lastMatchPresenter.getPreviousMatchInfo(lastMatchLeagueId)
 
                 }
@@ -182,8 +184,10 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
 
         lastMatchSwipeRefreshLayout.onRefresh {
             if (!isSearching) {
+                EspressoIdlingResource.increment()
                 lastMatchPresenter.getPreviousMatchInfo(lastMatchLeagueId)
             } else {
+                EspressoIdlingResource.increment()
                 lastMatchPresenter.getSearchMatchInfo(lastMatchSearchView?.query.toString())
             }
 
@@ -199,6 +203,9 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
     }
 
     override fun dataLoadingFinished() {
+        if(!EspressoIdlingResource.idlingResource.isIdleNow) {
+            EspressoIdlingResource.decrement()
+        }
         lastMatchSwipeRefreshLayout.isRefreshing = false
         lastMatchProgressBar.gone()
         lastMatchErrorText.gone()
@@ -208,6 +215,9 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
     }
 
     override fun dataFailedToLoad() {
+        if(!EspressoIdlingResource.idlingResource.isIdleNow) {
+            EspressoIdlingResource.decrement()
+        }
         lastMatchSwipeRefreshLayout.isRefreshing = false
         lastMatchProgressBar.gone()
         lastMatchErrorText.visible()
@@ -262,18 +272,18 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
 
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?) {
+    override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
         lastMatchLeagueId = (activity as FootballGameInfoActivity).leagueId
         lastMatchLeagueName = (activity as FootballGameInfoActivity).leagueName
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.menu_search_with_info, menu)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_search_with_info, menu)
 
-        lastMatchSearchItem = menu?.findItem(R.id.action_search)
+        lastMatchSearchItem = menu.findItem(R.id.action_search)
 
-        val lastMatchLeagueInfoItem = menu?.findItem(R.id.action_info)
+        val lastMatchLeagueInfoItem = menu.findItem(R.id.action_info)
 
         val lastMatchSearchManager: SearchManager =
             context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
@@ -288,6 +298,7 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
                 override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
                     isSearching = true
                     lastMatchLeagueSpinner.gone()
+                    EspressoIdlingResource.increment()
                     lastMatchPresenter.getSearchMatchInfo(lastMatchSearchView?.query.toString())
                     lastMatchLeagueInfoItem?.isVisible = false
                     return true
@@ -296,6 +307,7 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
                 override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
                     isSearching = false
                     lastMatchLeagueSpinner.visible()
+                    EspressoIdlingResource.increment()
                     lastMatchPresenter.getPreviousMatchInfo(lastMatchLeagueId)
                     activity?.invalidateOptionsMenu()
                     return true
@@ -306,6 +318,7 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
             lastMatchSearchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     if (!isDataLoading) {
+                        EspressoIdlingResource.increment()
                         lastMatchPresenter.getSearchMatchInfo(query!!)
                     }
                     return true
@@ -321,8 +334,8 @@ class LastMatchFragment : Fragment(), MatchView, FragmentLifecycle {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item?.itemId == R.id.action_info) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_info) {
             startActivity<LeagueDetailActivity>(
                 "leagueName" to lastMatchLeagueName,
                 "leagueId" to lastMatchLeagueId

@@ -21,6 +21,7 @@ import com.example.footballapps.activity.FootballGameInfoActivity
 import com.example.footballapps.activity.LeagueDetailActivity
 import com.example.footballapps.activity.MatchDetailActivity
 import com.example.footballapps.adapter.MatchRecyclerViewAdapter
+import com.example.footballapps.espresso.EspressoIdlingResource
 import com.example.footballapps.lifecycle.FragmentLifecycle
 import com.example.footballapps.model.LeagueOption
 import com.example.footballapps.model.MatchItem
@@ -172,6 +173,7 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
                     (activity as FootballGameInfoActivity).leagueId = nextMatchLeagueId
                     (activity as FootballGameInfoActivity).leagueName = nextMatchLeagueName
 
+                    EspressoIdlingResource.increment()
                     nextMatchPresenter.getNextMatchInfo(nextMatchLeagueId)
                 }
 
@@ -179,8 +181,10 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
 
         nextMatchSwipeRefreshLayout.onRefresh {
             if (!isSearching) {
+                EspressoIdlingResource.increment()
                 nextMatchPresenter.getNextMatchInfo(nextMatchLeagueId)
             } else {
+                EspressoIdlingResource.increment()
                 nextMatchPresenter.getSearchMatchInfo(nextMatchSearchView?.query.toString())
             }
 
@@ -196,6 +200,9 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
     }
 
     override fun dataLoadingFinished() {
+        if(!EspressoIdlingResource.idlingResource.isIdleNow) {
+            EspressoIdlingResource.decrement()
+        }
         nextMatchSwipeRefreshLayout.isRefreshing = false
         nextMatchProgressBar.gone()
         nextMatchRecyclerView.visible()
@@ -205,6 +212,9 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
     }
 
     override fun dataFailedToLoad() {
+        if(!EspressoIdlingResource.idlingResource.isIdleNow) {
+            EspressoIdlingResource.decrement()
+        }
         nextMatchSwipeRefreshLayout.isRefreshing = false
         nextMatchProgressBar.gone()
         nextMatchRecyclerView.invisible()
@@ -253,12 +263,12 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.menu_search_with_info, menu)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_search_with_info, menu)
 
-        nextMatchSearchItem = menu?.findItem(R.id.action_search)
+        nextMatchSearchItem = menu.findItem(R.id.action_search)
 
-        val nextMatchLeagueInfoItem = menu?.findItem(R.id.action_info)
+        val nextMatchLeagueInfoItem = menu.findItem(R.id.action_info)
 
         val nextMatchSearchManager: SearchManager =
             context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
@@ -273,6 +283,7 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
                 override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
                     isSearching = true
                     nextMatchLeagueSpinner.gone()
+                    EspressoIdlingResource.increment()
                     nextMatchPresenter.getSearchMatchInfo(nextMatchSearchView?.query.toString())
                     nextMatchLeagueInfoItem?.isVisible = false
                     return true
@@ -281,6 +292,7 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
                 override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
                     isSearching = false
                     nextMatchLeagueSpinner.visible()
+                    EspressoIdlingResource.increment()
                     nextMatchPresenter.getNextMatchInfo(nextMatchLeagueId)
                     activity?.invalidateOptionsMenu()
                     return true
@@ -291,6 +303,7 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
             nextMatchSearchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     if (!isDataLoading) {
+                        EspressoIdlingResource.increment()
                         nextMatchPresenter.getSearchMatchInfo(query!!)
                     }
                     return true
@@ -306,8 +319,8 @@ class NextMatchFragment : Fragment(), MatchView, FragmentLifecycle {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item?.itemId == R.id.action_info) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_info) {
             startActivity<LeagueDetailActivity>(
                 "leagueName" to nextMatchLeagueName,
                 "leagueId" to nextMatchLeagueId

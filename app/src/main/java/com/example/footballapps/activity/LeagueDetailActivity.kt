@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.example.footballapps.R
+import com.example.footballapps.espresso.EspressoIdlingResource
 import com.example.footballapps.model.LeagueDetailResponse
 import com.example.footballapps.model.LeagueItem
 import com.example.footballapps.presenter.LeagueDetailPresenter
@@ -171,9 +172,11 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
 
         leagueDetailPresenter = LeagueDetailPresenter(this, LeagueDetailRepository())
 
+        EspressoIdlingResource.increment()
         leagueDetailPresenter.getLeagueDetailInfo(leagueId)
 
         leagueDetailSwipeRefreshLayout.setOnRefreshListener {
+            EspressoIdlingResource.increment()
             leagueDetailPresenter.getLeagueDetailInfo(leagueId)
         }
 
@@ -186,6 +189,9 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
     }
 
     override fun dataLoadingFinished() {
+        if(!EspressoIdlingResource.idlingResource.isIdleNow) {
+            EspressoIdlingResource.decrement()
+        }
         leagueDetailSwipeRefreshLayout.isRefreshing = false
         leagueDetailProgressBar.gone()
         leagueDetailErrorDataText.gone()
@@ -193,6 +199,9 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
     }
 
     override fun dataFailedToLoad() {
+        if(!EspressoIdlingResource.idlingResource.isIdleNow) {
+            EspressoIdlingResource.decrement()
+        }
         leagueDetailSwipeRefreshLayout.isRefreshing = false
         leagueDetailProgressBar.gone()
         leagueDetailErrorDataText.visible()

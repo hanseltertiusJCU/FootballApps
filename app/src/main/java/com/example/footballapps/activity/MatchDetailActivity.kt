@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.example.footballapps.R
 import com.example.footballapps.adapter.MatchRecyclerViewAdapter
+import com.example.footballapps.espresso.EspressoIdlingResource
 import com.example.footballapps.favorite.FavoriteMatchItem
 import com.example.footballapps.helper.database
 import com.example.footballapps.model.CombinedMatchTeamsResponse
@@ -73,9 +74,11 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
 
         matchDetailPresenter = MatchDetailPresenter(this, MatchDetailRepository())
 
+        EspressoIdlingResource.increment()
         matchDetailPresenter.getDetailMatchInfo(eventId, homeTeamId, awayTeamId)
 
         match_detail_swipe_refresh_layout.setOnRefreshListener {
+            EspressoIdlingResource.increment()
             matchDetailPresenter.getDetailMatchInfo(eventId, homeTeamId, awayTeamId)
         }
 
@@ -102,6 +105,9 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
     }
 
     override fun dataLoadingFinished() {
+        if(!EspressoIdlingResource.idlingResource.isIdleNow) {
+            EspressoIdlingResource.decrement()
+        }
         match_detail_swipe_refresh_layout.isRefreshing = false
         progress_bar_match_detail.gone()
         match_detail_error_data_text.gone()
@@ -109,6 +115,9 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
     }
 
     override fun dataFailedToLoad() {
+        if(!EspressoIdlingResource.idlingResource.isIdleNow) {
+            EspressoIdlingResource.decrement()
+        }
         match_detail_swipe_refresh_layout.isRefreshing = false
         favoriteMatchItem = null
         progress_bar_match_detail.gone()

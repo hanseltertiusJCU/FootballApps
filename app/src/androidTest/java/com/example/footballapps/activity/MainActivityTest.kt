@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
@@ -12,7 +13,10 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.example.footballapps.R
+import com.example.footballapps.espresso.EspressoIdlingResource
 import org.hamcrest.Matchers.anything
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,6 +26,11 @@ class MainActivityTest {
     @Rule
     @JvmField
     var activityRule = ActivityTestRule(MainActivity::class.java)
+
+    @Before
+    fun setUp(){
+        IdlingRegistry.getInstance().register(EspressoIdlingResource.idlingResource)
+    }
 
     @Test
     fun testAppBehaviour() {
@@ -61,6 +70,11 @@ class MainActivityTest {
         Espresso.pressBack()
 
         onView(withId(R.id.view_pager_match_schedule)).perform(swipeLeft())
+        onView(withId(R.id.rv_next_match)).check(matches(isDisplayed()))
+        onView(withId(R.id.next_match_league_spinner)).check(matches(withSpinnerText("English Premier League")))
+            .perform(click())
+        onData(anything()).atPosition(3).perform(click())
+        onView(withId(R.id.next_match_league_spinner)).check(matches(withSpinnerText("Italian Serie A")))
         onView(withId(R.id.rv_next_match)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_next_match)).perform(
             RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
@@ -154,5 +168,10 @@ class MainActivityTest {
         onView(withId(R.id.menu_item_match_schedule)).perform(click())
         onView(withId(R.id.rv_last_match)).check(matches(isDisplayed()))
 
+    }
+
+    @After
+    fun tearDown(){
+        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.idlingResource)
     }
 }
