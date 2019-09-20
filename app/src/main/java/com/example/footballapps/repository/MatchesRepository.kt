@@ -15,7 +15,7 @@ class MatchesRepository {
     fun getNextMatches(id: String, callback: MatchesRepositoryCallback<MatchResponse?>) {
         RetrofitClient
             .createService(MatchService::class.java)
-            .getNextMatchesResponse(id)
+            .getLeagueNextMatchesResponse(id)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : Observer<MatchResponse> {
@@ -46,7 +46,7 @@ class MatchesRepository {
     fun getLastMatches(id: String, callback: MatchesRepositoryCallback<MatchResponse?>) {
         RetrofitClient
             .createService(MatchService::class.java)
-            .getLastMatchesResponse(id)
+            .getLeagueLastMatchesResponse(id)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : Observer<MatchResponse> {
@@ -111,6 +111,8 @@ class MatchesRepository {
 
             })
     }
+
+    // todo: tinggal implement dari last match, next match dari team
 
 
 }

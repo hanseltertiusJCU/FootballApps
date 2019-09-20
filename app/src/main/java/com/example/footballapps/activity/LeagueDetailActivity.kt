@@ -57,6 +57,8 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
     private lateinit var leagueDetailErrorDataText: TextView
     private lateinit var leagueDetailProgressBar: ProgressBar
 
+    // todo : viewnya itu ubah jadi fragment, intinya kita itu ingin menampung viewpager + tablayout untuk teams, league table,
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

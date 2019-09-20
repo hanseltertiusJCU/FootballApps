@@ -27,13 +27,13 @@ class MatchDetailRepository {
         val homeTeamResponseObservable : Observable<TeamResponse>? =
             RetrofitClient
                 .createService(TeamService::class.java)
-                .getTeamResponse(homeTeamId)
+                .getTeamDetailResponse(homeTeamId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
         val awayTeamResponseObservable : Observable<TeamResponse>? =
             RetrofitClient
                 .createService(TeamService::class.java)
-                .getTeamResponse(awayTeamId)
+                .getTeamDetailResponse(awayTeamId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
 

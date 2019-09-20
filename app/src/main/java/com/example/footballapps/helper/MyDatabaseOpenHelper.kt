@@ -20,6 +20,7 @@ class MyDatabaseOpenHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, "Favorit
     }
 
     override fun onCreate(db: SQLiteDatabase) {
+        // todo : mesti pake 2 tables
         db.createTable(
             FavoriteMatchItem.TABLE_FAVORITE_MATCH, true,
             FavoriteMatchItem.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
