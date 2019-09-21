@@ -12,7 +12,7 @@ import io.reactivex.schedulers.Schedulers
 
 class MatchesRepository {
 
-    fun getNextMatches(id: String, callback: MatchesRepositoryCallback<MatchResponse?>) {
+    fun getLeagueNextMatches(id: String, callback: MatchesRepositoryCallback<MatchResponse?>) {
         RetrofitClient
             .createService(MatchService::class.java)
             .getLeagueNextMatchesResponse(id)
@@ -43,10 +43,72 @@ class MatchesRepository {
             })
     }
 
-    fun getLastMatches(id: String, callback: MatchesRepositoryCallback<MatchResponse?>) {
+    fun getLeagueLastMatches(id: String, callback: MatchesRepositoryCallback<MatchResponse?>) {
         RetrofitClient
             .createService(MatchService::class.java)
             .getLeagueLastMatchesResponse(id)
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<MatchResponse> {
+                override fun onComplete() {}
+
+                override fun onSubscribe(d: Disposable) {}
+
+                override fun onNext(matchResponse: MatchResponse) {
+                    val lastMatchesList = matchResponse.events
+                    if (lastMatchesList != null) {
+                        if (lastMatchesList.isNotEmpty()) {
+                            callback.onDataLoaded(matchResponse)
+                        } else {
+                            callback.onDataError()
+                        }
+                    } else {
+                        callback.onDataError()
+                    }
+                }
+
+                override fun onError(error: Throwable) {
+                    callback.onDataError()
+                }
+
+            })
+    }
+
+    fun getTeamNextMatches(id : String, callback: MatchesRepositoryCallback<MatchResponse?>) {
+        RetrofitClient
+            .createService(MatchService::class.java)
+            .getTeamNextMatchesResponse(id)
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<MatchResponse> {
+                override fun onComplete() {}
+
+                override fun onSubscribe(d: Disposable) {}
+
+                override fun onNext(matchResponse: MatchResponse) {
+                    val lastMatchesList = matchResponse.events
+                    if (lastMatchesList != null) {
+                        if (lastMatchesList.isNotEmpty()) {
+                            callback.onDataLoaded(matchResponse)
+                        } else {
+                            callback.onDataError()
+                        }
+                    } else {
+                        callback.onDataError()
+                    }
+                }
+
+                override fun onError(error: Throwable) {
+                    callback.onDataError()
+                }
+
+            })
+    }
+
+    fun getTeamLastMatches(id: String, callback: MatchesRepositoryCallback<MatchResponse?>) {
+        RetrofitClient
+            .createService(MatchService::class.java)
+            .getTeamLastMatchesResponse(id)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : Observer<MatchResponse> {
@@ -111,8 +173,5 @@ class MatchesRepository {
 
             })
     }
-
-    // todo: tinggal implement dari last match, next match dari team
-
 
 }

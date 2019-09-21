@@ -70,9 +70,9 @@ import com.google.gson.annotations.SerializedName
 
 data class PlayerResponse(
     @SerializedName("player")
-    var playersList : List<PlayerItem> = emptyList(),
+    var playersList : List<PlayerItem>? = emptyList(),
     @SerializedName("players")
-    var playerDetail : List<PlayerItem> = emptyList()
+    var playerDetail : List<PlayerItem>? = emptyList()
 )
 
 data class PlayerItem(

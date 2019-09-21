@@ -13,7 +13,7 @@ class MatchPresenter(
     fun getNextMatchInfo(leagueId: String) {
         matchView.dataIsLoading()
 
-        matchesRepository.getNextMatches(
+        matchesRepository.getLeagueNextMatches(
             leagueId,
             object : MatchesRepositoryCallback<MatchResponse?> {
                 override fun onDataLoaded(data: MatchResponse?) {
@@ -32,7 +32,7 @@ class MatchPresenter(
     fun getPreviousMatchInfo(leagueId: String) {
         matchView.dataIsLoading()
 
-        matchesRepository.getLastMatches(
+        matchesRepository.getLeagueLastMatches(
             leagueId,
             object : MatchesRepositoryCallback<MatchResponse?> {
                 override fun onDataLoaded(data: MatchResponse?) {

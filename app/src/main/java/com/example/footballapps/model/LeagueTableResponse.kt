@@ -23,28 +23,28 @@ import com.google.gson.annotations.SerializedName
 
 data class LeagueTableResponse(
     @SerializedName("table")
-    var leagueTable : List<TeamInTableItem> = emptyList()
+    var leagueTable : List<TeamInTableItem>? = emptyList()
 )
 
 data class TeamInTableItem(
     @SerializedName("name")
-    var teamInTableName : String,
+    var teamInTableName : String?,
     @SerializedName("teamid")
-    var teamInTableId : String,
+    var teamInTableId : String?,
     @SerializedName("played")
-    var teamInTableGamesPlayed : String,
+    var teamInTableGamesPlayed : String?,
     @SerializedName("goalsfor")
-    var teamInTableGoalsScored : String,
+    var teamInTableGoalsScored : String?,
     @SerializedName("goalsagainst")
-    var teamInTableGoalsConceded : String,
+    var teamInTableGoalsConceded : String?,
     @SerializedName("goalsdifference")
-    var teamInTableGoalsDifference : String,
+    var teamInTableGoalsDifference : String?,
     @SerializedName("win")
-    var teamInTableGamesWon : String,
+    var teamInTableGamesWon : String?,
     @SerializedName("draw")
-    var teamInTableGamesTied : String,
+    var teamInTableGamesTied : String?,
     @SerializedName("loss")
-    var teamInTableGamesLost : String,
+    var teamInTableGamesLost : String?,
     @SerializedName("total")
-    var teamInTablePoints : String
+    var teamInTablePoints : String?
 )

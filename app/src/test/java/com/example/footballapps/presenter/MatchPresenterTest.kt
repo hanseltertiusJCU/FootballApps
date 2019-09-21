@@ -42,7 +42,7 @@ class MatchPresenterTest {
         matchPresenter.getNextMatchInfo(id)
 
         argumentCaptor<MatchesRepositoryCallback<MatchResponse?>>().apply {
-            verify(matchesRepository).getNextMatches(eq(id), capture())
+            verify(matchesRepository).getLeagueNextMatches(eq(id), capture())
             firstValue.onDataLoaded(matchResponse)
         }
 
@@ -62,7 +62,7 @@ class MatchPresenterTest {
         matchPresenter.getNextMatchInfo(id)
 
         argumentCaptor<MatchesRepositoryCallback<MatchResponse?>>().apply {
-            verify(matchesRepository).getNextMatches(eq(id), capture())
+            verify(matchesRepository).getLeagueNextMatches(eq(id), capture())
             firstValue.onDataError()
         }
 
@@ -81,7 +81,7 @@ class MatchPresenterTest {
         matchPresenter.getPreviousMatchInfo(id)
 
         argumentCaptor<MatchesRepositoryCallback<MatchResponse?>>().apply {
-            verify(matchesRepository).getLastMatches(eq(id), capture())
+            verify(matchesRepository).getLeagueLastMatches(eq(id), capture())
             firstValue.onDataLoaded(matchResponse)
         }
 
@@ -99,7 +99,7 @@ class MatchPresenterTest {
         matchPresenter.getPreviousMatchInfo(id)
 
         argumentCaptor<MatchesRepositoryCallback<MatchResponse?>>().apply {
-            verify(matchesRepository).getLastMatches(eq(id), capture())
+            verify(matchesRepository).getLeagueLastMatches(eq(id), capture())
             firstValue.onDataError()
         }
 
