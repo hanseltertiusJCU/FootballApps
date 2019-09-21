@@ -81,5 +81,7 @@ data class TeamItem(
     @SerializedName("strCountry")
     var teamCountry: String?,
     @SerializedName("strTeamBadge")
-    var teamBadge: String?
+    var teamBadge: String?,
+    @SerializedName("strSport")
+    var sportType : String?
 )
