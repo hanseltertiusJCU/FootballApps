@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.NumberPicker
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -35,6 +36,7 @@ import org.jetbrains.anko.constraint.layout.constraintLayout
 import org.jetbrains.anko.constraint.layout.matchConstraint
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.UI
+import org.jetbrains.anko.support.v4.nestedScrollView
 import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 
@@ -44,6 +46,7 @@ class LeagueTableFragment : Fragment(), LeagueTableView{
     private lateinit var leagueTableProgressBar : ProgressBar
     private lateinit var leagueTableSwipeRefreshLayout : SwipeRefreshLayout
     private lateinit var leagueTableErrorText : TextView
+    private lateinit var leagueTableLayout : LinearLayout
 
     private lateinit var leagueTablePresenter: LeagueTablePresenter
 
@@ -66,21 +69,26 @@ class LeagueTableFragment : Fragment(), LeagueTableView{
 
                     setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
 
-                    // todo : vertical layout variable
-                    verticalLayout {
-                        include<LinearLayout>(R.layout.layout_league_table_title_column)
+                    nestedScrollView {
+                        leagueTableLayout = verticalLayout {
+                            descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
+                            include<LinearLayout>(R.layout.layout_league_table_title_column)
 
-                        leagueTableRecyclerView = recyclerView {
-                            id = R.id.rv_league_table
-                            lparams(width = matchParent, height = wrapContent)
-                            layoutManager = LinearLayoutManager(context)
+                            leagueTableRecyclerView = recyclerView {
+                                id = R.id.rv_league_table
+                                isNestedScrollingEnabled = false
+                                lparams(width = matchParent, height = wrapContent)
+                                layoutManager = LinearLayoutManager(context)
+                            }
+
                         }
-
                     }
+
 
                 }.lparams{
                     width = matchConstraint
                     height = matchConstraint
+                    margin = dip(16)
                     topToTop = R.id.league_table_parent_layout
                     leftToLeft = R.id.league_table_parent_layout
                     rightToRight = R.id.league_table_parent_layout
@@ -132,7 +140,7 @@ class LeagueTableFragment : Fragment(), LeagueTableView{
     override fun dataIsLoading() {
         leagueTableProgressBar.visible()
         leagueTableErrorText.gone()
-        leagueTableRecyclerView.invisible()
+        leagueTableLayout.invisible()
     }
 
     override fun dataLoadingFinished() {
@@ -143,7 +151,7 @@ class LeagueTableFragment : Fragment(), LeagueTableView{
         leagueTableSwipeRefreshLayout.isRefreshing = false
         leagueTableProgressBar.gone()
         leagueTableErrorText.gone()
-        leagueTableRecyclerView.visible()
+        leagueTableLayout.visible()
     }
 
     override fun dataFailedToLoad() {
@@ -154,7 +162,7 @@ class LeagueTableFragment : Fragment(), LeagueTableView{
         leagueTableSwipeRefreshLayout.isRefreshing = false
         leagueTableProgressBar.gone()
         leagueTableErrorText.visible()
-        leagueTableRecyclerView.invisible()
+        leagueTableLayout.invisible()
 
         val isNetworkConnected = checkNetworkConnection()
         if(isNetworkConnected){
