@@ -39,5 +39,10 @@
     <item name="league_table_parent_layout" type="id" />
     <item name="rv_league_table" type="id" />
 
+    <!-- League Matches -->
+    <item name="league_match_parent_layout" type="id" />
+    <item name="league_match_spinner" type="id" />
+    <item name="rv_league_match" type="id" />
+
 
 </resources>

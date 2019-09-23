@@ -120,5 +120,10 @@
     <string name="goal_difference">+/-</string>
     <string name="pts">Pts</string>
 
+    <!-- League Matches -->
+    <array name="matches_category">
+        <item>Last Matches</item>
+        <item>Next Matches</item>
+    </array>
 
 </resources>
