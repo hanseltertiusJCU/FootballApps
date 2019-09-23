@@ -9,6 +9,7 @@ import com.example.footballapps.fragment.LeagueDetailInfoFragment
 import com.example.footballapps.fragment.LeagueMatchesFragment
 import com.example.footballapps.fragment.LeagueTableFragment
 import com.example.footballapps.fragment.LeagueTeamsFragment
+import com.example.footballapps.lifecycle.FragmentLifecycle
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_league_detail.*
 
@@ -85,13 +86,12 @@ class LeagueDetailActivity : AppCompatActivity() {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val newPosition = tab?.position!!
 
-                val fragmentToShow =
-                    leagueDetailViewPagerAdapter.getItem(newPosition)
-                fragmentToShow.onResume()
-
-                val fragmentToHide =
-                    leagueDetailViewPagerAdapter.getItem(currentPosition)
-                fragmentToHide.onPause()
+                if(currentPosition == 2 || currentPosition == 3) {
+                    // todo: tinggal pake pause di fragment lifecycle
+                    val fragmentToHide =
+                        leagueDetailViewPagerAdapter.getItem(currentPosition) as FragmentLifecycle
+                    fragmentToHide.onPauseFragment()
+                }
 
                 currentPosition = newPosition
 

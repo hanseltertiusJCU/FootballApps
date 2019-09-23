@@ -1,5 +1,6 @@
 package com.example.footballapps.fragment
 
+import android.app.SearchManager
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
@@ -7,10 +8,9 @@ import android.net.NetworkCapabilities
 import android.net.NetworkInfo
 import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.*
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +20,7 @@ import com.example.footballapps.R
 import com.example.footballapps.activity.MatchDetailActivity
 import com.example.footballapps.adapter.MatchRecyclerViewAdapter
 import com.example.footballapps.espresso.EspressoIdlingResource
+import com.example.footballapps.lifecycle.FragmentLifecycle
 import com.example.footballapps.model.MatchItem
 import com.example.footballapps.model.MatchResponse
 import com.example.footballapps.presenter.MatchPresenter
@@ -34,7 +35,7 @@ import org.jetbrains.anko.constraint.layout.matchConstraint
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.*
 
-class LeagueMatchesFragment : Fragment(), MatchView {
+class LeagueMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
 
     private lateinit var leagueMatchesRecyclerView : RecyclerView
     private lateinit var leagueMatchesProgressBar : ProgressBar
@@ -51,16 +52,18 @@ class LeagueMatchesFragment : Fragment(), MatchView {
 
     private var currentPosition = 0
 
-    // todo: searchview dan menu item
+    var leagueMatchSearchItem : MenuItem? = null
+    private var leagueMatchSearchView : SearchView? = null
 
-    // todo: isdata loading dan issearching
+    private var isDataLoading = false
+    private var isSearching = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // todo: set has options menu
+        setHasOptionsMenu(true)
         return UI {
             constraintLayout {
                 id = R.id.league_match_parent_layout
@@ -152,63 +155,18 @@ class LeagueMatchesFragment : Fragment(), MatchView {
         }
 
         leagueMatchesSwipeRefreshLayout.onRefresh {
-            // todo : issearching
             EspressoIdlingResource.increment()
-            when (currentPosition) {
-                1 -> leagueMatchesPresenter.getNextMatchInfo(leagueId)
-                else -> leagueMatchesPresenter.getPreviousMatchInfo(leagueId)
+            if(isSearching){
+                leagueMatchesPresenter.getSearchMatchInfo(leagueMatchSearchView?.query.toString())
+            } else {
+                when (currentPosition) {
+                    1 -> leagueMatchesPresenter.getNextMatchInfo(leagueId)
+                    else -> leagueMatchesPresenter.getPreviousMatchInfo(leagueId)
+                }
             }
+
         }
     }
-
-    override fun dataIsLoading() {
-        leagueMatchesProgressBar.visible()
-        leagueMatchesErrorText.gone()
-        leagueMatchesRecyclerView.invisible()
-    }
-
-    override fun dataLoadingFinished() {
-        if(!EspressoIdlingResource.idlingResource.isIdleNow) {
-            EspressoIdlingResource.decrement()
-        }
-        leagueMatchesSwipeRefreshLayout.isRefreshing = false
-        leagueMatchesProgressBar.gone()
-        leagueMatchesErrorText.gone()
-        leagueMatchesRecyclerView.visible()
-
-        // todo : is data loading false
-    }
-
-    override fun dataFailedToLoad() {
-        if(!EspressoIdlingResource.idlingResource.isIdleNow) {
-            EspressoIdlingResource.decrement()
-        }
-        leagueMatchesSwipeRefreshLayout.isRefreshing = false
-        leagueMatchesProgressBar.gone()
-        leagueMatchesErrorText.visible()
-        leagueMatchesRecyclerView.invisible()
-
-        // todo : is data loading false
-        val isNetworkConnected = checkNetworkConnection()
-        if (isNetworkConnected) {
-            leagueMatchesErrorText.text = resources.getString(R.string.no_data_to_show)
-        } else {
-            leagueMatchesErrorText.text = resources.getString(R.string.no_internet_connection)
-        }
-
-    }
-
-    override fun showMatchesData(matchResponse: MatchResponse) {
-        leagueMatches.clear()
-        // todo: if is searching, else
-        val leagueMatchesList = matchResponse.events
-        if(leagueMatchesList != null){
-            leagueMatches.addAll(leagueMatchesList)
-        }
-        leagueMatchesRvAdapter.notifyDataSetChanged()
-    }
-
-    // todo: pause fragment dan juga resume fragment
 
     @Suppress("DEPRECATION")
     private fun checkNetworkConnection(): Boolean {
@@ -239,6 +197,124 @@ class LeagueMatchesFragment : Fragment(), MatchView {
             }
         }
         return false
+    }
+
+    override fun dataIsLoading() {
+        leagueMatchesProgressBar.visible()
+        leagueMatchesErrorText.gone()
+        leagueMatchesRecyclerView.invisible()
+
+        isDataLoading = true
+    }
+
+    override fun dataLoadingFinished() {
+        if(!EspressoIdlingResource.idlingResource.isIdleNow) {
+            EspressoIdlingResource.decrement()
+        }
+        leagueMatchesSwipeRefreshLayout.isRefreshing = false
+        leagueMatchesProgressBar.gone()
+        leagueMatchesErrorText.gone()
+        leagueMatchesRecyclerView.visible()
+
+        isDataLoading = false
+    }
+
+    override fun dataFailedToLoad() {
+        if(!EspressoIdlingResource.idlingResource.isIdleNow) {
+            EspressoIdlingResource.decrement()
+        }
+
+        leagueMatchesSwipeRefreshLayout.isRefreshing = false
+        leagueMatchesProgressBar.gone()
+        leagueMatchesErrorText.visible()
+        leagueMatchesRecyclerView.invisible()
+
+        val isNetworkConnected = checkNetworkConnection()
+        if (isNetworkConnected) {
+            leagueMatchesErrorText.text = resources.getString(R.string.no_data_to_show)
+        } else {
+            leagueMatchesErrorText.text = resources.getString(R.string.no_internet_connection)
+        }
+
+        isDataLoading = false
+
+    }
+
+    override fun showMatchesData(matchResponse: MatchResponse) {
+        leagueMatches.clear()
+
+        if(isSearching){
+            val searchResultLeagueMatchesList = matchResponse.searchResultEvents
+            if(searchResultLeagueMatchesList != null){
+                leagueMatches.addAll(searchResultLeagueMatchesList)
+            }
+        } else {
+            val leagueMatchesList = matchResponse.events
+            if(leagueMatchesList != null){
+                leagueMatches.addAll(leagueMatchesList)
+            }
+        }
+
+        leagueMatchesRvAdapter.notifyDataSetChanged()
+    }
+
+    override fun onPauseFragment() {
+        leagueMatchSearchItem?.collapseActionView()
+    }
+
+    override fun onResumeFragment() {}
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_search, menu)
+
+        leagueMatchSearchItem = menu.findItem(R.id.action_search)
+
+        val leagueMatchSearchManager : SearchManager = context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+
+        if(leagueMatchSearchItem != null){
+            leagueMatchSearchView = leagueMatchSearchItem?.actionView as SearchView
+
+            leagueMatchSearchView?.setSearchableInfo(leagueMatchSearchManager.getSearchableInfo(activity?.componentName))
+
+            leagueMatchSearchItem?.setOnActionExpandListener(object  : MenuItem.OnActionExpandListener {
+                override fun onMenuItemActionExpand(menuItem: MenuItem?): Boolean {
+                    isSearching = true
+                    leagueMatchesSpinner.gone()
+                    EspressoIdlingResource.increment()
+                    leagueMatchesPresenter.getSearchMatchInfo(leagueMatchSearchView?.query.toString())
+                    return true
+                }
+
+                override fun onMenuItemActionCollapse(menuItem: MenuItem?): Boolean {
+                    isSearching = false
+                    leagueMatchesSpinner.visible()
+                    EspressoIdlingResource.increment()
+                    when (currentPosition) {
+                        1 -> leagueMatchesPresenter.getNextMatchInfo(leagueId)
+                        else -> leagueMatchesPresenter.getPreviousMatchInfo(leagueId)
+                    }
+                    return true
+                }
+
+            })
+
+            leagueMatchSearchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    if(!isDataLoading){
+                        EspressoIdlingResource.increment()
+                        leagueMatchesPresenter.getSearchMatchInfo(query!!)
+                    }
+                    return true
+                }
+
+                override fun onQueryTextChange(query: String?): Boolean {
+                    return false
+                }
+
+            })
+        }
+
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
 }
