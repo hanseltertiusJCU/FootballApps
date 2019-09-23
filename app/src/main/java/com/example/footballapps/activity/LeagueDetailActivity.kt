@@ -1,254 +1,111 @@
 package com.example.footballapps.activity
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.Network
-import android.net.NetworkCapabilities
-import android.net.NetworkInfo
-import android.os.Build
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.bumptech.glide.Glide
+import androidx.viewpager.widget.ViewPager
 import com.example.footballapps.R
-import com.example.footballapps.espresso.EspressoIdlingResource
-import com.example.footballapps.model.LeagueDetailResponse
-import com.example.footballapps.model.LeagueItem
-import com.example.footballapps.presenter.LeagueDetailPresenter
-import com.example.footballapps.repository.LeagueDetailRepository
-import com.example.footballapps.utils.gone
-import com.example.footballapps.utils.invisible
-import com.example.footballapps.utils.visible
-import com.example.footballapps.view.LeagueDetailView
-import org.jetbrains.anko.*
-import org.jetbrains.anko.appcompat.v7.toolbar
-import org.jetbrains.anko.constraint.layout.constraintLayout
-import org.jetbrains.anko.design.coordinatorLayout
-import org.jetbrains.anko.design.themedAppBarLayout
-import org.jetbrains.anko.support.v4.swipeRefreshLayout
+import com.example.footballapps.adapter.LeagueDetailViewPagerAdapter
+import com.example.footballapps.fragment.LeagueDetailInfoFragment
+import com.example.footballapps.fragment.LeagueTableFragment
+import com.example.footballapps.fragment.LeagueTeamsFragment
+import com.example.footballapps.lifecycle.FragmentLifecycle
+import com.google.android.material.tabs.TabLayout
+import kotlinx.android.synthetic.main.activity_league_detail.*
+import org.jetbrains.anko.startActivity
 
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
+class LeagueDetailActivity : AppCompatActivity() {
 
     private lateinit var leagueName: String
     private lateinit var leagueId: String
 
-    private lateinit var tvLeagueDetailName: TextView
-    private lateinit var tvLeagueDetailFormedYear: TextView
-    private lateinit var tvLeagueDetailCountry: TextView
-    private lateinit var ivLeagueDetailImage: ImageView
-    private lateinit var tvLeagueDetailDesc: TextView
-    private lateinit var tvDescTitle: TextView
+    lateinit var leagueDetailViewPagerAdapter: LeagueDetailViewPagerAdapter
 
-    private lateinit var leagueDetailPresenter: LeagueDetailPresenter
+    private val leagueDetailInfoFragment = LeagueDetailInfoFragment()
+    private val leagueTableFragment = LeagueTableFragment()
+    private val leagueTeamsFragment = LeagueTeamsFragment()
 
-    private lateinit var leagueDetailScrollView: ScrollView
-    private lateinit var toolbarLeagueDetail: Toolbar
-    private lateinit var leagueDetailSwipeRefreshLayout: SwipeRefreshLayout
-    private lateinit var leagueDetailLayout: RelativeLayout
-    private lateinit var leagueDetailErrorDataText: TextView
-    private lateinit var leagueDetailProgressBar: ProgressBar
-
-    // todo : viewnya itu ubah jadi fragment, intinya kita itu ingin menampung viewpager + tablayout untuk teams, league table,
+    private var currentPosition: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        initView()
+        setContentView(R.layout.activity_league_detail)
 
         initData()
 
     }
 
-    private fun initView() {
-        coordinatorLayout {
-
-            verticalLayout {
-                themedAppBarLayout(R.style.ThemeOverlay_AppCompat_Dark_ActionBar) {
-                    lparams(width = matchParent, height = wrapContent)
-
-                    toolbarLeagueDetail = toolbar {
-                        id = R.id.toolbar_league_detail
-                        lparams(width = matchParent, height = dimenAttr(R.attr.actionBarSize))
-                        popupTheme = R.style.ThemeOverlay_AppCompat_Light
-                    }
-                }
-
-                constraintLayout {
-                    id = R.id.container_layout_league_detail
-                    leagueDetailSwipeRefreshLayout = swipeRefreshLayout {
-
-                        setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
-
-                        leagueDetailScrollView = scrollView {
-                            leagueDetailLayout = relativeLayout {
-                                id = R.id.league_detail_layout
-                                padding = dip(16)
-                                ivLeagueDetailImage = imageView {
-                                    id = R.id.iv_league_detail_image
-                                }.lparams {
-                                    width = convertDpToPx(96f)
-                                    height = convertDpToPx(96f)
-                                    centerHorizontally()
-                                }
-
-                                tvLeagueDetailName = themedTextView(R.style.text_title) {
-                                    id = R.id.tv_league_detail_name
-                                }.lparams {
-                                    centerHorizontally()
-                                    topMargin = dip(8)
-                                    bottomOf(R.id.iv_league_detail_image)
-                                }
-
-                                tvLeagueDetailFormedYear = themedTextView(R.style.text_section) {
-                                    id = R.id.tv_league_detail_formed_year
-                                }.lparams {
-                                    centerHorizontally()
-                                    topMargin = dip(8)
-                                    bottomOf(R.id.tv_league_detail_name)
-                                }
-
-                                tvLeagueDetailCountry = themedTextView(R.style.text_section) {
-                                    id = R.id.tv_league_detail_country
-                                }.lparams {
-                                    centerHorizontally()
-                                    topMargin = dip(8)
-                                    bottomOf(R.id.tv_league_detail_formed_year)
-                                }
-
-                                tvDescTitle =
-                                    themedTextView("Description : ", R.style.text_section) {
-                                        id = R.id.tv_desc_title
-                                    }.lparams {
-                                        topMargin = dip(8)
-                                        bottomOf(R.id.tv_league_detail_country)
-                                    }
-                                tvLeagueDetailDesc = themedTextView(R.style.text_content) {
-                                    id = R.id.tv_league_detail_desc
-                                }.lparams {
-                                    topMargin = dip(8)
-                                    bottomOf(R.id.tv_desc_title)
-                                }
-                            }
-                        }
-                    }
-
-                    leagueDetailProgressBar = progressBar {
-                        id = R.id.progress_bar
-                    }.lparams {
-                        width = convertDpToPx(48f)
-                        height = convertDpToPx(48f)
-                        topToTop = R.id.container_layout_league_detail
-                        startToStart = R.id.container_layout_league_detail
-                        endToEnd = R.id.container_layout_league_detail
-                        bottomToBottom = R.id.container_layout_league_detail
-                    }
-
-                    leagueDetailErrorDataText = themedTextView(R.style.text_content).lparams {
-                        topToTop = R.id.container_layout_league_detail
-                        startToStart = R.id.container_layout_league_detail
-                        endToEnd = R.id.container_layout_league_detail
-                        bottomToBottom = R.id.container_layout_league_detail
-                    }
-                }
-            }
-
-
-        }
-    }
-
     private fun initData() {
         val intent = intent
-        leagueName = intent.getStringExtra("leagueName")
-        leagueId = intent.getStringExtra("leagueId")
+        leagueName = intent.getStringExtra("leagueName") ?: "English Premier League"
+        leagueId = intent.getStringExtra("leagueId") ?: "4328"
 
         setToolbarBehavior()
 
-        leagueDetailPresenter = LeagueDetailPresenter(this, LeagueDetailRepository())
+        val bundle = Bundle()
+        bundle.putString("leagueId", leagueId)
 
-        EspressoIdlingResource.increment()
-        leagueDetailPresenter.getLeagueDetailInfo(leagueId)
+        leagueDetailInfoFragment.arguments = bundle
+        leagueTableFragment.arguments = bundle
+        leagueTeamsFragment.arguments = bundle
 
-        leagueDetailSwipeRefreshLayout.setOnRefreshListener {
-            EspressoIdlingResource.increment()
-            leagueDetailPresenter.getLeagueDetailInfo(leagueId)
-        }
+        setupViewPager(view_pager_league_detail)
 
-    }
-
-    override fun dataIsLoading() {
-        leagueDetailProgressBar.visible()
-        leagueDetailErrorDataText.gone()
-        leagueDetailLayout.invisible()
-    }
-
-    override fun dataLoadingFinished() {
-        if(!EspressoIdlingResource.idlingResource.isIdleNow) {
-            EspressoIdlingResource.decrement()
-        }
-        leagueDetailSwipeRefreshLayout.isRefreshing = false
-        leagueDetailProgressBar.gone()
-        leagueDetailErrorDataText.gone()
-        leagueDetailLayout.visible()
-    }
-
-    override fun dataFailedToLoad() {
-        if(!EspressoIdlingResource.idlingResource.isIdleNow) {
-            EspressoIdlingResource.decrement()
-        }
-        leagueDetailSwipeRefreshLayout.isRefreshing = false
-        leagueDetailProgressBar.gone()
-        leagueDetailErrorDataText.visible()
-        leagueDetailLayout.invisible()
-
-        val isNetworkConnected = checkNetworkConnection()
-        if (isNetworkConnected) {
-            leagueDetailErrorDataText.text = resources.getString(R.string.no_data_to_show)
-        } else {
-            leagueDetailErrorDataText.text = resources.getString(R.string.no_internet_connection)
-        }
+        tab_layout_league_detail.setupWithViewPager(view_pager_league_detail)
 
     }
 
-    override fun showLeagueDetailTitle(leagueItem: LeagueItem) {
-        setSupportActionBar(toolbarLeagueDetail)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = leagueItem.leagueName
+    private fun setupViewPager(viewPager: ViewPager) {
+        leagueDetailViewPagerAdapter = LeagueDetailViewPagerAdapter(supportFragmentManager)
+        leagueDetailViewPagerAdapter.addFragment(leagueDetailInfoFragment, "Info")
+        leagueDetailViewPagerAdapter.addFragment(leagueTableFragment, "Table")
+        leagueDetailViewPagerAdapter.addFragment(leagueTeamsFragment, "Teams")
+
+        viewPager.adapter = leagueDetailViewPagerAdapter
+
+        viewPager.offscreenPageLimit = 2
+
+        setListener()
+
+    }
+
+    private fun setListener() {
+        view_pager_league_detail.addOnPageChangeListener(
+            TabLayout.TabLayoutOnPageChangeListener(tab_layout_league_detail)
+        )
+
+        tab_layout_league_detail.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                val newPosition = tab?.position!!
+
+                val fragmentToShow =
+                    leagueDetailViewPagerAdapter.getItem(newPosition)
+                fragmentToShow.onResume()
+
+                val fragmentToHide =
+                    leagueDetailViewPagerAdapter.getItem(currentPosition)
+                fragmentToHide.onPause()
+
+                currentPosition = newPosition
+
+            }
+
+        })
     }
 
     private fun setToolbarBehavior() {
-        setSupportActionBar(toolbarLeagueDetail)
+        setSupportActionBar(toolbar_league_detail)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = leagueName
-    }
-
-    override fun showLeagueDetailInfo(leagueDetailResponse: LeagueDetailResponse) {
-        val leagueItemList = leagueDetailResponse.leagues
-
-        if (leagueItemList != null) {
-            val leagueDetailItem = leagueItemList.first()
-
-            tvLeagueDetailName.text = leagueDetailItem.leagueName
-            tvLeagueDetailDesc.text = leagueDetailItem.leagueDescription
-
-            Glide.with(applicationContext)
-                .load(leagueDetailItem.leagueBadge)
-                .placeholder(R.drawable.empty_league_image_info)
-                .into(ivLeagueDetailImage)
-
-            tvLeagueDetailFormedYear.text =
-                StringBuilder("est. ${leagueDetailItem.leagueFormedYear}")
-            tvLeagueDetailCountry.text = StringBuilder("Based in ${leagueDetailItem.leagueCountry}")
-        }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -271,46 +128,5 @@ class LeagueDetailActivity : AppCompatActivity(), LeagueDetailView {
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun convertDpToPx(dp: Float): Int {
-        val r = resources
-        val px = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            dp,
-            r.displayMetrics
-        )
-        return px.toInt()
-    }
-
-    @Suppress("DEPRECATION")
-    private fun checkNetworkConnection(): Boolean {
-
-        val connectivityManager: ConnectivityManager? =
-            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-        if (connectivityManager != null) {
-            if (Build.VERSION.SDK_INT < 23) {
-                val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
-
-                if (networkInfo != null) {
-                    return (networkInfo.isConnected && (networkInfo.type == ConnectivityManager.TYPE_WIFI || networkInfo.type == ConnectivityManager.TYPE_MOBILE || networkInfo.type == ConnectivityManager.TYPE_VPN))
-                }
-
-            } else {
-                val network: Network? = connectivityManager.activeNetwork
-
-                if (network != null) {
-                    val networkCapabilities: NetworkCapabilities =
-                        connectivityManager.getNetworkCapabilities(network)!!
-
-
-                    return (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
-                            || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
-                            || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN))
-                }
-            }
-        }
-        return false
     }
 }

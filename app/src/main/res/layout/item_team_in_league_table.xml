@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_team_position"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/text_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/position"/>
+
+    <TextView
+        android:id="@+id/tv_team_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/text_content"
+        android:layout_weight="6"
+        android:gravity="center"
+        android:text="@string/team_name"/>
+
+    <TextView
+        android:id="@+id/tv_team_game_played"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/text_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/games_played"/>
+
+    <TextView
+        android:id="@+id/tv_team_game_won"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/text_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/game_won"/>
+
+    <TextView
+        android:id="@+id/tv_team_game_tied"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/text_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/game_tied"/>
+
+    <TextView
+        android:id="@+id/tv_team_game_lost"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/text_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/game_lost"/>
+
+    <TextView
+        android:id="@+id/tv_team_goals_scored"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/text_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/goal_scored"/>
+
+    <TextView
+        android:id="@+id/tv_team_goals_conceded"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/text_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/goal_conceded"/>
+
+    <TextView
+        android:id="@+id/tv_team_goal_difference"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/text_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/goal_difference"/>
+
+    <TextView
+        android:id="@+id/tv_team_points"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/text_content_bold"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/pts"/>
+
+</LinearLayout>

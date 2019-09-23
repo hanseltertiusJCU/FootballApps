@@ -28,6 +28,16 @@
 
     <!-- League List -->
     <item name="rv_league_list" type="id" />
+    <item name="team_badge" type="id" />
+    <item name="team_name" type="id" />
+
+    <!-- League Teams -->
+    <item name="league_teams_parent_layout" type="id" />
+    <item name="rv_league_teams" type="id" />
+
+    <!-- League Table -->
+    <item name="league_table_parent_layout" type="id" />
+    <item name="rv_league_table" type="id" />
 
 
 </resources>

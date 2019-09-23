@@ -72,10 +72,16 @@ data class TeamItem(
     var teamId: String?,
     @SerializedName("strTeam")
     var teamName: String?,
+    @SerializedName("intFormedYear")
+    var teamFormedYear : String?,
     @SerializedName("strLeague")
     var teamLeague: String?,
     @SerializedName("strStadium")
     var teamStadium: String?,
+    @SerializedName("strStadiumLocation")
+    var teamStadiumLocation : String?,
+    @SerializedName("intStadiumCapacity")
+    var teamStadiumCapacity : String?,
     @SerializedName("strDescriptionEN")
     var teamDesc: String?,
     @SerializedName("strCountry")

@@ -19,8 +19,8 @@ class MatchFragment : Fragment() {
     lateinit var matchViewPagerAdapter: MatchViewPagerAdapter
     var currentPosition = 0
 
-    private var lastMatchFragment = LastMatchFragment()
-    private var nextMatchFragment = NextMatchFragment()
+    private val lastMatchFragment = LastMatchFragment()
+    private val nextMatchFragment = NextMatchFragment()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
