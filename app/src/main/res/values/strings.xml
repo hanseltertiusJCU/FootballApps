@@ -126,4 +126,12 @@
         <item>Next Matches</item>
     </array>
 
+    <!-- Player data item -->
+    <string name="player_data">Player Data</string>
+    <string name="player_number">#No</string>
+    <string name="player_name">Player Name</string>
+    <string name="player_nationality">Player Nationality</string>
+    <string name="player_position">Player Position</string>
+
+
 </resources>
