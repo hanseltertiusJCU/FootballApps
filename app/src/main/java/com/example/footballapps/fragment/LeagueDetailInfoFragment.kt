@@ -201,7 +201,7 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
             tvLeagueDetailName.text = leagueDetailItem.leagueName
             tvLeagueDetailDesc.text = leagueDetailItem.leagueDescription
 
-            Glide.with(activity?.applicationContext!!)
+            Glide.with(context!!)
                 .load(leagueDetailItem.leagueBadge)
                 .placeholder(R.drawable.empty_league_image_info)
                 .into(ivLeagueDetailImage)

@@ -3,6 +3,7 @@ package com.example.footballapps.helper
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import com.example.footballapps.favorite.FavoriteMatchItem
+import com.example.footballapps.favorite.FavoriteTeamItem
 import org.jetbrains.anko.db.*
 
 class MyDatabaseOpenHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, "Favorite.db", null, 1) {
@@ -20,7 +21,6 @@ class MyDatabaseOpenHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, "Favorit
     }
 
     override fun onCreate(db: SQLiteDatabase) {
-        // todo : mesti pake 2 tables
         db.createTable(
             FavoriteMatchItem.TABLE_FAVORITE_MATCH, true,
             FavoriteMatchItem.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
@@ -37,10 +37,19 @@ class MyDatabaseOpenHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, "Favorit
             FavoriteMatchItem.HOME_TEAM_SCORE to TEXT,
             FavoriteMatchItem.AWAY_TEAM_SCORE to TEXT
         )
+
+        db.createTable(
+            FavoriteTeamItem.TABLE_FAVORITE_TEAM, true,
+            FavoriteTeamItem.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
+            FavoriteTeamItem.TEAM_ID to TEXT + UNIQUE,
+            FavoriteTeamItem.TEAM_NAME to TEXT,
+            FavoriteTeamItem.TEAM_BADGE_URL to TEXT
+        )
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.dropTable(FavoriteMatchItem.TABLE_FAVORITE_MATCH, true)
+        db.dropTable(FavoriteTeamItem.TABLE_FAVORITE_TEAM, true)
     }
 
 }
