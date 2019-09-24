@@ -65,6 +65,8 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
     private fun initData() {
         val intent = intent
 
+        // todo : tinggal pake intent mode, intinya bwt tau modelnya yang mana
+
         eventId = intent.getStringExtra("eventId")
         eventName = intent.getStringExtra("eventName")
         homeTeamId = intent.getStringExtra("homeTeamId")

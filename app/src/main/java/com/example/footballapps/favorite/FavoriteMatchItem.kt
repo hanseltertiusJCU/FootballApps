@@ -1,5 +1,6 @@
 package com.example.footballapps.favorite
 
+// todo: pake parcelable and shit
 data class FavoriteMatchItem(
     val id: Long,
     val idEvent: String?,

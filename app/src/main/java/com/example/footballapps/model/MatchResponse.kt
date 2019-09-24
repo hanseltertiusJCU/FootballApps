@@ -70,7 +70,9 @@ data class MatchResponse(
     @SerializedName("events")
     var events: List<MatchItem>? = emptyList(),
     @SerializedName("event")
-    var searchResultEvents: List<MatchItem>? = emptyList()
+    var searchResultEvents: List<MatchItem>? = emptyList(),
+    @SerializedName("results")
+    var results: List<MatchItem>? = emptyList()
 )
 
 data class MatchItem(

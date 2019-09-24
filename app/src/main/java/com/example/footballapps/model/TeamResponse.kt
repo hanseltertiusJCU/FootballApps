@@ -82,6 +82,8 @@ data class TeamItem(
     var teamStadiumLocation : String?,
     @SerializedName("intStadiumCapacity")
     var teamStadiumCapacity : String?,
+    @SerializedName("strStadiumDescription")
+    var teamStadiumDescription : String?,
     @SerializedName("strDescriptionEN")
     var teamDesc: String?,
     @SerializedName("strCountry")

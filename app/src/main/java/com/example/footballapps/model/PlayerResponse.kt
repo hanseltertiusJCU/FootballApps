@@ -75,6 +75,7 @@ data class PlayerResponse(
     var playerDetail : List<PlayerItem>? = emptyList()
 )
 
+// todo: tinggal pake parcelable
 data class PlayerItem(
     @SerializedName("idPlayer")
     var playerId : String?,

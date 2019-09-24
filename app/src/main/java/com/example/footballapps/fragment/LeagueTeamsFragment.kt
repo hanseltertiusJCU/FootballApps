@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.footballapps.R
+import com.example.footballapps.activity.TeamDetailActivity
 import com.example.footballapps.adapter.TeamRecyclerViewAdapter
 import com.example.footballapps.espresso.EspressoIdlingResource
 import com.example.footballapps.lifecycle.FragmentLifecycle
@@ -36,6 +37,7 @@ import org.jetbrains.anko.progressBar
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.onRefresh
+import org.jetbrains.anko.support.v4.startActivity
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 import org.jetbrains.anko.themedTextView
 import org.jetbrains.anko.wrapContent
@@ -114,12 +116,12 @@ class LeagueTeamsFragment : Fragment(), TeamsView, FragmentLifecycle{
         initData()
     }
 
-    // todo: implement view nya
     private fun initData() {
         leagueId = arguments?.getString("leagueId") ?: "4328"
 
         leagueTeamsRvAdapter = TeamRecyclerViewAdapter(leagueTeams) {
-            // todo : implement it
+            // todo : implement it, mungkin tinggal bawa team item
+            startActivity<TeamDetailActivity>("teamName" to it.teamName, "teamId" to it.teamId)
         }
 
         leagueTeamsRecyclerView.adapter = leagueTeamsRvAdapter

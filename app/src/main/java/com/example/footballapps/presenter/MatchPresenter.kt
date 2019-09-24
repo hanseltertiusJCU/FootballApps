@@ -65,4 +65,41 @@ class MatchPresenter(
 
             })
     }
+
+    fun getTeamLastMatchInfo(teamId: String) {
+        matchView.dataIsLoading()
+
+        matchesRepository.getTeamLastMatches(
+            teamId,
+            object : MatchesRepositoryCallback<MatchResponse?> {
+                override fun onDataLoaded(data: MatchResponse?) {
+                    matchView.showMatchesData(data!!)
+                    matchView.dataLoadingFinished()
+                }
+
+                override fun onDataError() {
+                    matchView.dataFailedToLoad()
+                }
+
+            })
+    }
+
+    fun getTeamNextMatchInfo(teamId: String) {
+        matchView.dataIsLoading()
+
+        matchesRepository.getTeamNextMatches(
+            teamId,
+            object : MatchesRepositoryCallback<MatchResponse?> {
+                override fun onDataLoaded(data: MatchResponse?) {
+                    matchView.showMatchesData(data!!)
+                    matchView.dataLoadingFinished()
+                }
+
+                override fun onDataError() {
+                    matchView.dataFailedToLoad()
+                }
+
+            })
+    }
+
 }

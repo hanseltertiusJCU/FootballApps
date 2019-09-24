@@ -44,5 +44,37 @@
     <item name="league_match_spinner" type="id" />
     <item name="rv_league_match" type="id" />
 
+    <!-- Match fragment from Team -->
+    <item name="team_matches_parent_layout" type="id" />
+
+    <!-- Team Detail -->
+    <item name="container_layout_team_detail" type="id" />
+    <item name="team_detail_layout" type="id" />
+    <item name="iv_team_detail_image" type="id" />
+    <item name="tv_team_detail_name" type="id" />
+    <item name="tv_team_detail_formed_year" type="id" />
+    <item name="tv_team_detail_country" type="id" />
+    <item name="tv_league_title" type="id" />
+    <item name="tv_team_detail_league" type="id" />
+    <item name="tv_stadium_title" type="id" />
+    <item name="tv_stadium_name_title" type="id" />
+    <item name="tv_team_stadium_name" type="id" />
+    <item name="tv_stadium_located_in_title" type="id" />
+    <item name="tv_team_stadium_location" type="id" />
+    <item name="tv_stadium_capacity_title" type="id" />
+    <item name="tv_team_stadium_capacity" type="id" />
+    <item name="tv_stadium_description_title" type="id" />
+    <item name="tv_stadium_description" type="id" />
+    <item name="tv_team_description_title" type="id" />
+    <item name="tv_team_description" type="id" />
+
+    <!-- Team Players -->
+    <item name="team_players_parent_layout" type="id" />
+    <item name="rv_team_players" type="id" />
+
+    <!-- Team Matches -->
+    <item name="team_match_spinner" type="id" />
+    <item name="rv_team_match" type="id" />
+
 
 </resources>

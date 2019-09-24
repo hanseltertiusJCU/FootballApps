@@ -32,6 +32,7 @@ class TeamRecyclerViewAdapter(
                     lparams(width = matchParent, height = wrapContent)
                     padding = dip(16)
                     orientation = LinearLayout.HORIZONTAL
+                    backgroundResource = attr(R.attr.selectableItemBackgroundBorderless).resourceId
 
 //                    view {
 //                        background = ContextCompat.getDrawable(context, R.color.color_grey_line)

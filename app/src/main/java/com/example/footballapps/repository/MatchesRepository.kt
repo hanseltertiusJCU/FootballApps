@@ -1,5 +1,6 @@
 package com.example.footballapps.repository
 
+import android.util.Log
 import com.example.footballapps.callback.MatchesRepositoryCallback
 import com.example.footballapps.client.RetrofitClient
 import com.example.footballapps.model.MatchItem
@@ -86,9 +87,10 @@ class MatchesRepository {
                 override fun onSubscribe(d: Disposable) {}
 
                 override fun onNext(matchResponse: MatchResponse) {
-                    val lastMatchesList = matchResponse.events
-                    if (lastMatchesList != null) {
-                        if (lastMatchesList.isNotEmpty()) {
+                    val nextMatchesList = matchResponse.events
+                    Log.d("next match team", nextMatchesList.toString())
+                    if (nextMatchesList != null) {
+                        if (nextMatchesList.isNotEmpty()) {
                             callback.onDataLoaded(matchResponse)
                         } else {
                             callback.onDataError()
@@ -106,6 +108,7 @@ class MatchesRepository {
     }
 
     fun getTeamLastMatches(id: String, callback: MatchesRepositoryCallback<MatchResponse?>) {
+        // todo: ga kepanggil, mesti d solve
         RetrofitClient
             .createService(MatchService::class.java)
             .getTeamLastMatchesResponse(id)
@@ -117,7 +120,9 @@ class MatchesRepository {
                 override fun onSubscribe(d: Disposable) {}
 
                 override fun onNext(matchResponse: MatchResponse) {
-                    val lastMatchesList = matchResponse.events
+                    // todo: events ganti jadi results
+                    val lastMatchesList = matchResponse.results
+                    Log.d("last match team", lastMatchesList.toString())
                     if (lastMatchesList != null) {
                         if (lastMatchesList.isNotEmpty()) {
                             callback.onDataLoaded(matchResponse)

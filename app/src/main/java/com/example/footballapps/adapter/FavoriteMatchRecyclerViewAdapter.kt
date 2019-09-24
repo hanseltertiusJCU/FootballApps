@@ -70,4 +70,6 @@ class FavoriteMatchRecyclerViewAdapter(
             }
         }
     }
+
+    // todo: format
 }

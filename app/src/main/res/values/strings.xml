@@ -84,7 +84,7 @@
     <string name="substitutes">Substitutes</string>
     <string name="away_team_substitutes">Away Team Substitutes</string>
 
-    <!-- Unknown data -->
+    <!-- Unknown match data -->
     <string name="match_week_unknown">Week Unknown</string>
     <string name="spectators_unknown">Spectators : Unknown</string>
     <string name="home_team_unknown">Unknown Home Team Name</string>
@@ -133,5 +133,13 @@
     <string name="player_nationality">Player Nationality</string>
     <string name="player_position">Player Position</string>
 
+    <!-- Unknown player data -->
+    <string name="player_name_unknown">Name Unknown</string>
+    <string name="player_nationality_unknown">Nationality Unknown</string>
+    <string name="player_position_unknown">Position Unknown</string>
+    <string name="player_number_unknown">#-</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
