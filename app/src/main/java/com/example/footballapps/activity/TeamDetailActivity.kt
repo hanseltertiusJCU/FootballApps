@@ -66,32 +66,15 @@ class TeamDetailActivity : AppCompatActivity() {
 
         viewPager.offscreenPageLimit = 2
 
-        setListener()
     }
 
-    private fun setListener(){
-        view_pager_team_detail.addOnPageChangeListener(
-            TabLayout.TabLayoutOnPageChangeListener(tab_layout_team_detail)
-        )
-
-        tab_layout_team_detail.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-
-            }
-
-        })
-    }
-
-    // todo: set toolbar behavior
     private fun setToolbarBehavior(){
         setSupportActionBar(toolbar_team_detail)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = teamName
     }
+
+    // todo: tinggal pake onoptionitemselected untuk favorite teams
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(item.itemId == android.R.id.home){

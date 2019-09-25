@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="8dp">
+
+    <ImageView
+        android:id="@+id/player_detail_photo"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_gravity="center_horizontal"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_player_picture_placeholder"
+        android:contentDescription="@string/player_photo"/>
+
+    <TextView
+        android:id="@+id/player_detail_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        style="@style/text_title"
+        android:text="@string/player_name"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/player_detail_nationality"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        style="@style/text_section"
+        android:text="@string/player_nationality"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/player_detail_birth_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/player_birth_date"
+        android:textAlignment="center"
+        android:layout_gravity="center_horizontal"
+        style="@style/text_section"
+        android:layout_marginTop="8dp" />
+
+    <TextView
+        android:id="@+id/player_detail_strong_foot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/player_strong_foot"
+        android:textAlignment="center"
+        android:layout_gravity="center_horizontal"
+        style="@style/text_section"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_grey_line"/>
+
+
+
+</LinearLayout>

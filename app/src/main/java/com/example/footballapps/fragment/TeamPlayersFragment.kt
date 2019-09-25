@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.footballapps.R
+import com.example.footballapps.activity.PlayerDetailActivity
 import com.example.footballapps.adapter.PlayerRecyclerViewAdapter
 import com.example.footballapps.adapter.TeamRecyclerViewAdapter
 import com.example.footballapps.espresso.EspressoIdlingResource
@@ -31,6 +32,7 @@ import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.progressBar
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.UI
+import org.jetbrains.anko.support.v4.startActivity
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 import org.jetbrains.anko.themedTextView
 import org.jetbrains.anko.wrapContent
@@ -108,6 +110,7 @@ class TeamPlayersFragment : Fragment(), PlayersView {
         // todo : tinggal pake adapter
         teamPlayersRvAdapter = PlayerRecyclerViewAdapter(context!!, teamPlayers){
             // todo: implement it
+            startActivity<PlayerDetailActivity>("playerItem" to it)
         }
 
         teamPlayersRecyclerView.adapter = teamPlayersRvAdapter
@@ -126,7 +129,7 @@ class TeamPlayersFragment : Fragment(), PlayersView {
     override fun dataIsLoading() {
         teamPlayersProgressBar.visible()
         teamPlayersErrorText.gone()
-        teamPlayersRecyclerView.visible()
+        teamPlayersRecyclerView.invisible()
     }
 
     override fun dataLoadingFinished() {

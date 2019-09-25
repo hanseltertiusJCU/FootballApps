@@ -1,6 +1,8 @@
 package com.example.footballapps.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
 /*
 {
@@ -75,6 +77,7 @@ data class MatchResponse(
     var results: List<MatchItem>? = emptyList()
 )
 
+@Parcelize
 data class MatchItem(
     @SerializedName("idEvent")
     var idEvent: String?,
@@ -144,4 +147,4 @@ data class MatchItem(
     var homeTeamId: String?,
     @SerializedName("idAwayTeam")
     var awayTeamId: String?
-)
+) : Parcelable
