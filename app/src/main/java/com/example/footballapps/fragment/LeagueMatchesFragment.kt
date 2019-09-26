@@ -129,10 +129,7 @@ class LeagueMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
 
         leagueMatchesRvAdapter = MatchRecyclerViewAdapter(context!!, leagueMatches) {
             startActivity<MatchDetailActivity>(
-                "eventId" to it.idEvent,
-                "eventName" to it.strEvent,
-                "homeTeamId" to it.homeTeamId,
-                "awayTeamId" to it.awayTeamId
+                "matchItem" to it
             )
         }
 

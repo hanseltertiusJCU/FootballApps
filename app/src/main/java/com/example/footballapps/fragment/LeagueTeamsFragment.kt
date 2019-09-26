@@ -121,7 +121,7 @@ class LeagueTeamsFragment : Fragment(), TeamsView, FragmentLifecycle{
 
         leagueTeamsRvAdapter = TeamRecyclerViewAdapter(leagueTeams) {
             // todo : implement it, mungkin tinggal bawa team item
-            startActivity<TeamDetailActivity>("teamName" to it.teamName, "teamId" to it.teamId)
+            startActivity<TeamDetailActivity>("teamItem" to it)
         }
 
         leagueTeamsRecyclerView.adapter = leagueTeamsRvAdapter

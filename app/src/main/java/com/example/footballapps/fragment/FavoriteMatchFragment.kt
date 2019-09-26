@@ -73,10 +73,7 @@ class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchV
         favoriteMatchRvAdapter = FavoriteMatchRecyclerViewAdapter(context!!, favoriteMatches) {
             // todo : tinggal ganti ke favorite match item untuk intent
             context?.startActivity<MatchDetailActivity>(
-                "eventId" to it.idEvent,
-                "eventName" to it.strEvent,
-                "homeTeamId" to it.homeTeamId,
-                "awayTeamId" to it.awayTeamId
+                "favMatchItem" to it
             )
         }
 

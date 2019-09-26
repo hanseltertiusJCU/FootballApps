@@ -140,6 +140,7 @@ class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView {
 
         player_detail_birth_date.text = StringBuilder("$birthLocation, $dateOfBirth")
 
+        // todo : ga tau napa bs kyk gt
         val strongFoot = if(playerDetailItem?.playerStrongFoot != null || playerDetailItem?.playerStrongFoot != ""){
             StringBuilder("Preferred Foot : ${playerDetailItem?.playerStrongFoot}").toString()
         } else {

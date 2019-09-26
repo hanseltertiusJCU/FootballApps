@@ -10,6 +10,8 @@ import com.example.footballapps.R
 import com.example.footballapps.application.FootballApps
 import com.example.footballapps.favorite.FavoriteMatchItem
 import kotlinx.android.synthetic.main.item_match_data.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class FavoriteMatchRecyclerViewAdapter(
@@ -52,8 +54,10 @@ class FavoriteMatchRecyclerViewAdapter(
                 else -> matchWeekUnknown
             }
 
-            itemView.league_item_event_date.text = favoriteMatchItem.dateEvent ?: dateUnknown
-            itemView.league_item_event_time.text = favoriteMatchItem.timeEvent ?: timeUnknown
+            val arrayLocalTimeDt = convertDateTimeToLocalTimeZone(formatDate(favoriteMatchItem.dateEvent), formatTime(favoriteMatchItem.timeEvent))
+
+            itemView.league_item_event_date.text = arrayLocalTimeDt[0]
+            itemView.league_item_event_time.text = arrayLocalTimeDt[1]
 
             itemView.league_item_home_team_name.text =
                 favoriteMatchItem.homeTeamName ?: homeTeamNameUnknown
@@ -69,7 +73,58 @@ class FavoriteMatchRecyclerViewAdapter(
                 clickListener(favoriteMatchItem)
             }
         }
+
+        @SuppressLint("SimpleDateFormat")
+        private fun formatDate(stringValue: String?): String {
+            return if (stringValue != null && stringValue.isNotEmpty()) {
+                val oldDateFormat = SimpleDateFormat("yyyy-MM-dd")
+                val newDateFormat = SimpleDateFormat("dd MMM yyyy")
+                val date: Date = oldDateFormat.parse(stringValue)
+                val formattedDateEvent = newDateFormat.format(date)
+
+                formattedDateEvent
+            } else {
+                dateUnknown
+            }
+        }
+
+        @SuppressLint("SimpleDateFormat")
+        private fun formatTime(stringValue: String?): String {
+            return if (stringValue != null && stringValue.isNotEmpty()
+                && stringValue != "00:00:00" && stringValue != "23:59:59"
+            ) {
+                val timeFormat = SimpleDateFormat("HH:mm")
+                val timeInDate: Date = timeFormat.parse(stringValue)
+                val formattedTimeEvent = timeFormat.format(timeInDate)
+
+                formattedTimeEvent
+            } else {
+                timeUnknown
+            }
+        }
+
+        private fun convertDateTimeToLocalTimeZone(date: String, time: String): List<String> {
+
+            lateinit var localTimeArray: List<String>
+
+            if (date != dateUnknown &&
+                time != timeUnknown
+            ) {
+                val dateTimeStr = "$date,$time"
+                val dateTimeFormat = SimpleDateFormat("dd MMM yyyy,HH:mm", Locale.ENGLISH)
+                dateTimeFormat.timeZone = TimeZone.getTimeZone("UTC")
+                val dateTime = dateTimeFormat.parse(dateTimeStr)
+                dateTimeFormat.timeZone = TimeZone.getDefault()
+                val localTimeDtFormat = dateTimeFormat.format(dateTime)
+                localTimeArray = localTimeDtFormat.split(",")
+
+            } else {
+                val localTimeDtFormat = "$date,$time"
+                localTimeArray = localTimeDtFormat.split(",")
+            }
+
+            return localTimeArray
+        }
     }
 
-    // todo: format
 }

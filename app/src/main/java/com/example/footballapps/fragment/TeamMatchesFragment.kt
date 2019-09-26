@@ -33,9 +33,6 @@ import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.startActivity
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 
-/**
- * A simple [Fragment] subclass.
- */
 class TeamMatchesFragment : Fragment(), MatchView {
 
     private lateinit var teamMatchesRecyclerView : RecyclerView
@@ -121,10 +118,7 @@ class TeamMatchesFragment : Fragment(), MatchView {
 
         teamMatchesRvAdapter = MatchRecyclerViewAdapter(context!!, teamMatches){
             startActivity<MatchDetailActivity>(
-                "eventId" to it.idEvent,
-                "eventName" to it.strEvent,
-                "homeTeamId" to it.homeTeamId,
-                "awayTeamId" to it.awayTeamId
+                "matchItem" to it
             )
         }
 

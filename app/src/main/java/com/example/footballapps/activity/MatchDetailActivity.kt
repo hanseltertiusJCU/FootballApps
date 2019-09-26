@@ -48,6 +48,9 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
     private lateinit var homeTeamId: String
     private lateinit var awayTeamId: String
 
+    private var matchItem : MatchItem? = null
+    private var favMatchItem: FavoriteMatchItem? = null
+
     private lateinit var matchDetailPresenter: MatchDetailPresenter
 
     private var menuItem: Menu? = null
@@ -65,12 +68,29 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
     private fun initData() {
         val intent = intent
 
-        // todo : tinggal pake intent mode, intinya bwt tau modelnya yang mana
+        matchItem = intent.getParcelableExtra<MatchItem>("matchItem")
+        favMatchItem = intent.getParcelableExtra<FavoriteMatchItem>("favMatchItem")
 
-        eventId = intent.getStringExtra("eventId")
-        eventName = intent.getStringExtra("eventName")
-        homeTeamId = intent.getStringExtra("homeTeamId")
-        awayTeamId = intent.getStringExtra("awayTeamId")
+        when {
+            matchItem != null -> {
+                eventId = matchItem?.idEvent ?: ""
+                eventName = matchItem?.strEvent ?: ""
+                homeTeamId = matchItem?.homeTeamId ?: ""
+                awayTeamId = matchItem?.awayTeamId ?: ""
+            }
+            favMatchItem != null -> {
+                eventId = favMatchItem?.idEvent ?: ""
+                eventName = favMatchItem?.strEvent ?: ""
+                homeTeamId = favMatchItem?.homeTeamId ?: ""
+                awayTeamId = favMatchItem?.awayTeamId ?: ""
+            }
+            else -> {
+                eventId = ""
+                eventName = ""
+                homeTeamId = ""
+                awayTeamId = ""
+            }
+        }
 
         setToolbarBehavior()
 
@@ -222,7 +242,7 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
             .with(applicationContext)
             .load(homeTeamItemBadgeUrl)
             .centerCrop()
-            .error(Glide.with(applicationContext).load(R.drawable.team_badge_placeholder))
+            .placeholder(R.drawable.team_badge_placeholder)
             .into(match_detail_home_team_logo)
 
         val awayTeamResponse = combinedMatchTeamsResponse.awayTeamResponse
@@ -233,7 +253,7 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
             .with(applicationContext)
             .load(awayTeamItemBadgeUrl)
             .centerCrop()
-            .error(Glide.with(applicationContext).load(R.drawable.team_badge_placeholder))
+            .placeholder(R.drawable.team_badge_placeholder)
             .into(match_detail_away_team_logo)
     }
 
@@ -324,7 +344,8 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
                 true
             }
             R.id.action_add_to_favorite -> {
-                if (favoriteMatchItem != null) {
+                // todo: if fav match item not null or match item not null else pake snackbar
+                if (favMatchItem != null || matchItem != null) {
                     if (isEventFavorite) removeMatchFromFavoriteMatches() else addMatchToFavoriteMatches()
 
                     isEventFavorite = !isEventFavorite
@@ -340,29 +361,47 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
 
     private fun addMatchToFavoriteMatches() {
         try {
-            val favoriteLocalizedDateTime = convertDateTimeToLocalTimeZone(
-                formatDate(favoriteMatchItem?.dateEvent),
-                formatTime(favoriteMatchItem?.timeEvent)
-            )
-            // todo : tinggal pake check if data is there, kyknya event date sm event time ga usah pake array, biar adapternya aja yang adjust
-            database.use {
-                insert(
-                    FavoriteMatchItem.TABLE_FAVORITE_MATCH,
-                    FavoriteMatchItem.EVENT_ID to favoriteMatchItem?.idEvent,
-                    FavoriteMatchItem.EVENT_NAME to favoriteMatchItem?.strEvent,
-                    FavoriteMatchItem.EVENT_DATE to favoriteLocalizedDateTime[0],
-                    FavoriteMatchItem.EVENT_TIME to favoriteLocalizedDateTime[1],
-                    FavoriteMatchItem.LEAGUE_NAME to favoriteMatchItem?.leagueName,
-                    FavoriteMatchItem.LEAGUE_MATCH_WEEK to favoriteMatchItem?.leagueMatchWeek,
-                    FavoriteMatchItem.HOME_TEAM_ID to favoriteMatchItem?.homeTeamId,
-                    FavoriteMatchItem.AWAY_TEAM_ID to favoriteMatchItem?.awayTeamId,
-                    FavoriteMatchItem.HOME_TEAM_NAME to favoriteMatchItem?.homeTeamName,
-                    FavoriteMatchItem.AWAY_TEAM_NAME to favoriteMatchItem?.awayTeamName,
-                    FavoriteMatchItem.HOME_TEAM_SCORE to favoriteMatchItem?.homeTeamScore,
-                    FavoriteMatchItem.AWAY_TEAM_SCORE to favoriteMatchItem?.awayTeamScore
-                )
+            when {
+                favMatchItem != null -> {
+                    database.use {
+                        insert(
+                            FavoriteMatchItem.TABLE_FAVORITE_MATCH,
+                            FavoriteMatchItem.EVENT_ID to favMatchItem?.idEvent,
+                            FavoriteMatchItem.EVENT_NAME to favMatchItem?.strEvent,
+                            FavoriteMatchItem.EVENT_DATE to favMatchItem?.dateEvent,
+                            FavoriteMatchItem.EVENT_TIME to favMatchItem?.timeEvent,
+                            FavoriteMatchItem.LEAGUE_NAME to favMatchItem?.leagueName,
+                            FavoriteMatchItem.LEAGUE_MATCH_WEEK to favMatchItem?.leagueMatchWeek,
+                            FavoriteMatchItem.HOME_TEAM_ID to favMatchItem?.homeTeamId,
+                            FavoriteMatchItem.AWAY_TEAM_ID to favMatchItem?.awayTeamId,
+                            FavoriteMatchItem.HOME_TEAM_NAME to favMatchItem?.homeTeamName,
+                            FavoriteMatchItem.AWAY_TEAM_NAME to favMatchItem?.awayTeamName,
+                            FavoriteMatchItem.HOME_TEAM_SCORE to favMatchItem?.homeTeamScore,
+                            FavoriteMatchItem.AWAY_TEAM_SCORE to favMatchItem?.awayTeamScore
+                        )
+                    }
+                }
+                matchItem != null -> {
+                    database.use {
+                        insert(
+                            FavoriteMatchItem.TABLE_FAVORITE_MATCH,
+                            FavoriteMatchItem.EVENT_ID to matchItem?.idEvent,
+                            FavoriteMatchItem.EVENT_NAME to matchItem?.strEvent,
+                            FavoriteMatchItem.EVENT_DATE to matchItem?.dateEvent,
+                            FavoriteMatchItem.EVENT_TIME to matchItem?.timeEvent,
+                            FavoriteMatchItem.LEAGUE_NAME to matchItem?.leagueName,
+                            FavoriteMatchItem.LEAGUE_MATCH_WEEK to matchItem?.leagueMatchWeek,
+                            FavoriteMatchItem.HOME_TEAM_ID to matchItem?.homeTeamId,
+                            FavoriteMatchItem.AWAY_TEAM_ID to matchItem?.awayTeamId,
+                            FavoriteMatchItem.HOME_TEAM_NAME to matchItem?.homeTeamName,
+                            FavoriteMatchItem.AWAY_TEAM_NAME to matchItem?.awayTeamName,
+                            FavoriteMatchItem.HOME_TEAM_SCORE to matchItem?.homeTeamScore,
+                            FavoriteMatchItem.AWAY_TEAM_SCORE to matchItem?.awayTeamScore
+                        )
+                    }
+                }
             }
-            // todo: tinggal tambahin undo
+            // todo: tinggal tambahin undo action
             match_detail_swipe_refresh_layout.snackbar("Add an event into favorites").show()
         } catch (e: SQLiteConstraintException) {
             match_detail_swipe_refresh_layout.snackbar(e.localizedMessage).show()
@@ -437,6 +476,5 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
         return false
     }
 
-    // todo: mungkin tinggal pake check if favorite match item is not null then the data is from favorites
 
 }

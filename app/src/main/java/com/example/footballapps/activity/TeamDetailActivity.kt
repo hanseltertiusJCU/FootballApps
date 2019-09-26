@@ -7,9 +7,11 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.example.footballapps.R
 import com.example.footballapps.adapter.TeamDetailViewPagerAdapter
+import com.example.footballapps.favorite.FavoriteTeamItem
 import com.example.footballapps.fragment.TeamDetailInfoFragment
 import com.example.footballapps.fragment.TeamMatchesFragment
 import com.example.footballapps.fragment.TeamPlayersFragment
+import com.example.footballapps.model.TeamItem
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_team_detail.*
 
@@ -25,6 +27,9 @@ class TeamDetailActivity : AppCompatActivity() {
     private val teamMatchesFragment = TeamMatchesFragment()
     private val teamPlayersFragment = TeamPlayersFragment()
 
+    private var teamItem : TeamItem? = null
+    private var favTeamItem : FavoriteTeamItem? = null
+
     private var currentPosition : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,15 +42,29 @@ class TeamDetailActivity : AppCompatActivity() {
     private fun initData() {
         val intent = intent
         // todo : intentnya tinggal bawa parcelable
-        teamName = intent.getStringExtra("teamName") ?: "Arsenal"
-        teamId = intent.getStringExtra("teamId") ?: "133604"
+        teamItem = intent.getParcelableExtra<TeamItem>("teamItem")
+        favTeamItem = intent.getParcelableExtra<FavoriteTeamItem>("favoriteTeamItem")
+
+        when {
+            teamItem != null -> {
+                teamName = teamItem?.teamName ?: ""
+                teamId = teamItem?.teamId ?: ""
+            }
+            favTeamItem != null -> {
+                teamName = favTeamItem?.teamName ?: ""
+                teamId = favTeamItem?.idTeam ?: ""
+            }
+            else -> {
+                teamName = ""
+                teamId = ""
+            }
+        }
 
         setToolbarBehavior()
 
         val bundle = Bundle()
         bundle.putString("teamId", teamId)
 
-        // todo: put bundle into the fragment
         teamDetailInfoFragment.arguments = bundle
         teamMatchesFragment.arguments = bundle
         teamPlayersFragment.arguments = bundle

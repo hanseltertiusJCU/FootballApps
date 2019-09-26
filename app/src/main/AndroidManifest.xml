@@ -13,8 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.PlayerDetailActivity"></activity>
-        <activity android:name=".activity.TeamDetailActivity" />
+        <activity android:name=".activity.PlayerDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.TeamDetailActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.FootballGameInfoActivity"
             android:launchMode="singleTop"
