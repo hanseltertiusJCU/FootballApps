@@ -26,6 +26,10 @@
     <item name="favorite_match_parent_layout" type="id" />
     <item name="rv_favorite_match" type="id" />
 
+    <!-- Favorite team fragment -->
+    <item name="favorite_team_parent_layout" type="id" />
+    <item name="rv_favorite_team" type="id"/>
+
     <!-- League List -->
     <item name="rv_league_list" type="id" />
     <item name="team_badge" type="id" />
@@ -75,6 +79,10 @@
     <!-- Team Matches -->
     <item name="team_match_spinner" type="id" />
     <item name="rv_team_match" type="id" />
+
+    <!-- Favorite team item -->
+    <item name="favorite_team_badge" type="id" />
+    <item name="favorite_team_name" type="id" />
 
 
 </resources>

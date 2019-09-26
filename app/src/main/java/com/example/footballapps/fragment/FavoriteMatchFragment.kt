@@ -22,6 +22,7 @@ import com.example.footballapps.R
 import com.example.footballapps.activity.MatchDetailActivity
 import com.example.footballapps.adapter.FavoriteMatchRecyclerViewAdapter
 import com.example.footballapps.favorite.FavoriteMatchItem
+import com.example.footballapps.lifecycle.FragmentLifecycle
 import com.example.footballapps.presenter.FavoriteMatchPresenter
 import com.example.footballapps.utils.gone
 import com.example.footballapps.utils.invisible
@@ -35,7 +36,7 @@ import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 
 
-class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchView {
+class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchView, FragmentLifecycle {
 
     private lateinit var favoriteMatchRecyclerView: RecyclerView
     private lateinit var favoriteMatchProgressBar: ProgressBar
@@ -70,6 +71,7 @@ class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchV
     private fun initData() {
 
         favoriteMatchRvAdapter = FavoriteMatchRecyclerViewAdapter(context!!, favoriteMatches) {
+            // todo : tinggal ganti ke favorite match item untuk intent
             context?.startActivity<MatchDetailActivity>(
                 "eventId" to it.idEvent,
                 "eventName" to it.strEvent,
@@ -146,7 +148,7 @@ class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchV
     private fun checkNetworkConnection(): Boolean {
 
         val connectivityManager: ConnectivityManager? =
-            context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            context?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
 
         if (connectivityManager != null) {
             if (Build.VERSION.SDK_INT < 23) {
@@ -227,6 +229,12 @@ class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchV
             favoriteMatchSearchItem?.collapseActionView()
         }
     }
+
+    override fun onPauseFragment() {
+        favoriteMatchSearchItem?.collapseActionView()
+    }
+
+    override fun onResumeFragment() {}
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
 

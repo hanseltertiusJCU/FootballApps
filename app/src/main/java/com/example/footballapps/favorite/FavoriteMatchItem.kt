@@ -1,6 +1,9 @@
 package com.example.footballapps.favorite
 
-// todo: pake parcelable and shit
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class FavoriteMatchItem(
     val id: Long,
     val idEvent: String?,
@@ -15,7 +18,7 @@ data class FavoriteMatchItem(
     val awayTeamName: String?,
     val homeTeamScore: String?,
     val awayTeamScore: String?
-) {
+) : Parcelable {
     companion object {
         const val TABLE_FAVORITE_MATCH: String = "TABLE_FAVORITE_MATCH"
         const val ID: String = "ID_"

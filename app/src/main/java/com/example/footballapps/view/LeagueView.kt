@@ -2,6 +2,6 @@ package com.example.footballapps.view
 
 import com.example.footballapps.model.LeagueItem
 
-interface MainView {
+interface LeagueView {
     fun displayRecyclerViewItem(leagueInfoList: MutableList<LeagueItem>)
 }

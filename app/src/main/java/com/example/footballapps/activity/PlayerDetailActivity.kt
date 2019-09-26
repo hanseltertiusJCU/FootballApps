@@ -8,6 +8,7 @@ import android.net.NetworkCapabilities
 import android.net.NetworkInfo
 import android.os.Build
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
@@ -137,8 +138,15 @@ class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView {
                 "Location Unknown"
             }
 
-        player_detail_birth_date.text = StringBuilder("$birthLocation , $dateOfBirth")
-        player_detail_strong_foot.text = playerDetailItem?.playerStrongFoot ?: "Preferred Foot : Unknown"
+        player_detail_birth_date.text = StringBuilder("$birthLocation, $dateOfBirth")
+
+        val strongFoot = if(playerDetailItem?.playerStrongFoot != null || playerDetailItem?.playerStrongFoot != ""){
+            StringBuilder("Preferred Foot : ${playerDetailItem?.playerStrongFoot}").toString()
+        } else {
+            "Preferred Foot : Unknown"
+        }
+
+        player_detail_strong_foot.text = strongFoot
 
         player_detail_height.text = playerDetailItem?.playerHeight ?: "Height Unknown"
         player_detail_weight.text = playerDetailItem?.playerWeight ?: "Weight Unknown"
@@ -160,6 +168,13 @@ class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView {
             playerDetailItem?.playerDescription ?: "Description Unknown"
 
 
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     @SuppressLint("SimpleDateFormat")

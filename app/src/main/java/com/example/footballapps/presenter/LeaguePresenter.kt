@@ -1,11 +1,11 @@
 package com.example.footballapps.presenter
 
 import com.example.footballapps.model.LeagueItem
-import com.example.footballapps.view.MainView
+import com.example.footballapps.view.LeagueView
 
-class MainPresenter(private val mainView: MainView) {
+class LeaguePresenter(private val leagueView: LeagueView) {
 
     fun displayLeagueInfoListToRecyclerView(leagueInfoList: MutableList<LeagueItem>) {
-        mainView.displayRecyclerViewItem(leagueInfoList)
+        leagueView.displayRecyclerViewItem(leagueInfoList)
     }
 }

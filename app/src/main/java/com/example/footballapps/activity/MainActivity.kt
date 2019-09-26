@@ -5,14 +5,18 @@ import android.util.TypedValue
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.footballapps.R
 import com.example.footballapps.adapter.LeagueRecyclerViewAdapter
+import com.example.footballapps.fragment.FavoriteFragment
+import com.example.footballapps.fragment.LeagueFragment
 import com.example.footballapps.model.LeagueItem
-import com.example.footballapps.presenter.MainPresenter
+import com.example.footballapps.presenter.LeaguePresenter
 import com.example.footballapps.utils.GridSpacingItemDecoration
-import com.example.footballapps.view.MainView
+import com.example.footballapps.view.LeagueView
+import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.constraint.layout.constraintLayout
@@ -20,117 +24,65 @@ import org.jetbrains.anko.design.coordinatorLayout
 import org.jetbrains.anko.design.themedAppBarLayout
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 
-class MainActivity : AppCompatActivity(), MainView {
+class MainActivity : AppCompatActivity() {
+    private var leagueFragment = LeagueFragment()
+    private var favoriteFragment = FavoriteFragment()
 
-    private lateinit var mainPresenter: MainPresenter
-
-    private var leagueItems: MutableList<LeagueItem> = mutableListOf()
-
-    private val spanCount = 2
-    private val includeEdge = true
-
-    private lateinit var mainActivityUI: MainActivityUI
+    private var activeFragment : Fragment = leagueFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
-        mainActivityUI = MainActivityUI()
-        mainActivityUI.setContentView(this)
+        setSupportActionBar(toolbar_main)
 
-        initData()
+        setListener()
+
+        initializeFragments()
 
     }
 
-    private fun initData() {
-
-        val leagueId = resources.getStringArray(R.array.league_id)
-        val leagueName = resources.getStringArray(R.array.league_name)
-        val leagueImage = resources.obtainTypedArray(R.array.league_image)
-
-        leagueItems.clear()
-
-        for (i in leagueName.indices) {
-            leagueItems.add(
-                LeagueItem(
-                    leagueId[i],
-                    leagueName[i],
-                    leagueImage.getResourceId(i, 0)
-                )
-            )
-        }
-
-        leagueImage.recycle()
-
-        mainPresenter = MainPresenter(this)
-
-        mainPresenter.displayLeagueInfoListToRecyclerView(leagueItems)
-
-        setSupportActionBar(mainActivityUI.toolbarMain)
-
-        supportActionBar?.title = "Leagues"
-    }
-
-    override fun displayRecyclerViewItem(leagueInfoList: MutableList<LeagueItem>) {
-        mainActivityUI.recyclerViewLeagueList.layoutManager =
-            GridLayoutManager(this, spanCount)
-        mainActivityUI.recyclerViewLeagueList.adapter =
-            LeagueRecyclerViewAdapter(leagueInfoList) { leagueItem ->
-                startActivity<LeagueDetailActivity>(
-                    "leagueName" to leagueItem.leagueName,
-                    "leagueId" to leagueItem.leagueId
-                )
-            }
-        mainActivityUI.recyclerViewLeagueList.addItemDecoration(
-            GridSpacingItemDecoration(
-                spanCount = spanCount,
-                space = convertDpToPx(16f),
-                includeEdge = includeEdge
-            )
-        )
-    }
-
-    private fun convertDpToPx(dp: Float): Int {
-        val r = resources
-        val px = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            dp,
-            r.displayMetrics
-        )
-        return px.toInt()
-    }
-
-    class MainActivityUI : AnkoComponent<MainActivity> {
-        lateinit var recyclerViewLeagueList: RecyclerView
-
-        private lateinit var constraintLayoutView: View
-
-        lateinit var toolbarMain: Toolbar
-
-
-        override fun createView(ui: AnkoContext<MainActivity>): View = with(ui) {
-
-            coordinatorLayout {
-                lparams(width = matchParent, height = matchParent)
-                verticalLayout {
-                    themedAppBarLayout(R.style.ThemeOverlay_AppCompat_Dark_ActionBar) {
-                        lparams(width = matchParent, height = wrapContent)
-                        toolbarMain = toolbar {
-                            lparams(width = matchParent, height = dimenAttr(R.attr.actionBarSize))
-                            popupTheme = R.style.ThemeOverlay_AppCompat_Light
-                        }
+    private fun setListener() {
+        main_bottom_navigation.setOnNavigationItemSelectedListener { item ->
+            val previousItem = main_bottom_navigation.selectedItemId
+            val nextItem = item.itemId
+            if(previousItem != nextItem){
+                when(nextItem) {
+                    R.id.menu_item_leagues -> {
+                        loadLeagueFragment()
                     }
-
-                    constraintLayoutView = constraintLayout {
-                        recyclerViewLeagueList = recyclerView {
-                            id = R.id.rv_league_list
-                            isNestedScrollingEnabled = false
-                        }
-                    }.lparams(width = matchParent, height = wrapContent)
-
+                    R.id.menu_item_favorite -> {
+                        loadFavoritesFragment()
+                    }
                 }
-
             }
+
+            true
         }
 
+
     }
+
+    private fun initializeFragments(){
+        supportFragmentManager.beginTransaction().add(R.id.main_fragment_container, leagueFragment, leagueFragment::class.java.simpleName).commit()
+
+        supportFragmentManager.beginTransaction().add(R.id.main_fragment_container, favoriteFragment, favoriteFragment::class.java.simpleName).hide(favoriteFragment).commit()
+
+        supportActionBar?.title = getString(R.string.leagues)
+    }
+
+    private fun loadLeagueFragment(){
+        supportFragmentManager.beginTransaction().hide(activeFragment).show(leagueFragment).commit()
+        activeFragment = leagueFragment
+
+        supportActionBar?.title = getString(R.string.leagues)
+    }
+
+    private fun loadFavoritesFragment(){
+        supportFragmentManager.beginTransaction().hide(activeFragment).show(favoriteFragment).commit()
+        activeFragment = favoriteFragment
+
+        supportActionBar?.title = getString(R.string.favorites)
+    }
+
 }

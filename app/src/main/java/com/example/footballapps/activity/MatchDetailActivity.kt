@@ -344,6 +344,7 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
                 formatDate(favoriteMatchItem?.dateEvent),
                 formatTime(favoriteMatchItem?.timeEvent)
             )
+            // todo : tinggal pake check if data is there, kyknya event date sm event time ga usah pake array, biar adapternya aja yang adjust
             database.use {
                 insert(
                     FavoriteMatchItem.TABLE_FAVORITE_MATCH,
@@ -361,6 +362,7 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
                     FavoriteMatchItem.AWAY_TEAM_SCORE to favoriteMatchItem?.awayTeamScore
                 )
             }
+            // todo: tinggal tambahin undo
             match_detail_swipe_refresh_layout.snackbar("Add an event into favorites").show()
         } catch (e: SQLiteConstraintException) {
             match_detail_swipe_refresh_layout.snackbar(e.localizedMessage).show()
@@ -377,6 +379,7 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
                 )
 
             }
+            // todo : tinggal tambahin undo
             match_detail_swipe_refresh_layout.snackbar("Remove an event from favorites").show()
         } catch (e: SQLiteConstraintException) {
             match_detail_swipe_refresh_layout.snackbar(e.localizedMessage).show()
@@ -433,5 +436,7 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
         }
         return false
     }
+
+    // todo: mungkin tinggal pake check if favorite match item is not null then the data is from favorites
 
 }

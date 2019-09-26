@@ -101,6 +101,7 @@
 
     <!-- Bottom Navigation View Menu item title -->
     <string name="schedule">Schedule</string>
+    <string name="leagues">Leagues</string>
     <string name="favorites">Favorites</string>
 
     <!-- Content Description -->
@@ -160,7 +161,10 @@
     <string name="player_description">Player Description</string>
     <string name="player_strong_foot">Player Strong Foot</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <!-- Unknown player data -->
-    
+
 
 </resources>

@@ -1,0 +1,272 @@
+package com.example.footballapps.fragment
+
+
+import android.app.SearchManager
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkInfo
+import android.os.Build
+import android.os.Bundle
+import android.view.*
+import androidx.fragment.app.Fragment
+import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.footballapps.R
+import com.example.footballapps.activity.TeamDetailActivity
+import com.example.footballapps.adapter.FavoriteTeamRecyclerViewAdapter
+import com.example.footballapps.favorite.FavoriteTeamItem
+import com.example.footballapps.lifecycle.FragmentLifecycle
+import com.example.footballapps.presenter.FavoriteTeamPresenter
+import com.example.footballapps.utils.gone
+import com.example.footballapps.utils.invisible
+import com.example.footballapps.utils.visible
+import com.example.footballapps.view.FavoriteTeamView
+import org.jetbrains.anko.*
+import org.jetbrains.anko.constraint.layout.constraintLayout
+import org.jetbrains.anko.constraint.layout.matchConstraint
+import org.jetbrains.anko.recyclerview.v7.recyclerView
+import org.jetbrains.anko.support.v4.onRefresh
+import org.jetbrains.anko.support.v4.swipeRefreshLayout
+
+class FavoriteTeamFragment : Fragment(), AnkoComponent<Context>, FavoriteTeamView, FragmentLifecycle {
+
+    private lateinit var favoriteTeamRecyclerView : RecyclerView
+    private lateinit var favoriteTeamProgressBar : ProgressBar
+    private lateinit var favoriteTeamSwipeRefreshLayout : SwipeRefreshLayout
+    private lateinit var favoriteTeamErrorText : TextView
+
+    private var favoriteTeams : MutableList<FavoriteTeamItem> = mutableListOf()
+    private lateinit var favoriteTeamRvAdapter : FavoriteTeamRecyclerViewAdapter
+
+    private lateinit var favoriteTeamPresenter : FavoriteTeamPresenter
+
+    private var favoriteTeamSearchView : SearchView? = null
+    private var favoriteTeamSearchItem : MenuItem? = null
+
+    private var isDataLoading = false
+    private var isSearching = false
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        setHasOptionsMenu(true)
+        return createView(AnkoContext.create(requireContext()))
+    }
+
+    override fun createView(ui: AnkoContext<Context>): View = with(ui) {
+        constraintLayout {
+            id = R.id.favorite_team_parent_layout
+            lparams(width = matchParent, height = matchParent)
+
+            favoriteTeamSwipeRefreshLayout = swipeRefreshLayout {
+
+                setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
+
+                favoriteTeamRecyclerView = recyclerView {
+                    id = R.id.rv_favorite_team
+                    lparams(width = matchParent, height = wrapContent)
+                    layoutManager = LinearLayoutManager(context)
+                }
+            }.lparams {
+                width = matchConstraint
+                height = matchConstraint
+                topToTop = R.id.favorite_team_parent_layout
+                leftToLeft = R.id.favorite_team_parent_layout
+                rightToRight = R.id.favorite_team_parent_layout
+                bottomToBottom = R.id.favorite_team_parent_layout
+                verticalBias = 0f
+            }
+
+            favoriteTeamProgressBar = progressBar().lparams{
+                topToTop = R.id.favorite_team_parent_layout
+                leftToLeft = R.id.favorite_team_parent_layout
+                rightToRight = R.id.favorite_team_parent_layout
+                bottomToBottom = R.id.favorite_team_parent_layout
+            }
+
+            favoriteTeamErrorText = themedTextView(R.style.text_content).lparams {
+                topToTop = R.id.favorite_team_parent_layout
+                leftToLeft = R.id.favorite_team_parent_layout
+                rightToRight = R.id.favorite_team_parent_layout
+                bottomToBottom = R.id.favorite_team_parent_layout
+            }
+
+        }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        initData()
+    }
+
+    override fun dataIsLoading() {
+
+        favoriteTeamProgressBar.visible()
+        favoriteTeamErrorText.gone()
+        favoriteTeamRecyclerView.invisible()
+
+        isDataLoading = true
+    }
+
+    override fun dataLoadingFinished() {
+        favoriteTeamSwipeRefreshLayout.isRefreshing = false
+        favoriteTeamProgressBar.gone()
+        favoriteTeamErrorText.gone()
+        favoriteTeamRecyclerView.visible()
+
+        isDataLoading = false
+    }
+
+    override fun dataFailedToLoad(errorText: String) {
+        favoriteTeamSwipeRefreshLayout.isRefreshing = false
+        favoriteTeamProgressBar.gone()
+        favoriteTeamErrorText.visible()
+        favoriteTeamRecyclerView.invisible()
+
+        isDataLoading = false
+
+        favoriteTeamErrorText.text = errorText
+    }
+
+    override fun showTeamData(favoriteTeamList: List<FavoriteTeamItem>) {
+        favoriteTeams.clear()
+        favoriteTeams.addAll(favoriteTeamList)
+        favoriteTeamRvAdapter.notifyDataSetChanged()
+    }
+
+    override fun onPauseFragment() {
+        favoriteTeamSearchItem?.collapseActionView()
+    }
+
+    override fun onResumeFragment() {}
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if(hidden){
+            favoriteTeamSearchItem?.collapseActionView()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(isSearching){
+            getFavoriteDataFromQuery(favoriteTeamSearchView?.query.toString())
+        } else {
+            getFavoriteData()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+
+        inflater.inflate(R.menu.menu_search, menu)
+
+        favoriteTeamSearchItem = menu.findItem(R.id.action_search)
+
+        val favoriteSearchManager : SearchManager = context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+
+        if(favoriteTeamSearchItem != null){
+            favoriteTeamSearchView = favoriteTeamSearchItem?.actionView as SearchView
+
+            favoriteTeamSearchItem?.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+                override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+                    isSearching = true
+                    getFavoriteDataFromQuery(favoriteTeamSearchView?.query.toString())
+                    return true
+                }
+
+                override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+                    isSearching = false
+                    getFavoriteData()
+                    return true
+                }
+
+            })
+
+            favoriteTeamSearchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    if(!isDataLoading){
+                        getFavoriteDataFromQuery(query!!)
+                    }
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    return false
+                }
+
+            })
+        }
+
+        favoriteTeamSearchView?.setSearchableInfo(favoriteSearchManager.getSearchableInfo(activity?.componentName))
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    private fun initData(){
+        favoriteTeamRvAdapter = FavoriteTeamRecyclerViewAdapter(favoriteTeams) {
+            context?.startActivity<TeamDetailActivity>("favoriteTeamItem" to it)
+        }
+
+        favoriteTeamRecyclerView.adapter = favoriteTeamRvAdapter
+
+        favoriteTeamPresenter = FavoriteTeamPresenter(this, context!!)
+
+        favoriteTeamSwipeRefreshLayout.onRefresh {
+            if(!isSearching){
+                getFavoriteDataFromQuery(favoriteTeamSearchView?.query.toString())
+            } else {
+                getFavoriteData()
+            }
+        }
+
+    }
+    private fun getFavoriteData(){
+        val isNetworkConnected = checkNetworkConnection()
+        favoriteTeamPresenter.getFavoriteTeamInfo(isNetworkConnected)
+    }
+
+    private fun getFavoriteDataFromQuery(query : String){
+        val isNetworkConnected = checkNetworkConnection()
+        favoriteTeamPresenter.getFavoriteTeamInfoSearchResult(isNetworkConnected, query)
+    }
+
+    @Suppress("DEPRECATION")
+    private fun checkNetworkConnection(): Boolean {
+
+        val connectivityManager: ConnectivityManager? =
+            context?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
+
+        if (connectivityManager != null) {
+            if (Build.VERSION.SDK_INT < 23) {
+                val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
+
+                if (networkInfo != null) {
+                    return (networkInfo.isConnected && (networkInfo.type == ConnectivityManager.TYPE_WIFI || networkInfo.type == ConnectivityManager.TYPE_MOBILE || networkInfo.type == ConnectivityManager.TYPE_VPN))
+                }
+
+            } else {
+                val network: Network? = connectivityManager.activeNetwork
+
+                if (network != null) {
+                    val networkCapabilities: NetworkCapabilities =
+                        connectivityManager.getNetworkCapabilities(network)!!
+
+
+                    return (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                            || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                            || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN))
+                }
+            }
+        }
+        return false
+    }
+
+}
