@@ -52,7 +52,7 @@ class LeagueMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
 
     private var currentPosition = 0
 
-    var leagueMatchSearchItem : MenuItem? = null
+    private var leagueMatchSearchItem : MenuItem? = null
     private var leagueMatchSearchView : SearchView? = null
 
     private var isDataLoading = false

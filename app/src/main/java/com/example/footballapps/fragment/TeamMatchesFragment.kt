@@ -1,11 +1,16 @@
 package com.example.footballapps.fragment
 
 
+import android.app.SearchManager
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkInfo
+import android.os.Build
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,7 +20,9 @@ import com.example.footballapps.R
 import com.example.footballapps.activity.MatchDetailActivity
 import com.example.footballapps.adapter.MatchRecyclerViewAdapter
 import com.example.footballapps.adapter.TeamRecyclerViewAdapter
+import androidx.appcompat.widget.SearchView
 import com.example.footballapps.espresso.EspressoIdlingResource
+import com.example.footballapps.lifecycle.FragmentLifecycle
 import com.example.footballapps.model.MatchItem
 import com.example.footballapps.model.MatchResponse
 import com.example.footballapps.presenter.MatchPresenter
@@ -33,7 +40,7 @@ import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.startActivity
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 
-class TeamMatchesFragment : Fragment(), MatchView {
+class TeamMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
 
     private lateinit var teamMatchesRecyclerView : RecyclerView
     private lateinit var teamMatchesProgressBar : ProgressBar
@@ -50,10 +57,19 @@ class TeamMatchesFragment : Fragment(), MatchView {
 
     private var currentPosition = 0
 
+    private var teamMatchSearchItem : MenuItem? = null
+    private var teamMatchSearchView : SearchView? = null
+
+    private var isDataLoading = false
+    private var isSearching = false
+
+    // todo : tinggal pake query variable
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true)
         return UI{
             constraintLayout {
                 id = R.id.team_matches_parent_layout
@@ -142,10 +158,15 @@ class TeamMatchesFragment : Fragment(), MatchView {
 
         teamMatchesSwipeRefreshLayout.onRefresh {
             EspressoIdlingResource.increment()
-            when (currentPosition){
-                1 -> teamMatchesPresenter.getTeamNextMatchInfo(teamId)
-                else -> teamMatchesPresenter.getTeamLastMatchInfo(teamId)
+            if(isSearching){
+                teamMatchesPresenter.getSearchMatchInfo(teamMatchSearchView?.query.toString())
+            } else {
+                when (currentPosition){
+                    1 -> teamMatchesPresenter.getTeamNextMatchInfo(teamId)
+                    else -> teamMatchesPresenter.getTeamLastMatchInfo(teamId)
+                }
             }
+
         }
 
 
@@ -156,6 +177,8 @@ class TeamMatchesFragment : Fragment(), MatchView {
         teamMatchesProgressBar.visible()
         teamMatchesErrorText.gone()
         teamMatchesRecyclerView.invisible()
+
+        isDataLoading = true
     }
 
     override fun dataLoadingFinished() {
@@ -166,6 +189,8 @@ class TeamMatchesFragment : Fragment(), MatchView {
         teamMatchesProgressBar.gone()
         teamMatchesErrorText.gone()
         teamMatchesRecyclerView.visible()
+
+        isDataLoading = false
     }
 
     override fun dataFailedToLoad() {
@@ -176,30 +201,135 @@ class TeamMatchesFragment : Fragment(), MatchView {
         teamMatchesProgressBar.gone()
         teamMatchesErrorText.visible()
         teamMatchesRecyclerView.invisible()
+
+        val isNetworkConnected = checkNetworkConnection()
+        if (isNetworkConnected) {
+            teamMatchesErrorText.text = resources.getString(R.string.no_data_to_show)
+        } else {
+            teamMatchesErrorText.text = resources.getString(R.string.no_internet_connection)
+        }
+
+        isDataLoading = false
     }
 
     override fun showMatchesData(matchResponse: MatchResponse) {
         teamMatches.clear()
 
-        when (currentPosition) {
-            1 -> {
-                val teamMatchesList = matchResponse.events
-                if(teamMatchesList != null){
-                    teamMatches.addAll(teamMatchesList)
-                }
+        if(isSearching){
+            val searchResultTeamMatchesList = matchResponse.searchResultEvents
+            if(searchResultTeamMatchesList != null){
+                teamMatches.addAll(searchResultTeamMatchesList)
             }
-            else -> {
-                val teamMatchesList = matchResponse.results
-                if(teamMatchesList != null){
-                    teamMatches.addAll(teamMatchesList)
+        } else {
+            when (currentPosition) {
+                1 -> {
+                    val teamMatchesList = matchResponse.events
+                    if(teamMatchesList != null){
+                        teamMatches.addAll(teamMatchesList)
+                    }
+                }
+                else -> {
+                    val teamMatchesList = matchResponse.results
+                    if(teamMatchesList != null){
+                        teamMatches.addAll(teamMatchesList)
+                    }
                 }
             }
         }
 
+
         teamMatchesRvAdapter.notifyDataSetChanged()
     }
 
+    override fun onPauseFragment() {
+        teamMatchSearchItem?.collapseActionView()
+    }
 
+    override fun onResumeFragment() {}
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_search, menu)
+
+        teamMatchSearchItem = menu.findItem(R.id.action_search)
+
+        val teamMatchSearchManager : SearchManager = context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+
+        if(teamMatchSearchItem != null){
+            teamMatchSearchView = teamMatchSearchItem?.actionView as SearchView
+
+            teamMatchSearchView?.setSearchableInfo(teamMatchSearchManager.getSearchableInfo(activity?.componentName))
+
+            teamMatchSearchItem?.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+                override fun onMenuItemActionExpand(menuItem: MenuItem?): Boolean {
+                    isSearching = true
+                    teamMatchesSpinner.gone()
+                    EspressoIdlingResource.increment()
+                    teamMatchesPresenter.getSearchMatchInfo(teamMatchSearchView?.query.toString())
+                    return true
+                }
+
+                override fun onMenuItemActionCollapse(menuItem: MenuItem?): Boolean {
+                    isSearching = false
+                    teamMatchesSpinner.visible()
+                    EspressoIdlingResource.increment()
+                    when (currentPosition){
+                        1 -> teamMatchesPresenter.getTeamNextMatchInfo(teamId)
+                        else -> teamMatchesPresenter.getTeamLastMatchInfo(teamId)
+                    }
+                    return true
+                }
+
+            })
+
+            teamMatchSearchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    if(!isDataLoading){
+                        EspressoIdlingResource.increment()
+                        teamMatchesPresenter.getSearchMatchInfo(query!!)
+                    }
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    return false
+                }
+
+            })
+        }
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    @Suppress("DEPRECATION")
+    private fun checkNetworkConnection(): Boolean {
+
+        val connectivityManager: ConnectivityManager? =
+            context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (connectivityManager != null) {
+            if (Build.VERSION.SDK_INT < 23) {
+                val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
+
+                if (networkInfo != null) {
+                    return (networkInfo.isConnected && (networkInfo.type == ConnectivityManager.TYPE_WIFI || networkInfo.type == ConnectivityManager.TYPE_MOBILE || networkInfo.type == ConnectivityManager.TYPE_VPN))
+                }
+
+            } else {
+                val network: Network? = connectivityManager.activeNetwork
+
+                if (network != null) {
+                    val networkCapabilities: NetworkCapabilities =
+                        connectivityManager.getNetworkCapabilities(network)!!
+
+
+                    return (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                            || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                            || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN))
+                }
+            }
+        }
+        return false
+    }
 
 
 }

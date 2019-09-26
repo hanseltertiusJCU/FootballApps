@@ -1,12 +1,11 @@
 package com.example.footballapps.activity
 
 import android.database.sqlite.SQLiteConstraintException
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.example.footballapps.R
 import com.example.footballapps.adapter.TeamDetailViewPagerAdapter
@@ -15,6 +14,7 @@ import com.example.footballapps.fragment.TeamDetailInfoFragment
 import com.example.footballapps.fragment.TeamMatchesFragment
 import com.example.footballapps.fragment.TeamPlayersFragment
 import com.example.footballapps.helper.database
+import com.example.footballapps.lifecycle.FragmentLifecycle
 import com.example.footballapps.model.TeamItem
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_team_detail.*
@@ -27,24 +27,24 @@ import org.jetbrains.anko.design.snackbar
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class TeamDetailActivity : AppCompatActivity() {
 
-    private lateinit var teamName : String
-    private lateinit var teamId : String
+    private lateinit var teamName: String
+    private lateinit var teamId: String
 
     // todo : fragmentpageradapter ganti jadi teamdetailviewpageradapter, mungkin viewpageradapter bisa di jadiin 1 aja
-    private lateinit var teamDetailViewPagerAdapter : TeamDetailViewPagerAdapter
+    private lateinit var teamDetailViewPagerAdapter: TeamDetailViewPagerAdapter
 
     private val teamDetailInfoFragment = TeamDetailInfoFragment()
     private val teamMatchesFragment = TeamMatchesFragment()
     private val teamPlayersFragment = TeamPlayersFragment()
 
-    private var teamItem : TeamItem? = null
-    private var favTeamItem : FavoriteTeamItem? = null
+    private var teamItem: TeamItem? = null
+    private var favTeamItem: FavoriteTeamItem? = null
 
-    private var currentPosition : Int = 0
+    private var currentPosition: Int = 0
 
     // todo : rapiin beberapa section dari code
-    private var menuItem : Menu? = null
-    private var isEventFavorite : Boolean = false
+    private var menuItem: Menu? = null
+    private var isTeamFavorite: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,7 +90,7 @@ class TeamDetailActivity : AppCompatActivity() {
 
     }
 
-    private fun setupViewPager(viewPager : ViewPager){
+    private fun setupViewPager(viewPager: ViewPager) {
         teamDetailViewPagerAdapter = TeamDetailViewPagerAdapter(supportFragmentManager)
         teamDetailViewPagerAdapter.addFragment(teamDetailInfoFragment, "Info")
         teamDetailViewPagerAdapter.addFragment(teamMatchesFragment, "Matches")
@@ -100,9 +100,37 @@ class TeamDetailActivity : AppCompatActivity() {
 
         viewPager.offscreenPageLimit = 2
 
+        setListener()
+
     }
 
-    private fun setToolbarBehavior(){
+    private fun setListener(){
+        view_pager_team_detail.addOnPageChangeListener(
+            TabLayout.TabLayoutOnPageChangeListener(tab_layout_team_detail)
+        )
+
+        tab_layout_team_detail.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                val newPosition = tab?.position!!
+
+                if(currentPosition == 1) {
+                    // todo: tinggal pake pause di fragment lifecycle
+                    val fragmentToHide =
+                        teamDetailViewPagerAdapter.getItem(currentPosition) as FragmentLifecycle
+                    fragmentToHide.onPauseFragment()
+                }
+
+                currentPosition = newPosition
+            }
+
+        })
+    }
+
+    private fun setToolbarBehavior() {
         setSupportActionBar(toolbar_team_detail)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = teamName
@@ -122,10 +150,10 @@ class TeamDetailActivity : AppCompatActivity() {
                 true
             }
             R.id.action_add_to_favorite -> {
-                if(favTeamItem != null || teamItem != null){
-                    if(isEventFavorite) removeTeamFromFavoriteTeams() else addTeamToFavoriteTeams()
+                if (favTeamItem != null || teamItem != null) {
+                    if (isTeamFavorite) removeTeamFromFavoriteTeams() else addTeamToFavoriteTeams()
 
-                    isEventFavorite = !isEventFavorite
+                    isTeamFavorite = !isTeamFavorite
                     setFavoriteTeamIcon()
                 }
                 true
@@ -134,12 +162,13 @@ class TeamDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun addTeamToFavoriteTeams(){
+    private fun addTeamToFavoriteTeams() {
         try {
             when {
                 favTeamItem != null -> {
                     database.use {
-                        insert(FavoriteTeamItem.TABLE_FAVORITE_TEAM,
+                        insert(
+                            FavoriteTeamItem.TABLE_FAVORITE_TEAM,
                             FavoriteTeamItem.TEAM_ID to favTeamItem?.idTeam,
                             FavoriteTeamItem.TEAM_NAME to favTeamItem?.teamName,
                             FavoriteTeamItem.TEAM_BADGE_URL to favTeamItem?.teamBadgeUrl
@@ -148,43 +177,54 @@ class TeamDetailActivity : AppCompatActivity() {
                 }
                 teamItem != null -> {
                     database.use {
-                        insert(FavoriteTeamItem.TABLE_FAVORITE_TEAM,
+                        insert(
+                            FavoriteTeamItem.TABLE_FAVORITE_TEAM,
                             FavoriteTeamItem.TEAM_ID to teamItem?.teamId,
                             FavoriteTeamItem.TEAM_NAME to teamItem?.teamName,
-                            FavoriteTeamItem.TEAM_BADGE_URL to teamItem?.teamBadge)
+                            FavoriteTeamItem.TEAM_BADGE_URL to teamItem?.teamBadge
+                        )
                     }
                 }
             }
             team_detail_coordinator_layout.snackbar("Add a team into favorites").show()
-        } catch (e : SQLiteConstraintException) {
+        } catch (e: SQLiteConstraintException) {
             team_detail_coordinator_layout.snackbar(e.localizedMessage).show()
         }
     }
 
-    private fun removeTeamFromFavoriteTeams(){
+    private fun removeTeamFromFavoriteTeams() {
         try {
             database.use {
-                delete(FavoriteTeamItem.TABLE_FAVORITE_TEAM, "(TEAM_ID = {teamId})", "teamId" to teamId)
+                delete(
+                    FavoriteTeamItem.TABLE_FAVORITE_TEAM,
+                    "(TEAM_ID = {teamId})",
+                    "teamId" to teamId
+                )
             }
             team_detail_coordinator_layout.snackbar("Remove a team from favorites").show()
-        } catch (e : SQLiteConstraintException) {
+        } catch (e: SQLiteConstraintException) {
             team_detail_coordinator_layout.snackbar(e.localizedMessage).show()
         }
     }
 
     private fun setFavoriteTeamIcon() {
-        if(isEventFavorite){
-            menuItem?.getItem(0)?.icon = ContextCompat.getDrawable(this, R.drawable.ic_added_to_favorites)
+        if (isTeamFavorite) {
+            menuItem?.getItem(0)?.icon =
+                ContextCompat.getDrawable(this, R.drawable.ic_added_to_favorites)
         } else {
-            menuItem?.getItem(0)?.icon = ContextCompat.getDrawable(this, R.drawable.ic_add_to_favorites)
+            menuItem?.getItem(0)?.icon =
+                ContextCompat.getDrawable(this, R.drawable.ic_add_to_favorites)
         }
     }
 
-    private fun checkFavoriteTeamState(){
+    private fun checkFavoriteTeamState() {
         database.use {
-            val result = select(FavoriteTeamItem.TABLE_FAVORITE_TEAM).whereArgs("(TEAM_ID = {teamId})", "teamId" to teamId)
+            val result = select(FavoriteTeamItem.TABLE_FAVORITE_TEAM).whereArgs(
+                "(TEAM_ID = {teamId})",
+                "teamId" to teamId
+            )
             val favorite = result.parseList(classParser<FavoriteTeamItem>())
-            if(favorite.isNotEmpty()) isEventFavorite = true
+            if (favorite.isNotEmpty()) isTeamFavorite = true
         }
     }
 }
