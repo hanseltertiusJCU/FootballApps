@@ -17,13 +17,13 @@ import org.mockito.MockitoAnnotations
 class MatchPresenterTest {
 
     @Mock
-    lateinit var matchView: MatchView
+    private lateinit var matchView: MatchView
 
     @Mock
     private lateinit var matchesRepository: MatchesRepository
 
     @Mock
-    lateinit var matchResponse: MatchResponse
+    private lateinit var matchResponse: MatchResponse
 
     private lateinit var matchPresenter: MatchPresenter
 
@@ -136,6 +136,74 @@ class MatchPresenterTest {
 
         argumentCaptor<MatchesRepositoryCallback<MatchResponse?>>().apply {
             verify(matchesRepository).getSearchResultMatches(eq(query), capture())
+            firstValue.onDataError()
+        }
+
+        val inOrder = inOrder(matchView)
+        inOrder.verify(matchView, times(1)).dataIsLoading()
+        inOrder.verify(matchView, times(1)).dataFailedToLoad()
+    }
+
+    @Test
+    fun getTeamPreviousMatchInfoTest(){
+
+        val id = "133604"
+
+        matchPresenter.getTeamLastMatchInfo(id)
+
+        argumentCaptor<MatchesRepositoryCallback<MatchResponse?>>().apply {
+            verify(matchesRepository).getTeamLastMatches(eq(id), capture())
+            firstValue.onDataLoaded(matchResponse)
+        }
+
+        val inOrder = inOrder(matchView)
+        inOrder.verify(matchView, times(1)).dataIsLoading()
+        inOrder.verify(matchView, times(1)).showMatchesData(matchResponse)
+        inOrder.verify(matchView, times(1)).dataLoadingFinished()
+    }
+
+    @Test
+    fun getFailedTeamPreviousMatchInfoTest(){
+        val id = ""
+
+        matchPresenter.getTeamLastMatchInfo(id)
+
+        argumentCaptor<MatchesRepositoryCallback<MatchResponse?>>().apply {
+            verify(matchesRepository).getTeamLastMatches(eq(id), capture())
+            firstValue.onDataError()
+        }
+
+        val inOrder = inOrder(matchView)
+        inOrder.verify(matchView, times(1)).dataIsLoading()
+        inOrder.verify(matchView, times(1)).dataFailedToLoad()
+    }
+
+    @Test
+    fun getTeamNextMatchInfoTest(){
+        val id = "133604"
+
+        matchPresenter.getTeamNextMatchInfo(id)
+
+        argumentCaptor<MatchesRepositoryCallback<MatchResponse?>>().apply {
+            verify(matchesRepository).getTeamNextMatches(eq(id), capture())
+            firstValue.onDataLoaded(matchResponse)
+        }
+
+        val inOrder = inOrder(matchView)
+        inOrder.verify(matchView, times(1)).dataIsLoading()
+        inOrder.verify(matchView, times(1)).showMatchesData(matchResponse)
+        inOrder.verify(matchView, times(1)).dataLoadingFinished()
+
+    }
+
+    @Test
+    fun getFailedTeamNextMatchInfoTest(){
+        val id = ""
+
+        matchPresenter.getTeamNextMatchInfo(id)
+
+        argumentCaptor<MatchesRepositoryCallback<MatchResponse?>>().apply {
+            verify(matchesRepository).getTeamNextMatches(eq(id), capture())
             firstValue.onDataError()
         }
 

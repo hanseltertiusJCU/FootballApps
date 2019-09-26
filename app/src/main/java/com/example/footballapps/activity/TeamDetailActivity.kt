@@ -42,6 +42,7 @@ class TeamDetailActivity : AppCompatActivity() {
 
     private var currentPosition : Int = 0
 
+    // todo : rapiin beberapa section dari code
     private var menuItem : Menu? = null
     private var isEventFavorite : Boolean = false
 
@@ -163,7 +164,7 @@ class TeamDetailActivity : AppCompatActivity() {
     private fun removeTeamFromFavoriteTeams(){
         try {
             database.use {
-                delete(FavoriteTeamItem.TABLE_FAVORITE_TEAM, "(TEAM_iD = {teamId})", "teamId" to teamId)
+                delete(FavoriteTeamItem.TABLE_FAVORITE_TEAM, "(TEAM_ID = {teamId})", "teamId" to teamId)
             }
             team_detail_coordinator_layout.snackbar("Remove a team from favorites").show()
         } catch (e : SQLiteConstraintException) {

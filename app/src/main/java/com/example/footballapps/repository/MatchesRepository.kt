@@ -88,7 +88,6 @@ class MatchesRepository {
 
                 override fun onNext(matchResponse: MatchResponse) {
                     val nextMatchesList = matchResponse.events
-                    Log.d("next match team", nextMatchesList.toString())
                     if (nextMatchesList != null) {
                         if (nextMatchesList.isNotEmpty()) {
                             callback.onDataLoaded(matchResponse)
@@ -108,7 +107,6 @@ class MatchesRepository {
     }
 
     fun getTeamLastMatches(id: String, callback: MatchesRepositoryCallback<MatchResponse?>) {
-        // todo: ga kepanggil, mesti d solve
         RetrofitClient
             .createService(MatchService::class.java)
             .getTeamLastMatchesResponse(id)
@@ -120,9 +118,7 @@ class MatchesRepository {
                 override fun onSubscribe(d: Disposable) {}
 
                 override fun onNext(matchResponse: MatchResponse) {
-                    // todo: events ganti jadi results
                     val lastMatchesList = matchResponse.results
-                    Log.d("last match team", lastMatchesList.toString())
                     if (lastMatchesList != null) {
                         if (lastMatchesList.isNotEmpty()) {
                             callback.onDataLoaded(matchResponse)
