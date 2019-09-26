@@ -11,6 +11,7 @@ import com.example.footballapps.fragment.LeagueMatchesFragment
 import com.example.footballapps.fragment.LeagueTableFragment
 import com.example.footballapps.fragment.LeagueTeamsFragment
 import com.example.footballapps.lifecycle.FragmentLifecycle
+import com.example.footballapps.model.LeagueItem
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_league_detail.*
 
@@ -40,8 +41,18 @@ class LeagueDetailActivity : AppCompatActivity() {
 
     private fun initData() {
         val intent = intent
-        leagueName = intent.getStringExtra("leagueName") ?: "English Premier League"
-        leagueId = intent.getStringExtra("leagueId") ?: "4328"
+        val leagueItem = intent.getParcelableExtra<LeagueItem>("leagueItem")
+
+        when {
+            leagueItem != null -> {
+                leagueName = leagueItem.leagueName ?: "English Premier League"
+                leagueId = leagueItem.leagueId ?: "4328"
+            }
+            else -> {
+                leagueName = "English Premier League"
+                leagueId = "4328"
+            }
+        }
 
         setToolbarBehavior()
 
