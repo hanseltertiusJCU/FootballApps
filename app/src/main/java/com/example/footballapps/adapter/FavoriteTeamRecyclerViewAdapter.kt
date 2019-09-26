@@ -51,8 +51,8 @@ class FavoriteTeamRecyclerViewAdapter (private val favoriteTeamItemList : List<F
 
     class FavoriteTeamViewHolder(view : View) : RecyclerView.ViewHolder(view) {
 
-        private val favoriteTeamBadge : ImageView = view.find(R.id.team_badge)
-        private val favoriteTeamName : TextView = view.find(R.id.team_name)
+        private val favoriteTeamBadge : ImageView = view.find(R.id.favorite_team_badge)
+        private val favoriteTeamName : TextView = view.find(R.id.favorite_team_name)
 
         fun bindItem(favoriteTeam : FavoriteTeamItem, listener : (FavoriteTeamItem) -> Unit) {
             Picasso.get().load(favoriteTeam.teamBadgeUrl).placeholder(R.drawable.team_badge_placeholder).into(favoriteTeamBadge)

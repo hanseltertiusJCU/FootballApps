@@ -56,8 +56,6 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
     private var menuItem: Menu? = null
     private var isEventFavorite: Boolean = false
 
-    private var favoriteMatchItem: MatchItem? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_match_detail)
@@ -141,7 +139,6 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
             EspressoIdlingResource.decrement()
         }
         match_detail_swipe_refresh_layout.isRefreshing = false
-        favoriteMatchItem = null
         progress_bar_match_detail.gone()
         match_detail_error_data_text.visible()
         layout_match_detail_data.invisible()
@@ -158,7 +155,6 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
     override fun showMatchDetailData(combinedMatchTeamsResponse: CombinedMatchTeamsResponse) {
         val matchDetailResponse = combinedMatchTeamsResponse.matchDetailResponse
         val matchDetailItem = matchDetailResponse.events?.first()
-        favoriteMatchItem = matchDetailItem
 
         match_detail_league_name.text = matchDetailItem?.leagueName ?: "-"
         match_detail_match_week.text = when {

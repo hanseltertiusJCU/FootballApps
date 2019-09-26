@@ -49,8 +49,8 @@ class FavoriteFragment : Fragment() {
 
     private fun setupViewPager(viewPager : ViewPager) {
         favoriteViewPagerAdapter = ViewPagerAdapter(childFragmentManager)
-        favoriteViewPagerAdapter.addFragment(favoriteMatchesFragment, "Favorite Matches")
-        favoriteViewPagerAdapter.addFragment(favoriteTeamsFragment, "Favorite Teams")
+        favoriteViewPagerAdapter.addFragment(favoriteMatchesFragment, "Matches")
+        favoriteViewPagerAdapter.addFragment(favoriteTeamsFragment, "Teams")
         viewPager.adapter = favoriteViewPagerAdapter
 
         setListener()

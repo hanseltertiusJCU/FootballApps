@@ -120,7 +120,6 @@ class LeagueTeamsFragment : Fragment(), TeamsView, FragmentLifecycle{
         leagueId = arguments?.getString("leagueId") ?: "4328"
 
         leagueTeamsRvAdapter = TeamRecyclerViewAdapter(leagueTeams) {
-            // todo : implement it, mungkin tinggal bawa team item
             startActivity<TeamDetailActivity>("teamItem" to it)
         }
 

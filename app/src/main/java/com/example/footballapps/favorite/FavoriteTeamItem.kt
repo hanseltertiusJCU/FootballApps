@@ -7,8 +7,8 @@ import kotlinx.android.parcel.Parcelize
 data class FavoriteTeamItem(
     val id: Long,
     val idTeam: String?,
-    val teamBadgeUrl: String?,
-    val teamName: String?
+    val teamName: String?,
+    val teamBadgeUrl: String?
 ) : Parcelable {
     companion object {
         const val TABLE_FAVORITE_TEAM: String = "TABLE_FAVORITE_TEAM"

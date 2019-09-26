@@ -78,11 +78,11 @@ class LeagueRecyclerViewAdapter(
 
                     imageView {
                         id = leagueImageViewId
-                        scaleType = ImageView.ScaleType.FIT_XY
+                        scaleType = ImageView.ScaleType.CENTER_CROP
                         contentDescription = R.string.league_image.toString()
                     }.lparams {
                         width = matchParent
-                        height = convertDpToPx(256f, context)
+                        height = convertDpToPx(128f, context)
                     }
 
                     themedTextView(R.style.text_content) {
