@@ -43,8 +43,10 @@ class TeamDetailActivity : AppCompatActivity() {
     private var currentPosition: Int = 0
 
     // todo : rapiin beberapa section dari code
-    private var menuItem: Menu? = null
+    private var menu: Menu? = null
     private var isTeamFavorite: Boolean = false
+
+    var favoriteMenuItem : MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -138,7 +140,8 @@ class TeamDetailActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_favorite, menu)
-        menuItem = menu
+        this.menu = menu
+        favoriteMenuItem = menu?.findItem(R.id.action_add_to_favorite)
         setFavoriteTeamIcon()
         return super.onCreateOptionsMenu(menu)
     }
@@ -209,10 +212,10 @@ class TeamDetailActivity : AppCompatActivity() {
 
     private fun setFavoriteTeamIcon() {
         if (isTeamFavorite) {
-            menuItem?.getItem(0)?.icon =
+            this.menu?.getItem(0)?.icon =
                 ContextCompat.getDrawable(this, R.drawable.ic_added_to_favorites)
         } else {
-            menuItem?.getItem(0)?.icon =
+            this.menu?.getItem(0)?.icon =
                 ContextCompat.getDrawable(this, R.drawable.ic_add_to_favorites)
         }
     }

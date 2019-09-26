@@ -21,6 +21,7 @@ import com.example.footballapps.activity.MatchDetailActivity
 import com.example.footballapps.adapter.MatchRecyclerViewAdapter
 import com.example.footballapps.adapter.TeamRecyclerViewAdapter
 import androidx.appcompat.widget.SearchView
+import com.example.footballapps.activity.TeamDetailActivity
 import com.example.footballapps.espresso.EspressoIdlingResource
 import com.example.footballapps.lifecycle.FragmentLifecycle
 import com.example.footballapps.model.MatchItem
@@ -64,6 +65,7 @@ class TeamMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
     private var isSearching = false
 
     // todo : tinggal pake query variable
+    private lateinit var teamDetailActivity : TeamDetailActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -125,6 +127,9 @@ class TeamMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
     }
 
     private fun initData(){
+
+        teamDetailActivity = activity as TeamDetailActivity
+
         teamId = arguments?.getString("teamId") ?: "133604"
 
         val matchesCategoryList = resources.getStringArray(R.array.matches_category)
@@ -168,7 +173,6 @@ class TeamMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
             }
 
         }
-
 
 
     }
@@ -264,6 +268,7 @@ class TeamMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
                     isSearching = true
                     teamMatchesSpinner.gone()
                     EspressoIdlingResource.increment()
+                    teamDetailActivity.favoriteMenuItem?.isVisible = false
                     teamMatchesPresenter.getSearchMatchInfo(teamMatchSearchView?.query.toString())
                     return true
                 }
@@ -276,6 +281,7 @@ class TeamMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
                         1 -> teamMatchesPresenter.getTeamNextMatchInfo(teamId)
                         else -> teamMatchesPresenter.getTeamLastMatchInfo(teamId)
                     }
+                    teamDetailActivity.invalidateOptionsMenu()
                     return true
                 }
 
