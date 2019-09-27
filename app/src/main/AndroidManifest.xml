@@ -18,21 +18,6 @@
         <activity android:name=".activity.TeamDetailActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.FootballGameInfoActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
-        </activity>
-        <activity
             android:name=".activity.MatchDetailActivity"
             android:screenOrientation="portrait" />
         <activity

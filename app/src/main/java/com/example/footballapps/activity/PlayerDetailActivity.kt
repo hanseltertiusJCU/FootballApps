@@ -23,6 +23,7 @@ import com.example.footballapps.utils.gone
 import com.example.footballapps.utils.invisible
 import com.example.footballapps.utils.visible
 import com.example.footballapps.view.PlayerDetailView
+import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_player_detail.*
 import kotlinx.android.synthetic.main.layout_player_detail_description.*
 import kotlinx.android.synthetic.main.layout_player_detail_info.*
@@ -48,6 +49,11 @@ class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView {
     private fun initData() {
         val intent = intent
         playerItem = intent.getParcelableExtra("playerItem")
+
+        Glide.with(applicationContext)
+            .load(playerItem.playerFanArt)
+            .placeholder(R.drawable.ic_player_picture_placeholder)
+            .into(iv_player_fanart)
 
         setToolbarBehavior()
 

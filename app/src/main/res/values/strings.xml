@@ -95,12 +95,9 @@
 
     <!-- Menu item title -->
     <string name="search">Search</string>
-    <string name="match_schedule">Match Schedule</string>
-    <string name="info">Info</string>
     <string name="favorite">Favorite</string>
 
     <!-- Bottom Navigation View Menu item title -->
-    <string name="schedule">Schedule</string>
     <string name="leagues">Leagues</string>
     <string name="favorites">Favorites</string>
 
@@ -141,6 +138,7 @@
     <string name="player_number_unknown">#-</string>
 
     <!-- Player detail data Item -->
+    <string name="player_fanart">Player Fanart</string>
     <string name="player_photo">Player Photo</string>
     <string name="player_birth_date">Player Birth Date</string>
     <string name="height_m">Height (m)</string>
@@ -162,7 +160,6 @@
     <string name="player_strong_foot">Player Strong Foot</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Unknown player data -->
 

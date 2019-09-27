@@ -14,7 +14,6 @@ import com.example.footballapps.adapter.ViewPagerAdapter
 import com.example.footballapps.lifecycle.FragmentLifecycle
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_favorite.*
-import kotlinx.android.synthetic.main.fragment_match.*
 
 class FavoriteFragment : Fragment() {
 
@@ -66,12 +65,9 @@ class FavoriteFragment : Fragment() {
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 view_pager_favorite_fragment.currentItem = tab?.position!!
-                // todo: sepertinya karena ini
-//                mainActivity.supportActionBar?.title = favoriteViewPagerAdapter.getPageTitle(tab.position)
 
                 val newPosition = tab.position
 
-//
                 val fragmentToHide = favoriteViewPagerAdapter.getItem(currentPosition) as FragmentLifecycle
                 fragmentToHide.onPauseFragment()
 
