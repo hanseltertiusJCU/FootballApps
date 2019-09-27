@@ -40,7 +40,6 @@ class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchV
 
     private lateinit var favoriteMatchRecyclerView: RecyclerView
     private lateinit var favoriteMatchProgressBar: ProgressBar
-    private lateinit var favoriteMatchSwipeRefreshLayout: SwipeRefreshLayout
     private lateinit var favoriteMatchErrorText: TextView
 
     private var favoriteMatches: MutableList<FavoriteMatchItem> = mutableListOf()
@@ -71,7 +70,6 @@ class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchV
     private fun initData() {
 
         favoriteMatchRvAdapter = FavoriteMatchRecyclerViewAdapter(context!!, favoriteMatches) {
-            // todo : tinggal ganti ke favorite match item untuk intent
             context?.startActivity<MatchDetailActivity>(
                 "favMatchItem" to it
             )
@@ -80,15 +78,6 @@ class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchV
         favoriteMatchRecyclerView.adapter = favoriteMatchRvAdapter
 
         favoriteMatchPresenter = FavoriteMatchPresenter(this, context!!)
-
-        favoriteMatchSwipeRefreshLayout.onRefresh {
-            if (isSearching) {
-                getFavoriteDataFromQuery(favoriteMatchSearchView?.query.toString())
-            } else {
-                getFavoriteData()
-            }
-
-        }
     }
 
     override fun onResume() {
@@ -105,23 +94,10 @@ class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchV
             id = R.id.favorite_match_parent_layout
             lparams(width = matchParent, height = matchParent)
 
-            favoriteMatchSwipeRefreshLayout = swipeRefreshLayout {
-
-                setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
-
-                favoriteMatchRecyclerView = recyclerView {
-                    id = R.id.rv_favorite_match
-                    lparams(width = matchParent, height = wrapContent)
-                    layoutManager = LinearLayoutManager(context)
-                }
-            }.lparams {
-                width = matchConstraint
-                height = matchConstraint
-                topToTop = R.id.favorite_match_parent_layout
-                leftToLeft = R.id.favorite_match_parent_layout
-                rightToRight = R.id.favorite_match_parent_layout
-                bottomToBottom = R.id.favorite_match_parent_layout
-                verticalBias = 0f
+            favoriteMatchRecyclerView = recyclerView {
+                id = R.id.rv_favorite_match
+                lparams(width = matchParent, height = wrapContent)
+                layoutManager = LinearLayoutManager(context)
             }
 
             favoriteMatchProgressBar = progressBar().lparams {
@@ -141,38 +117,6 @@ class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchV
     }
 
 
-    @Suppress("DEPRECATION")
-    private fun checkNetworkConnection(): Boolean {
-
-        val connectivityManager: ConnectivityManager? =
-            context?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
-
-        if (connectivityManager != null) {
-            if (Build.VERSION.SDK_INT < 23) {
-                val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
-
-                if (networkInfo != null) {
-                    return (networkInfo.isConnected && (networkInfo.type == ConnectivityManager.TYPE_WIFI || networkInfo.type == ConnectivityManager.TYPE_MOBILE || networkInfo.type == ConnectivityManager.TYPE_VPN))
-                }
-
-            } else {
-                val network: Network? = connectivityManager.activeNetwork
-
-                if (network != null) {
-                    val networkCapabilities: NetworkCapabilities =
-                        connectivityManager.getNetworkCapabilities(network)!!
-
-
-                    return (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
-                            || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
-                            || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN))
-                }
-            }
-        }
-        return false
-    }
-
-
     override fun dataIsLoading() {
         favoriteMatchProgressBar.visible()
         favoriteMatchErrorText.gone()
@@ -182,7 +126,6 @@ class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchV
     }
 
     override fun dataLoadingFinished() {
-        favoriteMatchSwipeRefreshLayout.isRefreshing = false
         favoriteMatchProgressBar.gone()
         favoriteMatchErrorText.gone()
         favoriteMatchRecyclerView.visible()
@@ -190,15 +133,14 @@ class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchV
         isDataLoading = false
     }
 
-    override fun dataFailedToLoad(errorText: String) {
-        favoriteMatchSwipeRefreshLayout.isRefreshing = false
+    override fun dataFailedToLoad() {
         favoriteMatchProgressBar.gone()
         favoriteMatchErrorText.visible()
         favoriteMatchRecyclerView.invisible()
 
         isDataLoading = false
 
-        favoriteMatchErrorText.text = errorText
+        favoriteMatchErrorText.text = resources.getString(R.string.no_data_to_show)
     }
 
     override fun showMatchData(favoriteMatchList: List<FavoriteMatchItem>) {
@@ -208,16 +150,11 @@ class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchV
     }
 
     private fun getFavoriteData() {
-        val isNetworkConnected = checkNetworkConnection()
-        favoriteMatchPresenter.getFavoriteMatchInfo(isNetworkConnected)
+        favoriteMatchPresenter.getFavoriteMatchInfo()
     }
 
     private fun getFavoriteDataFromQuery(query: String) {
-        val isNetworkConnected = checkNetworkConnection()
-        favoriteMatchPresenter.getFavoriteMatchInfoSearchResult(
-            isNetworkConnected,
-            query
-        )
+        favoriteMatchPresenter.getFavoriteMatchInfoSearchResult(query)
     }
 
     override fun onHiddenChanged(hidden: Boolean) {

@@ -49,7 +49,9 @@ class LeagueFragment : Fragment(), AnkoComponent<Context>, LeagueView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initData()
+        if(savedInstanceState == null){
+            initData()
+        }
     }
 
     private fun initData(){

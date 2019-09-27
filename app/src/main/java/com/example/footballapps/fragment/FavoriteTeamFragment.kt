@@ -39,7 +39,6 @@ class FavoriteTeamFragment : Fragment(), AnkoComponent<Context>, FavoriteTeamVie
 
     private lateinit var favoriteTeamRecyclerView : RecyclerView
     private lateinit var favoriteTeamProgressBar : ProgressBar
-    private lateinit var favoriteTeamSwipeRefreshLayout : SwipeRefreshLayout
     private lateinit var favoriteTeamErrorText : TextView
 
     private var favoriteTeams : MutableList<FavoriteTeamItem> = mutableListOf()
@@ -66,23 +65,10 @@ class FavoriteTeamFragment : Fragment(), AnkoComponent<Context>, FavoriteTeamVie
             id = R.id.favorite_team_parent_layout
             lparams(width = matchParent, height = matchParent)
 
-            favoriteTeamSwipeRefreshLayout = swipeRefreshLayout {
-
-                setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
-
-                favoriteTeamRecyclerView = recyclerView {
-                    id = R.id.rv_favorite_team
-                    lparams(width = matchParent, height = wrapContent)
-                    layoutManager = LinearLayoutManager(context)
-                }
-            }.lparams {
-                width = matchConstraint
-                height = matchConstraint
-                topToTop = R.id.favorite_team_parent_layout
-                leftToLeft = R.id.favorite_team_parent_layout
-                rightToRight = R.id.favorite_team_parent_layout
-                bottomToBottom = R.id.favorite_team_parent_layout
-                verticalBias = 0f
+            favoriteTeamRecyclerView = recyclerView {
+                id = R.id.rv_favorite_team
+                lparams(width = matchParent, height = wrapContent)
+                layoutManager = LinearLayoutManager(context)
             }
 
             favoriteTeamProgressBar = progressBar().lparams{
@@ -117,7 +103,6 @@ class FavoriteTeamFragment : Fragment(), AnkoComponent<Context>, FavoriteTeamVie
     }
 
     override fun dataLoadingFinished() {
-        favoriteTeamSwipeRefreshLayout.isRefreshing = false
         favoriteTeamProgressBar.gone()
         favoriteTeamErrorText.gone()
         favoriteTeamRecyclerView.visible()
@@ -125,15 +110,14 @@ class FavoriteTeamFragment : Fragment(), AnkoComponent<Context>, FavoriteTeamVie
         isDataLoading = false
     }
 
-    override fun dataFailedToLoad(errorText: String) {
-        favoriteTeamSwipeRefreshLayout.isRefreshing = false
+    override fun dataFailedToLoad() {
         favoriteTeamProgressBar.gone()
         favoriteTeamErrorText.visible()
         favoriteTeamRecyclerView.invisible()
 
         isDataLoading = false
 
-        favoriteTeamErrorText.text = errorText
+        favoriteTeamErrorText.text = resources.getString(R.string.no_data_to_show)
     }
 
     override fun showTeamData(favoriteTeamList: List<FavoriteTeamItem>) {
@@ -219,54 +203,13 @@ class FavoriteTeamFragment : Fragment(), AnkoComponent<Context>, FavoriteTeamVie
 
         favoriteTeamPresenter = FavoriteTeamPresenter(this, context!!)
 
-        favoriteTeamSwipeRefreshLayout.onRefresh {
-            if(!isSearching){
-                getFavoriteDataFromQuery(favoriteTeamSearchView?.query.toString())
-            } else {
-                getFavoriteData()
-            }
-        }
-
     }
     private fun getFavoriteData(){
-        val isNetworkConnected = checkNetworkConnection()
-        favoriteTeamPresenter.getFavoriteTeamInfo(isNetworkConnected)
+        favoriteTeamPresenter.getFavoriteTeamInfo()
     }
 
     private fun getFavoriteDataFromQuery(query : String){
-        val isNetworkConnected = checkNetworkConnection()
-        favoriteTeamPresenter.getFavoriteTeamInfoSearchResult(isNetworkConnected, query)
-    }
-
-    @Suppress("DEPRECATION")
-    private fun checkNetworkConnection(): Boolean {
-
-        val connectivityManager: ConnectivityManager? =
-            context?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
-
-        if (connectivityManager != null) {
-            if (Build.VERSION.SDK_INT < 23) {
-                val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
-
-                if (networkInfo != null) {
-                    return (networkInfo.isConnected && (networkInfo.type == ConnectivityManager.TYPE_WIFI || networkInfo.type == ConnectivityManager.TYPE_MOBILE || networkInfo.type == ConnectivityManager.TYPE_VPN))
-                }
-
-            } else {
-                val network: Network? = connectivityManager.activeNetwork
-
-                if (network != null) {
-                    val networkCapabilities: NetworkCapabilities =
-                        connectivityManager.getNetworkCapabilities(network)!!
-
-
-                    return (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
-                            || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
-                            || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN))
-                }
-            }
-        }
-        return false
+        favoriteTeamPresenter.getFavoriteTeamInfoSearchResult(query)
     }
 
 }

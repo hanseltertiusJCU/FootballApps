@@ -40,6 +40,7 @@ class MatchRecyclerViewAdapter(
     class MatchViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         companion object {
+            // todo : mungkin pake unknown aja biar lebih efisien
             val leagueNameUnknown = FootballApps.res.getString(R.string.league_unknown)
             val matchWeekUnknown = FootballApps.res.getString(R.string.match_week_unknown)
             val homeTeamNameUnknown = FootballApps.res.getString(R.string.home_team_unknown)

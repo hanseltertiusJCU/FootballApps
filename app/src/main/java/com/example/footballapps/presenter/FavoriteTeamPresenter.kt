@@ -13,50 +13,38 @@ import org.jetbrains.anko.db.select
 
 class FavoriteTeamPresenter(private val favoriteTeamView : FavoriteTeamView, private val context: Context) {
 
-    companion object {
-        val noDataText = FootballApps.res.getString(R.string.no_data_to_show)
-        val noConnectionText = FootballApps.res.getString(R.string.no_internet_connection)
-    }
-
-    fun getFavoriteTeamInfo(isNetworkActive : Boolean){
+    fun getFavoriteTeamInfo(){
         favoriteTeamView.dataIsLoading()
 
-        if(isNetworkActive){
-            context.database.use {
-                val favoriteTeam = select(FavoriteTeamItem.TABLE_FAVORITE_TEAM).orderBy("ID_", SqlOrderDirection.DESC)
-                val favoriteTeamList = favoriteTeam.parseList(classParser<FavoriteTeamItem>())
-                if(favoriteTeamList.isNotEmpty()){
-                    favoriteTeamView.showTeamData(favoriteTeamList)
+        context.database.use {
+            val favoriteTeam = select(FavoriteTeamItem.TABLE_FAVORITE_TEAM).orderBy("ID_", SqlOrderDirection.DESC)
+            val favoriteTeamList = favoriteTeam.parseList(classParser<FavoriteTeamItem>())
+            if(favoriteTeamList.isNotEmpty()){
+                favoriteTeamView.showTeamData(favoriteTeamList)
 
-                    favoriteTeamView.dataLoadingFinished()
-                } else {
-                    favoriteTeamView.dataFailedToLoad(noDataText)
-                }
+                favoriteTeamView.dataLoadingFinished()
+            } else {
+                favoriteTeamView.dataFailedToLoad()
             }
-        } else {
-            favoriteTeamView.dataFailedToLoad(noConnectionText)
         }
     }
 
-    fun getFavoriteTeamInfoSearchResult(isNetworkActive: Boolean, query : String){
+    fun getFavoriteTeamInfoSearchResult(query : String){
         favoriteTeamView.dataIsLoading()
 
-        if(isNetworkActive) {
-            val capitalizedQuery = getCapitalizedWord(query)
-            context.database.use {
-                val favoriteTeamSearchResult = select(FavoriteTeamItem.TABLE_FAVORITE_TEAM).whereArgs("TEAM_NAME LIKE '%$capitalizedQuery%'").orderBy("ID_", SqlOrderDirection.DESC)
-                val favoriteTeamList = favoriteTeamSearchResult.parseList(classParser<FavoriteTeamItem>())
-                if(favoriteTeamList.isNotEmpty()){
-                    favoriteTeamView.showTeamData(favoriteTeamList)
+        val capitalizedQuery = getCapitalizedWord(query)
+        context.database.use {
+            val favoriteTeamSearchResult = select(FavoriteTeamItem.TABLE_FAVORITE_TEAM).whereArgs("TEAM_NAME LIKE '%$capitalizedQuery%'").orderBy("ID_", SqlOrderDirection.DESC)
+            val favoriteTeamList = favoriteTeamSearchResult.parseList(classParser<FavoriteTeamItem>())
+            if(favoriteTeamList.isNotEmpty()){
+                favoriteTeamView.showTeamData(favoriteTeamList)
 
-                    favoriteTeamView.dataLoadingFinished()
-                } else {
-                    favoriteTeamView.dataFailedToLoad(noDataText)
-                }
+                favoriteTeamView.dataLoadingFinished()
+            } else {
+                favoriteTeamView.dataFailedToLoad()
             }
-        } else {
-            favoriteTeamView.dataFailedToLoad(noConnectionText)
         }
+
     }
 
     @SuppressLint("DefaultLocale")

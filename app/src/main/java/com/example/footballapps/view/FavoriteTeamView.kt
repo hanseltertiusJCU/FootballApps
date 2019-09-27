@@ -5,6 +5,6 @@ import com.example.footballapps.favorite.FavoriteTeamItem
 interface FavoriteTeamView {
     fun dataIsLoading()
     fun dataLoadingFinished()
-    fun dataFailedToLoad(errorText : String)
+    fun dataFailedToLoad()
     fun showTeamData(favoriteTeamList: List<FavoriteTeamItem>)
 }

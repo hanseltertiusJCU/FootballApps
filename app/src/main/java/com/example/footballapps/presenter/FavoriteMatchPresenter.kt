@@ -16,58 +16,45 @@ class FavoriteMatchPresenter(
     private val context: Context
 ) {
 
-    companion object {
-        val noDataText = FootballApps.res.getString(R.string.no_data_to_show)
-        val noConnectionText = FootballApps.res.getString(R.string.no_internet_connection)
-    }
-
-    fun getFavoriteMatchInfo(isNetworkActive: Boolean) {
+    fun getFavoriteMatchInfo() {
         favoriteMatchView.dataIsLoading()
 
-        if (isNetworkActive) {
-            context.database.use {
-                val favoriteMatchResult = select(FavoriteMatchItem.TABLE_FAVORITE_MATCH)
-                    .orderBy("ID_", SqlOrderDirection.DESC)
-                val favoriteMatchList =
-                    favoriteMatchResult.parseList(classParser<FavoriteMatchItem>())
-                if (favoriteMatchList.isNotEmpty()) {
-                    favoriteMatchView.showMatchData(favoriteMatchList)
+        context.database.use {
+            val favoriteMatchResult = select(FavoriteMatchItem.TABLE_FAVORITE_MATCH)
+                .orderBy("ID_", SqlOrderDirection.DESC)
+            val favoriteMatchList =
+                favoriteMatchResult.parseList(classParser<FavoriteMatchItem>())
+            if (favoriteMatchList.isNotEmpty()) {
+                favoriteMatchView.showMatchData(favoriteMatchList)
 
-                    favoriteMatchView.dataLoadingFinished()
-                } else {
-                    favoriteMatchView.dataFailedToLoad(noDataText)
-                }
+                favoriteMatchView.dataLoadingFinished()
+            } else {
+                favoriteMatchView.dataFailedToLoad()
             }
-        } else {
-            favoriteMatchView.dataFailedToLoad(noConnectionText)
         }
 
     }
 
-    fun getFavoriteMatchInfoSearchResult(isNetworkActive: Boolean, query: String) {
+    fun getFavoriteMatchInfoSearchResult(query: String) {
         favoriteMatchView.dataIsLoading()
 
-        if (isNetworkActive) {
-            val capitalizedQuery = getCapitalizedWord(query)
-            context.database.use {
-                val favoriteMatchResult = select(FavoriteMatchItem.TABLE_FAVORITE_MATCH)
-                    .whereArgs(
-                        "HOME_TEAM_NAME = {query} OR AWAY_TEAM_NAME = {query} OR LEAGUE_NAME LIKE '%$capitalizedQuery%'",
-                        "query" to capitalizedQuery
-                    )
-                    .orderBy("ID_", SqlOrderDirection.DESC)
-                val favoriteMatchList =
-                    favoriteMatchResult.parseList(classParser<FavoriteMatchItem>())
-                if (favoriteMatchList.isNotEmpty()) {
-                    favoriteMatchView.showMatchData(favoriteMatchList)
+        val capitalizedQuery = getCapitalizedWord(query)
+        context.database.use {
+            val favoriteMatchResult = select(FavoriteMatchItem.TABLE_FAVORITE_MATCH)
+                .whereArgs(
+                    "HOME_TEAM_NAME = {query} OR AWAY_TEAM_NAME = {query} OR LEAGUE_NAME LIKE '%$capitalizedQuery%'",
+                    "query" to capitalizedQuery
+                )
+                .orderBy("ID_", SqlOrderDirection.DESC)
+            val favoriteMatchList =
+                favoriteMatchResult.parseList(classParser<FavoriteMatchItem>())
+            if (favoriteMatchList.isNotEmpty()) {
+                favoriteMatchView.showMatchData(favoriteMatchList)
 
-                    favoriteMatchView.dataLoadingFinished()
-                } else {
-                    favoriteMatchView.dataFailedToLoad(noDataText)
-                }
+                favoriteMatchView.dataLoadingFinished()
+            } else {
+                favoriteMatchView.dataFailedToLoad()
             }
-        } else {
-            favoriteMatchView.dataFailedToLoad(noConnectionText)
         }
     }
 
