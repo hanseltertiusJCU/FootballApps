@@ -14,116 +14,47 @@
         style="@style/text_section"
         android:text="@string/team_info"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tv_player_detail_team_name"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/team_detail_name_section"
-            style="@style/text_content"/>
-
-        <TextView
-            android:id="@+id/tv_player_detail_team_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/text_content"
-            android:layout_marginStart="4dp"
-            android:text="@string/team_name"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/team_detail_date_signed_section"
-            style="@style/text_content"/>
-
-        <TextView
-            android:id="@+id/tv_player_detail_team_date_signed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/text_content"
-            android:layout_marginStart="4dp"
-            android:text="@string/team_date_signed"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Transfer Fee :"
-            style="@style/text_content"/>
-
-        <TextView
-            android:id="@+id/tv_player_detail_team_transfer_fee"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/text_content"
-            android:layout_marginStart="4dp"
-            android:text="Team Transfer Fee"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Wages :"
-            style="@style/text_content"/>
-
-        <TextView
-            android:id="@+id/tv_player_detail_team_wage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/text_content"
-            android:layout_marginStart="4dp"
-            android:text="Team Wages"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        style="@style/text_content"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp">
+        android:text="@string/team_name"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/team_detail_number_section"
-            style="@style/text_content"/>
+    <TextView
+        android:id="@+id/tv_player_detail_team_date_signed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/text_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/team_date_signed"/>
 
-        <TextView
-            android:id="@+id/tv_player_detail_team_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/text_content"
-            android:layout_marginStart="4dp"
-            android:text="@string/team_number"/>
+    <TextView
+        android:id="@+id/tv_player_detail_team_transfer_fee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/text_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/team_transfer_fee"/>
 
-    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_player_detail_team_wage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/text_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/team_wages"/>
+
+    <TextView
+        android:id="@+id/tv_player_detail_team_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/text_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/team_number"/>
 
     <View
         android:layout_width="match_parent"

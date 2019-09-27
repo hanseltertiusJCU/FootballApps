@@ -14,160 +14,62 @@
         style="@style/text_section"
         android:text="@string/player_biodata"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tv_player_detail_date_of_birth"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/date_of_birth"
-            style="@style/text_content"/>
-
-        <TextView
-            android:id="@+id/tv_player_detail_date_of_birth"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/text_content"
-            android:layout_marginStart="4dp"
-            android:text="@string/player_date_of_birth"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/nationality"
-            style="@style/text_content"/>
-
-        <TextView
-            android:id="@+id/tv_player_detail_nationality"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/text_content"
-            android:layout_marginStart="4dp"
-            android:text="@string/player_nationality"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/outfitter"
-            style="@style/text_content"/>
-
-        <TextView
-            android:id="@+id/tv_player_detail_outfitter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/text_content"
-            android:layout_marginStart="4dp"
-            android:text="@string/player_outfitter"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/kit"
-            style="@style/text_content"/>
-
-        <TextView
-            android:id="@+id/tv_player_detail_kit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/text_content"
-            android:layout_marginStart="4dp"
-            android:text="@string/player_kit"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/agent"
-            style="@style/text_content"/>
-
-        <TextView
-            android:id="@+id/tv_player_detail_agent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/text_content"
-            android:layout_marginStart="4dp"
-            android:text="@string/player_agent"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/team_detail_position_section"
-            style="@style/text_content"/>
-
-        <TextView
-            android:id="@+id/tv_player_detail_position"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/text_content"
-            android:layout_marginStart="4dp"
-            android:text="@string/player_position"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        style="@style/text_content"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp">
+        android:text="@string/player_date_of_birth"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/preferred_foot"
-            style="@style/text_content"/>
+    <TextView
+        android:id="@+id/tv_player_detail_nationality"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/text_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/player_nationality"/>
 
-        <TextView
-            android:id="@+id/tv_player_detail_preferred_foot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/text_content"
-            android:layout_marginStart="4dp"
-            android:text="@string/player_preferred_foot"/>
+    <TextView
+        android:id="@+id/tv_player_detail_outfitter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/text_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/player_outfitter"/>
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_player_detail_kit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/text_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/player_kit"/>
+
+    <TextView
+        android:id="@+id/tv_player_detail_agent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/text_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/player_agent"/>
+
+    <TextView
+        android:id="@+id/tv_player_detail_position"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/text_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/player_position"/>
+
+    <TextView
+        android:id="@+id/tv_player_detail_preferred_foot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/text_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/player_preferred_foot"/>
 
     <View
         android:layout_width="match_parent"

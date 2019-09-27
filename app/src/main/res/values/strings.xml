@@ -84,6 +84,10 @@
     <string name="substitutes">Substitutes</string>
     <string name="away_team_substitutes">Away Team Substitutes</string>
 
+    <!-- Unknown value -->
+    <string name="value_unknown">Unknown</string>
+    <string name="value_none">-</string>
+
     <!-- Unknown match data -->
     <string name="match_week_unknown">Week Unknown</string>
     <string name="spectators_unknown">Spectators : Unknown</string>
@@ -148,30 +152,25 @@
     <string name="team_info">Team Info</string>
 
     <!-- Team in Player Detail Section -->
-    <string name="team_detail_name_section">Name :</string>
-    <string name="team_detail_date_signed_section">Date Signed :</string>
     <string name="team_date_signed">Team Date Signed</string>
-    <string name="team_detail_number_section">Number :</string>
     <string name="team_number">Team Number</string>
     <string name="team_position">Team Position</string>
-    <string name="team_detail_position_section">Position :</string>
-    <string name="player_description_section">Description</string>
-    <string name="player_description">Player Description</string>
-    <string name="player_strong_foot">Player Strong Foot</string>
+    <string name="team_wages">Team Wages</string>
+    <string name="team_transfer_fee">Team Transfer Fee</string>
 
     <!-- Player Info in Player Detail Section -->
     <string name="player_biodata">Biodata</string>
-    <string name="nationality">Nationality :</string>
-    <string name="outfitter">Outfitter :</string>
     <string name="player_outfitter">Player Outfitter</string>
-    <string name="kit">Kit :</string>
     <string name="player_kit">Player Kit</string>
-    <string name="agent">Agent :</string>
     <string name="player_agent">Player Agent</string>
-    <string name="preferred_foot">Preferred Foot :</string>
     <string name="player_preferred_foot">Player Preferred Foot</string>
-    <string name="date_of_birth">Date of Birth :</string>
     <string name="player_date_of_birth">Player Date of Birth</string>
+
+    <!-- Description in Player Detail Section -->
+    <string name="player_description_section">Description</string>
+    <string name="player_description">Player Description</string>
+
+
 
 
     <!-- Unknown player data -->

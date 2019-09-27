@@ -64,7 +64,10 @@ class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchV
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        initData()
+        if(savedInstanceState == null){
+            initData()
+        }
+
     }
 
     private fun initData() {

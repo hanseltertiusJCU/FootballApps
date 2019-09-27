@@ -32,6 +32,7 @@ import kotlinx.android.synthetic.main.layout_player_detail_physique.*
 import kotlinx.android.synthetic.main.layout_player_detail_team_info.*
 import java.text.SimpleDateFormat
 import java.util.*
+import java.lang.StringBuilder
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView {
@@ -124,49 +125,43 @@ class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView {
 
         Glide.with(applicationContext)
             .load(playerDetailItem?.playerPhoto)
-            .error(Glide.with(applicationContext).load(R.drawable.ic_player_picture_placeholder))
+            .placeholder(R.drawable.ic_player_picture_placeholder)
             .into(player_detail_photo)
 
-        player_detail_name.text = playerDetailItem?.playerName ?: "Name Unknown"
+        player_detail_name.text = StringBuilder(formatValue(playerDetailItem?.playerName))
 
-        val dateOfBirth = if(playerDetailItem?.playerBirthDate != null || playerDetailItem?.playerBirthDate != "") {
-            formatDate(playerDetailItem?.playerBirthDate)
-        } else {
-            "Date Unknown"
-        }
+        player_detail_height.text = formatValue(playerDetailItem?.playerHeight)
+        player_detail_weight.text = formatValue(playerDetailItem?.playerWeight)
 
-        val birthLocation = playerDetailItem?.playerBirthLocation ?: "Location Unknown"
+        val dateOfBirth = formatDate(playerDetailItem?.playerBirthDate)
 
-        tv_player_detail_date_of_birth.text = StringBuilder("$birthLocation, $dateOfBirth")
+        val birthLocation = formatValue(playerDetailItem?.playerBirthLocation)
 
-        tv_player_detail_nationality.text =
-            playerDetailItem?.playerNationality ?: "Nationality Unknown"
+        tv_player_detail_date_of_birth.text = StringBuilder("Place, Date of Birth : $birthLocation, $dateOfBirth")
 
-        tv_player_detail_outfitter.text = playerDetailItem?.playerOutfitter ?: "Outfitter Unknown"
+        tv_player_detail_nationality.text = StringBuilder("Nationality : ${formatValue(playerDetailItem?.playerNationality)}")
 
-        tv_player_detail_kit.text = playerDetailItem?.playerKit ?: "Kit Unknown"
+        tv_player_detail_outfitter.text =  StringBuilder("Outfitter : ${formatValue(playerDetailItem?.playerOutfitter)}")
 
-        tv_player_detail_agent.text = playerDetailItem?.playerAgent ?: "Agent Unknown"
+        tv_player_detail_kit.text = StringBuilder("Kit : ${formatValue(playerDetailItem?.playerKit)}")
 
-        tv_player_detail_position.text = playerDetailItem?.playerPosition ?: "Position Unknown"
+        tv_player_detail_agent.text = StringBuilder("Agent : ${formatValue(playerDetailItem?.playerAgent)}")
 
-        tv_player_detail_preferred_foot.text = playerDetailItem?.playerStrongFoot ?: "Preferred Foot Unknown"
+        tv_player_detail_position.text = StringBuilder("Position : ${formatValue(playerDetailItem?.playerPosition)}")
 
-        player_detail_height.text = playerDetailItem?.playerHeight ?: "Height Unknown"
-        player_detail_weight.text = playerDetailItem?.playerWeight ?: "Weight Unknown"
+        tv_player_detail_preferred_foot.text = StringBuilder("Preferred Foot : ${formatValue(playerDetailItem?.playerStrongFoot)}")
 
-        tv_player_detail_team_name.text = playerDetailItem?.playerTeam ?: "Team Unknown"
+        tv_player_detail_team_name.text = StringBuilder("Team Name : ${formatValue(playerDetailItem?.playerTeam)}")
 
-        tv_player_detail_team_date_signed.text = formatDate(playerDetailItem?.playerSignedDate)
+        tv_player_detail_team_date_signed.text = StringBuilder("Date Signed : ${formatDate(playerDetailItem?.playerSignedDate)}")
 
-        tv_player_detail_team_transfer_fee.text = playerDetailItem?.playerTransferFee ?: "Transfer Fee Unknown"
+        tv_player_detail_team_transfer_fee.text = StringBuilder("Transfer Fee : ${formatValue(playerDetailItem?.playerTransferFee)}")
 
-        tv_player_detail_team_wage.text = playerDetailItem?.playerWages ?: "Wages Unknown"
+        tv_player_detail_team_wage.text = StringBuilder("Wage : ${formatValue(playerDetailItem?.playerWages)}")
 
-        tv_player_detail_team_number.text = playerDetailItem?.playerShirtNumber ?: "Number Unknown"
+        tv_player_detail_team_number.text = StringBuilder("Shirt Number : ${formatValue(playerDetailItem?.playerShirtNumber)}")
 
-        tv_player_detail_description.text =
-            playerDetailItem?.playerDescription ?: "Description Unknown"
+        tv_player_detail_description.text = formatValue(playerDetailItem?.playerDescription)
 
 
     }
@@ -188,11 +183,17 @@ class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView {
 
             formattedDateEvent
         } else {
-            resources.getString(R.string.date_unknown)
+            resources.getString(R.string.value_unknown)
         }
     }
 
-    // todo : tinggal pake unknown aja untuk string format biar lebih gampang dan efisien
+    private fun formatValue(stringValue : String?) : String {
+        return if(stringValue != null && stringValue.trim().isNotEmpty()) {
+            stringValue
+        } else {
+            resources.getString(R.string.value_unknown)
+        }
+    }
 
     @Suppress("DEPRECATION")
     private fun checkNetworkConnection(): Boolean {

@@ -160,13 +160,13 @@ class FavoriteTeamFragment : Fragment(), AnkoComponent<Context>, FavoriteTeamVie
             favoriteTeamSearchView = favoriteTeamSearchItem?.actionView as SearchView
 
             favoriteTeamSearchItem?.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-                override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+                override fun onMenuItemActionExpand(menuItem: MenuItem?): Boolean {
                     isSearching = true
                     getFavoriteDataFromQuery(favoriteTeamSearchView?.query.toString())
                     return true
                 }
 
-                override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+                override fun onMenuItemActionCollapse(menuItem: MenuItem?): Boolean {
                     isSearching = false
                     getFavoriteData()
                     return true
