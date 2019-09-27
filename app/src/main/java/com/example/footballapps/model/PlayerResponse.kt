@@ -1,5 +1,6 @@
 package com.example.footballapps.model
 
+import android.app.backup.BackupAgent
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
@@ -108,5 +109,15 @@ data class PlayerItem(
     @SerializedName("strWeight")
     var playerWeight : String?,
     @SerializedName("strThumb")
-    var playerFanArt : String?
+    var playerFanArt : String?,
+    @SerializedName("strSigning")
+    var playerTransferFee : String?,
+    @SerializedName("strWage")
+    var playerWages : String?,
+    @SerializedName("strOutfitter")
+    var playerOutfitter : String?,
+    @SerializedName("strAgent")
+    var playerAgent: String?,
+    @SerializedName("strKit")
+    var playerKit : String?
 ) : Parcelable

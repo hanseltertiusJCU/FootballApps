@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/text_section"
-        android:text="@string/team_info"/>
+        android:text="@string/player_biodata"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,16 +23,16 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/team_detail_name_section"
+            android:text="@string/date_of_birth"
             style="@style/text_content"/>
 
         <TextView
-            android:id="@+id/tv_player_detail_team_name"
+            android:id="@+id/tv_player_detail_date_of_birth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/text_content"
             android:layout_marginStart="4dp"
-            android:text="@string/team_name"/>
+            android:text="@string/player_date_of_birth"/>
 
     </LinearLayout>
 
@@ -45,16 +45,16 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/team_detail_date_signed_section"
+            android:text="@string/nationality"
             style="@style/text_content"/>
 
         <TextView
-            android:id="@+id/tv_player_detail_team_date_signed"
+            android:id="@+id/tv_player_detail_nationality"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/text_content"
             android:layout_marginStart="4dp"
-            android:text="@string/team_date_signed"/>
+            android:text="@string/player_nationality"/>
 
     </LinearLayout>
 
@@ -67,16 +67,16 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Transfer Fee :"
+            android:text="@string/outfitter"
             style="@style/text_content"/>
 
         <TextView
-            android:id="@+id/tv_player_detail_team_transfer_fee"
+            android:id="@+id/tv_player_detail_outfitter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/text_content"
             android:layout_marginStart="4dp"
-            android:text="Team Transfer Fee"/>
+            android:text="@string/player_outfitter"/>
 
     </LinearLayout>
 
@@ -89,16 +89,60 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Wages :"
+            android:text="@string/kit"
             style="@style/text_content"/>
 
         <TextView
-            android:id="@+id/tv_player_detail_team_wage"
+            android:id="@+id/tv_player_detail_kit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/text_content"
             android:layout_marginStart="4dp"
-            android:text="Team Wages"/>
+            android:text="@string/player_kit"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/agent"
+            style="@style/text_content"/>
+
+        <TextView
+            android:id="@+id/tv_player_detail_agent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/text_content"
+            android:layout_marginStart="4dp"
+            android:text="@string/player_agent"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/team_detail_position_section"
+            style="@style/text_content"/>
+
+        <TextView
+            android:id="@+id/tv_player_detail_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/text_content"
+            android:layout_marginStart="4dp"
+            android:text="@string/player_position"/>
 
     </LinearLayout>
 
@@ -112,16 +156,16 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/team_detail_number_section"
+            android:text="@string/preferred_foot"
             style="@style/text_content"/>
 
         <TextView
-            android:id="@+id/tv_player_detail_team_number"
+            android:id="@+id/tv_player_detail_preferred_foot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/text_content"
             android:layout_marginStart="4dp"
-            android:text="@string/team_number"/>
+            android:text="@string/player_preferred_foot"/>
 
     </LinearLayout>
 
@@ -129,5 +173,6 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/color_grey_line"/>
+
 
 </LinearLayout>

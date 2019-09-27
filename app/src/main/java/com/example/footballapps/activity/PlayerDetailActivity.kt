@@ -26,7 +26,8 @@ import com.example.footballapps.view.PlayerDetailView
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_player_detail.*
 import kotlinx.android.synthetic.main.layout_player_detail_description.*
-import kotlinx.android.synthetic.main.layout_player_detail_info.*
+import kotlinx.android.synthetic.main.layout_player_detail_biodata.*
+import kotlinx.android.synthetic.main.layout_player_detail_title.*
 import kotlinx.android.synthetic.main.layout_player_detail_physique.*
 import kotlinx.android.synthetic.main.layout_player_detail_team_info.*
 import java.text.SimpleDateFormat
@@ -127,48 +128,41 @@ class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView {
             .into(player_detail_photo)
 
         player_detail_name.text = playerDetailItem?.playerName ?: "Name Unknown"
-        player_detail_nationality.text =
-            playerDetailItem?.playerNationality ?: "Nationality Unknown"
 
-        val dateOfBirth =
-            if (playerDetailItem?.playerBirthDate != null || playerDetailItem?.playerBirthDate != "") {
-                formatDate(playerDetailItem?.playerBirthDate)
-            } else {
-                "Date Unknown"
-            }
-
-        val birthLocation =
-            if (playerDetailItem?.playerBirthLocation != null || playerDetailItem?.playerBirthLocation != "") {
-                playerDetailItem?.playerBirthLocation
-            } else {
-                "Location Unknown"
-            }
-
-        player_detail_birth_date.text = StringBuilder("$birthLocation, $dateOfBirth")
-
-        // todo : ga tau napa bs kyk gt
-        val strongFoot = if(playerDetailItem?.playerStrongFoot != null || playerDetailItem?.playerStrongFoot != ""){
-            StringBuilder("Preferred Foot : ${playerDetailItem?.playerStrongFoot}").toString()
+        val dateOfBirth = if(playerDetailItem?.playerBirthDate != null || playerDetailItem?.playerBirthDate != "") {
+            formatDate(playerDetailItem?.playerBirthDate)
         } else {
-            "Preferred Foot : Unknown"
+            "Date Unknown"
         }
 
-        player_detail_strong_foot.text = strongFoot
+        val birthLocation = playerDetailItem?.playerBirthLocation ?: "Location Unknown"
+
+        tv_player_detail_date_of_birth.text = StringBuilder("$birthLocation, $dateOfBirth")
+
+        tv_player_detail_nationality.text =
+            playerDetailItem?.playerNationality ?: "Nationality Unknown"
+
+        tv_player_detail_outfitter.text = playerDetailItem?.playerOutfitter ?: "Outfitter Unknown"
+
+        tv_player_detail_kit.text = playerDetailItem?.playerKit ?: "Kit Unknown"
+
+        tv_player_detail_agent.text = playerDetailItem?.playerAgent ?: "Agent Unknown"
+
+        tv_player_detail_position.text = playerDetailItem?.playerPosition ?: "Position Unknown"
+
+        tv_player_detail_preferred_foot.text = playerDetailItem?.playerStrongFoot ?: "Preferred Foot Unknown"
 
         player_detail_height.text = playerDetailItem?.playerHeight ?: "Height Unknown"
         player_detail_weight.text = playerDetailItem?.playerWeight ?: "Weight Unknown"
 
         tv_player_detail_team_name.text = playerDetailItem?.playerTeam ?: "Team Unknown"
 
-        val dateSigned =
-            if (playerDetailItem?.playerSignedDate != null || playerDetailItem?.playerSignedDate != "") {
-                formatDate(playerDetailItem?.playerSignedDate)
-            } else {
-                "Date Signing Unknown"
-            }
+        tv_player_detail_team_date_signed.text = formatDate(playerDetailItem?.playerSignedDate)
 
-        tv_player_detail_team_date_signed.text = dateSigned
-        tv_player_detail_team_position.text = playerDetailItem?.playerPosition ?: "Position Unknown"
+        tv_player_detail_team_transfer_fee.text = playerDetailItem?.playerTransferFee ?: "Transfer Fee Unknown"
+
+        tv_player_detail_team_wage.text = playerDetailItem?.playerWages ?: "Wages Unknown"
+
         tv_player_detail_team_number.text = playerDetailItem?.playerShirtNumber ?: "Number Unknown"
 
         tv_player_detail_description.text =
@@ -194,9 +188,11 @@ class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView {
 
             formattedDateEvent
         } else {
-            MatchRecyclerViewAdapter.MatchViewHolder.dateUnknown
+            resources.getString(R.string.date_unknown)
         }
     }
+
+    // todo : tinggal pake unknown aja untuk string format biar lebih gampang dan efisien
 
     @Suppress("DEPRECATION")
     private fun checkNetworkConnection(): Boolean {

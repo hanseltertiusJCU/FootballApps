@@ -159,7 +159,20 @@
     <string name="player_description">Player Description</string>
     <string name="player_strong_foot">Player Strong Foot</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+    <!-- Player Info in Player Detail Section -->
+    <string name="player_biodata">Biodata</string>
+    <string name="nationality">Nationality :</string>
+    <string name="outfitter">Outfitter :</string>
+    <string name="player_outfitter">Player Outfitter</string>
+    <string name="kit">Kit :</string>
+    <string name="player_kit">Player Kit</string>
+    <string name="agent">Agent :</string>
+    <string name="player_agent">Player Agent</string>
+    <string name="preferred_foot">Preferred Foot :</string>
+    <string name="player_preferred_foot">Player Preferred Foot</string>
+    <string name="date_of_birth">Date of Birth :</string>
+    <string name="player_date_of_birth">Player Date of Birth</string>
+
 
     <!-- Unknown player data -->
 

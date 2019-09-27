@@ -28,7 +28,6 @@
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/english_premier_league"
                 android:contentDescription="@string/player_fanart"
                 app:layout_collapseMode="parallax"/>
 
@@ -73,9 +72,11 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0">
 
-                    <include layout="@layout/layout_player_detail_info"/>
+                    <include layout="@layout/layout_player_detail_title"/>
 
                     <include layout="@layout/layout_player_detail_physique"/>
+
+                    <include layout="@layout/layout_player_detail_biodata"/>
 
                     <include layout="@layout/layout_player_detail_team_info"/>
 
