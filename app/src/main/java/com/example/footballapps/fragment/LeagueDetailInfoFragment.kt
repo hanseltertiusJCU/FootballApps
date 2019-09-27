@@ -8,6 +8,7 @@ import android.net.NetworkInfo
 import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,15 +42,14 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
     private lateinit var tvLeagueDetailCountry: TextView
     private lateinit var ivLeagueDetailImage: ImageView
     private lateinit var tvLeagueDetailDesc: TextView
-    private lateinit var tvDescTitle: TextView
 
     private lateinit var leagueDetailPresenter: LeagueDetailPresenter
 
-    private lateinit var leagueDetailScrollView: ScrollView
-    private lateinit var leagueDetailSwipeRefreshLayout: SwipeRefreshLayout
-    private lateinit var leagueDetailLayout: RelativeLayout
-    private lateinit var leagueDetailErrorDataText: TextView
-    private lateinit var leagueDetailProgressBar: ProgressBar
+    private lateinit var leagueDetailInfoScrollView: ScrollView
+    private lateinit var leagueDetailInfoSwipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var leagueDetailInfoLayout: LinearLayout
+    private lateinit var leagueDetailInfoErrorDataText: TextView
+    private lateinit var leagueDetailInfoProgressBar: ProgressBar
 
     private lateinit var leagueId: String
 
@@ -61,12 +61,12 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
         return UI {
             constraintLayout {
                 id = R.id.container_layout_league_detail
-                leagueDetailSwipeRefreshLayout = swipeRefreshLayout {
+                leagueDetailInfoSwipeRefreshLayout = swipeRefreshLayout {
 
                     setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
 
-                    leagueDetailScrollView = scrollView {
-                        leagueDetailLayout = relativeLayout {
+                    leagueDetailInfoScrollView = scrollView {
+                        leagueDetailInfoLayout = verticalLayout {
                             id = R.id.league_detail_layout
                             padding = dip(16)
                             ivLeagueDetailImage = imageView {
@@ -74,51 +74,54 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
                             }.lparams {
                                 width = convertDpToPx(96f)
                                 height = convertDpToPx(96f)
-                                centerHorizontally()
+                                gravity = Gravity.CENTER_HORIZONTAL
                             }
 
                             tvLeagueDetailName = themedTextView(R.style.text_title) {
                                 id = R.id.tv_league_detail_name
                             }.lparams {
-                                centerHorizontally()
+                                gravity = Gravity.CENTER_HORIZONTAL
                                 topMargin = dip(8)
-                                bottomOf(R.id.iv_league_detail_image)
                             }
 
-                            tvLeagueDetailFormedYear = themedTextView(R.style.text_section) {
+                            tvLeagueDetailFormedYear = themedTextView(R.style.text_content) {
                                 id = R.id.tv_league_detail_formed_year
                             }.lparams {
-                                centerHorizontally()
+                                gravity = Gravity.CENTER_HORIZONTAL
                                 topMargin = dip(8)
-                                bottomOf(R.id.tv_league_detail_name)
                             }
 
-                            tvLeagueDetailCountry = themedTextView(R.style.text_section) {
+                            tvLeagueDetailCountry = themedTextView(R.style.text_content) {
                                 id = R.id.tv_league_detail_country
                             }.lparams {
-                                centerHorizontally()
+                                gravity = Gravity.CENTER_HORIZONTAL
                                 topMargin = dip(8)
-                                bottomOf(R.id.tv_league_detail_formed_year)
                             }
 
-                            tvDescTitle =
-                                themedTextView("Description : ", R.style.text_section) {
-                                    id = R.id.tv_desc_title
-                                }.lparams {
-                                    topMargin = dip(8)
-                                    bottomOf(R.id.tv_league_detail_country)
-                                }
+                            view {
+                                background = ContextCompat.getDrawable(context, R.color.color_grey_line)
+                            }.lparams {
+                                width = matchParent
+                                height = dip(1)
+                                topMargin = dip(8)
+                            }
+
+                            themedTextView("Description : ", R.style.text_section) {
+                                id = R.id.tv_desc_title
+                            }.lparams {
+                                topMargin = dip(8)
+                            }
                             tvLeagueDetailDesc = themedTextView(R.style.text_content) {
                                 id = R.id.tv_league_detail_desc
                             }.lparams {
+                                gravity = Gravity.CENTER_HORIZONTAL
                                 topMargin = dip(8)
-                                bottomOf(R.id.tv_desc_title)
                             }
                         }
                     }
                 }
 
-                leagueDetailProgressBar = progressBar {
+                leagueDetailInfoProgressBar = progressBar {
                     id = R.id.progress_bar
                 }.lparams {
                     width = convertDpToPx(48f)
@@ -129,7 +132,7 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
                     bottomToBottom = R.id.container_layout_league_detail
                 }
 
-                leagueDetailErrorDataText = themedTextView(R.style.text_content).lparams {
+                leagueDetailInfoErrorDataText = themedTextView(R.style.text_content).lparams {
                     topToTop = R.id.container_layout_league_detail
                     startToStart = R.id.container_layout_league_detail
                     endToEnd = R.id.container_layout_league_detail
@@ -153,42 +156,42 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
         EspressoIdlingResource.increment()
         leagueDetailPresenter.getLeagueDetailInfo(leagueId)
 
-        leagueDetailSwipeRefreshLayout.setOnRefreshListener {
+        leagueDetailInfoSwipeRefreshLayout.setOnRefreshListener {
             EspressoIdlingResource.increment()
             leagueDetailPresenter.getLeagueDetailInfo(leagueId)
         }
     }
 
     override fun dataIsLoading() {
-        leagueDetailProgressBar.visible()
-        leagueDetailErrorDataText.gone()
-        leagueDetailLayout.invisible()
+        leagueDetailInfoProgressBar.visible()
+        leagueDetailInfoErrorDataText.gone()
+        leagueDetailInfoLayout.invisible()
     }
 
     override fun dataLoadingFinished() {
         if(!EspressoIdlingResource.idlingResource.isIdleNow) {
             EspressoIdlingResource.decrement()
         }
-        leagueDetailSwipeRefreshLayout.isRefreshing = false
-        leagueDetailProgressBar.gone()
-        leagueDetailErrorDataText.gone()
-        leagueDetailLayout.visible()
+        leagueDetailInfoSwipeRefreshLayout.isRefreshing = false
+        leagueDetailInfoProgressBar.gone()
+        leagueDetailInfoErrorDataText.gone()
+        leagueDetailInfoLayout.visible()
     }
 
     override fun dataFailedToLoad() {
         if(!EspressoIdlingResource.idlingResource.isIdleNow) {
             EspressoIdlingResource.decrement()
         }
-        leagueDetailSwipeRefreshLayout.isRefreshing = false
-        leagueDetailProgressBar.gone()
-        leagueDetailErrorDataText.visible()
-        leagueDetailLayout.invisible()
+        leagueDetailInfoSwipeRefreshLayout.isRefreshing = false
+        leagueDetailInfoProgressBar.gone()
+        leagueDetailInfoErrorDataText.visible()
+        leagueDetailInfoLayout.invisible()
 
         val isNetworkConnected = checkNetworkConnection()
         if (isNetworkConnected) {
-            leagueDetailErrorDataText.text = resources.getString(R.string.no_data_to_show)
+            leagueDetailInfoErrorDataText.text = resources.getString(R.string.no_data_to_show)
         } else {
-            leagueDetailErrorDataText.text = resources.getString(R.string.no_internet_connection)
+            leagueDetailInfoErrorDataText.text = resources.getString(R.string.no_internet_connection)
         }
     }
 

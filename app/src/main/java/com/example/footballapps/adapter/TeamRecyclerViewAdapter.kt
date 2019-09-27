@@ -34,13 +34,6 @@ class TeamRecyclerViewAdapter(
                     orientation = LinearLayout.HORIZONTAL
                     backgroundResource = attr(R.attr.selectableItemBackground).resourceId
 
-//                    view {
-//                        background = ContextCompat.getDrawable(context, R.color.color_grey_line)
-//                    }.lparams {
-//                        width = matchParent
-//                        height = dip(1)
-//                    }
-
                     imageView {
                         id = R.id.team_badge
                     }.lparams {
