@@ -43,6 +43,14 @@
         <item>@drawable/english_league_1</item>
     </array>
 
+    <!-- League Detail -->
+    <string name="league_detail">League Detail</string>
+
+    <!-- League Detail Content Description -->
+    <string name="league_detail_logo_collapsed">League Detail Logo Collapsed</string>
+    <string name="league_detail_logo_expanded">League Detail Logo Expanded</string>
+    <string name="league_detail_logo_collapsing">League Detail Logo Collapsing</string>
+
     <!-- Data error -->
     <string name="no_data_to_show">No data to show</string>
     <string name="no_internet_connection">No internet connection</string>
@@ -126,16 +134,16 @@
     </string-array>
 
     <string-array name="seasons_text">
-        <item>2019/20</item>
-        <item>2018/19</item>
-        <item>2017/18</item>
-        <item>2016/17</item>
-        <item>2015/16</item>
-        <item>2014/15</item>
-        <item>2013/14</item>
-        <item>2012/13</item>
-        <item>2011/12</item>
-        <item>2010/11</item>
+        <item>Season 2019/20</item>
+        <item>Season 2018/19</item>
+        <item>Season 2017/18</item>
+        <item>Season 2016/17</item>
+        <item>Season 2015/16</item>
+        <item>Season 2014/15</item>
+        <item>Season 2013/14</item>
+        <item>Season 2012/13</item>
+        <item>Season 2011/12</item>
+        <item>Season 2010/11</item>
     </string-array>
 
     <!-- Team in League Table item -->

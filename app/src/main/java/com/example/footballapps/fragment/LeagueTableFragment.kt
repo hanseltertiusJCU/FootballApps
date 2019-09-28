@@ -66,24 +66,13 @@ class LeagueTableFragment : Fragment(), LeagueTableView{
                 id = R.id.league_table_parent_layout
                 lparams(width = matchParent, height = matchParent)
 
-                themedTextView("Season :", R.style.text_section){
-                    id = R.id.season_title
-                }.lparams {
-                    topToTop = R.id.league_table_parent_layout
-                    leftToLeft = R.id.league_table_parent_layout
-                    rightToRight = R.id.league_table_parent_layout
-                    horizontalBias = 0f
-                    topMargin = dip(16)
-                    leftMargin = dip(16)
-                }
-
                 leagueTableSpinner = spinner {
                     id = R.id.league_table_spinner
                 }.lparams {
                     width = matchParent
                     height = wrapContent
-                    margin = dip(8)
-                    topToBottom = R.id.season_title
+                    margin = dip(16)
+                    topToTop = R.id.league_table_parent_layout
                     leftToLeft = R.id.league_table_parent_layout
                     rightToRight = R.id.league_table_parent_layout
                     horizontalBias = 0f

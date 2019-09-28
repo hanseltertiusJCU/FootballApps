@@ -7,14 +7,13 @@ import android.net.NetworkCapabilities
 import android.net.NetworkInfo
 import android.os.Build
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
@@ -28,25 +27,21 @@ import com.example.footballapps.utils.invisible
 import com.example.footballapps.utils.visible
 import com.example.footballapps.view.LeagueDetailView
 import org.jetbrains.anko.*
-import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.constraint.layout.constraintLayout
-import org.jetbrains.anko.design.coordinatorLayout
-import org.jetbrains.anko.design.themedAppBarLayout
 import org.jetbrains.anko.support.v4.UI
+import org.jetbrains.anko.support.v4.nestedScrollView
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 
 class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
 
-    private lateinit var tvLeagueDetailName: TextView
     private lateinit var tvLeagueDetailFormedYear: TextView
     private lateinit var tvLeagueDetailCountry: TextView
-    private lateinit var ivLeagueDetailImage: ImageView
     private lateinit var ivLeagueDetailTrophy: ImageView
     private lateinit var tvLeagueDetailDesc: TextView
 
     private lateinit var leagueDetailPresenter: LeagueDetailPresenter
 
-    private lateinit var leagueDetailInfoScrollView: ScrollView
+    private lateinit var leagueDetailInfoNestedScrollView: NestedScrollView
     private lateinit var leagueDetailInfoSwipeRefreshLayout: SwipeRefreshLayout
     private lateinit var leagueDetailInfoLayout: LinearLayout
     private lateinit var leagueDetailInfoErrorDataText: TextView
@@ -60,42 +55,33 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
         savedInstanceState: Bundle?
     ): View? {
         return UI {
-            constraintLayout {
-                id = R.id.container_layout_league_detail
-                leagueDetailInfoSwipeRefreshLayout = swipeRefreshLayout {
+            leagueDetailInfoSwipeRefreshLayout = swipeRefreshLayout {
 
-                    setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
+                setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
 
-                    leagueDetailInfoScrollView = scrollView {
+                leagueDetailInfoNestedScrollView = nestedScrollView {
+                    constraintLayout {
+                        id = R.id.container_layout_league_detail
+
                         leagueDetailInfoLayout = verticalLayout {
                             id = R.id.league_detail_layout
                             padding = dip(16)
-                            ivLeagueDetailImage = imageView {
-                                id = R.id.iv_league_detail_image
-                            }.lparams {
-                                width = dip(128)
-                                height = dip(128)
-                                gravity = Gravity.CENTER_HORIZONTAL
-                            }
 
-                            tvLeagueDetailName = themedTextView(R.style.text_title) {
-                                id = R.id.tv_league_detail_name
+                            themedTextView("Info : ", R.style.text_section) {
+                                id = R.id.tv_desc_title
                             }.lparams {
-                                gravity = Gravity.CENTER_HORIZONTAL
                                 topMargin = dip(8)
                             }
 
                             tvLeagueDetailFormedYear = themedTextView(R.style.text_content) {
                                 id = R.id.tv_league_detail_formed_year
                             }.lparams {
-                                gravity = Gravity.CENTER_HORIZONTAL
                                 topMargin = dip(8)
                             }
 
                             tvLeagueDetailCountry = themedTextView(R.style.text_content) {
                                 id = R.id.tv_league_detail_country
                             }.lparams {
-                                gravity = Gravity.CENTER_HORIZONTAL
                                 topMargin = dip(8)
                             }
 
@@ -141,25 +127,27 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
                                 topMargin = dip(8)
                             }
                         }
+
+                        leagueDetailInfoProgressBar = progressBar {
+                            id = R.id.progress_bar
+                        }.lparams {
+                            width = dip(48)
+                            height = dip(48)
+                            topToTop = R.id.container_layout_league_detail
+                            startToStart = R.id.container_layout_league_detail
+                            endToEnd = R.id.container_layout_league_detail
+                            bottomToBottom = R.id.container_layout_league_detail
+                        }
+
+                        leagueDetailInfoErrorDataText = themedTextView(R.style.text_content).lparams {
+                            topToTop = R.id.container_layout_league_detail
+                            startToStart = R.id.container_layout_league_detail
+                            endToEnd = R.id.container_layout_league_detail
+                            bottomToBottom = R.id.container_layout_league_detail
+                        }
+
+
                     }
-                }
-
-                leagueDetailInfoProgressBar = progressBar {
-                    id = R.id.progress_bar
-                }.lparams {
-                    width = dip(48)
-                    height = dip(48)
-                    topToTop = R.id.container_layout_league_detail
-                    startToStart = R.id.container_layout_league_detail
-                    endToEnd = R.id.container_layout_league_detail
-                    bottomToBottom = R.id.container_layout_league_detail
-                }
-
-                leagueDetailInfoErrorDataText = themedTextView(R.style.text_content).lparams {
-                    topToTop = R.id.container_layout_league_detail
-                    startToStart = R.id.container_layout_league_detail
-                    endToEnd = R.id.container_layout_league_detail
-                    bottomToBottom = R.id.container_layout_league_detail
                 }
             }
         }.view
@@ -223,14 +211,7 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
 
         if (leagueItemList != null) {
             val leagueDetailItem = leagueItemList.first()
-
-            tvLeagueDetailName.text = leagueDetailItem.leagueName
             tvLeagueDetailDesc.text = leagueDetailItem.leagueDescription
-
-            Glide.with(context!!)
-                .load(leagueDetailItem.leagueBadge)
-                .placeholder(R.drawable.empty_league_image_info)
-                .into(ivLeagueDetailImage)
 
             Glide.with(context!!)
                 .load(leagueDetailItem.leagueTrophy)
@@ -238,7 +219,7 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
                 .into(ivLeagueDetailTrophy)
 
             tvLeagueDetailFormedYear.text =
-                StringBuilder("est. ${leagueDetailItem.leagueFormedYear}")
+                StringBuilder("Formed Year : ${leagueDetailItem.leagueFormedYear}")
             tvLeagueDetailCountry.text = StringBuilder("Based in ${leagueDetailItem.leagueCountry}")
         }
     }

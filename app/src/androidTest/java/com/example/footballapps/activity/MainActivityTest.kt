@@ -16,8 +16,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.example.footballapps.R
 import com.example.footballapps.espresso.EspressoIdlingResource
-import org.hamcrest.Matchers.allOf
-import org.hamcrest.Matchers.anything
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -27,6 +25,7 @@ import com.google.android.material.appbar.AppBarLayout
 import androidx.test.espresso.ViewAction
 import com.example.footballapps.action.CustomViewActions
 import org.hamcrest.Matcher
+import org.hamcrest.Matchers.*
 
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest {
@@ -47,6 +46,10 @@ class MainActivityTest {
         onView(withId(R.id.rv_league_list)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(4, click()))
 
         // todo : this is league detail
+        onView(withId(R.id.iv_league_detail_logo)).check(matches(withContentDescription(R.string.league_detail_logo_expanded)))
+        onView(withId(R.id.league_detail_app_bar_layout)).perform(click(), swipeUp())
+        onView(withId(R.id.iv_league_detail_logo)).check(matches(anyOf(withContentDescription(R.string.league_detail_logo_collapsed), withContentDescription(R.string.league_detail_logo_collapsing))))
+
         onView(withId(R.id.league_detail_layout)).check(matches(isDisplayed()))
         onView(withId(R.id.view_pager_league_detail)).perform(swipeLeft())
         onView(withId(R.id.rv_league_table)).check(matches(isDisplayed()))
@@ -71,6 +74,8 @@ class MainActivityTest {
             typeText("liverpool"),
             pressImeActionButton()
         )
+
+        Espresso.pressBack()
 
         onView(withId(R.id.rv_league_match)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_league_match)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(4))
