@@ -135,8 +135,6 @@ class FavoriteTeamFragment : Fragment(), AnkoComponent<Context>, FavoriteTeamVie
         favoriteTeamSearchItem?.collapseActionView()
     }
 
-    override fun onResumeFragment() {}
-
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
         if(hidden){

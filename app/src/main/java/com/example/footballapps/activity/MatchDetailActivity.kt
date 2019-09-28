@@ -31,7 +31,6 @@ import kotlinx.android.synthetic.main.activity_match_detail.*
 import kotlinx.android.synthetic.main.layout_match_detail_event_info.*
 import kotlinx.android.synthetic.main.layout_match_detail_teams_info.*
 import kotlinx.android.synthetic.main.layout_match_detail_teams_stats.*
-import okhttp3.internal.format
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.delete
 import org.jetbrains.anko.db.insert
@@ -49,7 +48,7 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
     private lateinit var homeTeamId: String
     private lateinit var awayTeamId: String
 
-    private var matchItem : MatchItem? = null
+    private var matchItem: MatchItem? = null
     private var favMatchItem: FavoriteMatchItem? = null
 
     private lateinit var matchDetailPresenter: MatchDetailPresenter
@@ -67,8 +66,8 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
     private fun initData() {
         val intent = intent
 
-        matchItem = intent.getParcelableExtra<MatchItem>("matchItem")
-        favMatchItem = intent.getParcelableExtra<FavoriteMatchItem>("favMatchItem")
+        matchItem = intent.getParcelableExtra("matchItem")
+        favMatchItem = intent.getParcelableExtra("favMatchItem")
 
         when {
             matchItem != null -> {
@@ -126,7 +125,7 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
     }
 
     override fun dataLoadingFinished() {
-        if(!EspressoIdlingResource.idlingResource.isIdleNow) {
+        if (!EspressoIdlingResource.idlingResource.isIdleNow) {
             EspressoIdlingResource.decrement()
         }
         match_detail_swipe_refresh_layout.isRefreshing = false
@@ -136,7 +135,7 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
     }
 
     override fun dataFailedToLoad() {
-        if(!EspressoIdlingResource.idlingResource.isIdleNow) {
+        if (!EspressoIdlingResource.idlingResource.isIdleNow) {
             EspressoIdlingResource.decrement()
         }
         match_detail_swipe_refresh_layout.isRefreshing = false
@@ -157,8 +156,10 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
         val matchDetailResponse = combinedMatchTeamsResponse.matchDetailResponse
         val matchDetailItem = matchDetailResponse.events?.first()
 
-        match_detail_league_name.text = matchDetailItem?.leagueName ?: resources.getString(R.string.value_none)
-        match_detail_match_week.text = StringBuilder("Week ${formatValue(matchDetailItem?.leagueMatchWeek)}")
+        match_detail_league_name.text =
+            matchDetailItem?.leagueName ?: resources.getString(R.string.value_none)
+        match_detail_match_week.text =
+            StringBuilder("Week ${formatValue(matchDetailItem?.leagueMatchWeek)}")
 
         val localizedDateTime = convertDateTimeToLocalTimeZone(
             formatDate(matchDetailItem?.dateEvent),
@@ -168,12 +169,17 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
         match_detail_event_date.text = localizedDateTime[0]
         match_detail_event_time.text = localizedDateTime[1]
 
-        match_detail_home_team_name.text = matchDetailItem?.homeTeamName ?: resources.getString(R.string.value_none)
-        match_detail_home_team_score.text = matchDetailItem?.homeTeamScore ?: resources.getString(R.string.value_none)
-        match_detail_away_team_score.text = matchDetailItem?.awayTeamScore ?: resources.getString(R.string.value_none)
-        match_detail_away_team_name.text = matchDetailItem?.awayTeamName ?: resources.getString(R.string.value_none)
+        match_detail_home_team_name.text =
+            matchDetailItem?.homeTeamName ?: resources.getString(R.string.value_none)
+        match_detail_home_team_score.text =
+            matchDetailItem?.homeTeamScore ?: resources.getString(R.string.value_none)
+        match_detail_away_team_score.text =
+            matchDetailItem?.awayTeamScore ?: resources.getString(R.string.value_none)
+        match_detail_away_team_name.text =
+            matchDetailItem?.awayTeamName ?: resources.getString(R.string.value_none)
 
-        tv_match_detail_spectators.text = StringBuilder("Spectators : ${formatValue(matchDetailItem?.spectators)}")
+        tv_match_detail_spectators.text =
+            StringBuilder("Spectators : ${formatValue(matchDetailItem?.spectators)}")
 
         match_detail_home_goal_scorers.text =
             createTextFromStringValue(matchDetailItem?.homeTeamGoalDetails)
@@ -248,8 +254,8 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
             .into(match_detail_away_team_logo)
     }
 
-    private fun formatValue(stringValue : String?) : String {
-        return if(stringValue != null && stringValue.trim().isNotEmpty()) {
+    private fun formatValue(stringValue: String?): String {
+        return if (stringValue != null && stringValue.trim().isNotEmpty()) {
             stringValue
         } else {
             resources.getString(R.string.value_unknown)
@@ -343,14 +349,9 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
                 true
             }
             R.id.action_add_to_favorite -> {
-                // todo: if fav match item not null or match item not null else pake snackbar
                 if (favMatchItem != null || matchItem != null) {
-                    if (isEventFavorite) removeMatchFromFavoriteMatches() else addMatchToFavoriteMatches()
-
-                    isEventFavorite = !isEventFavorite
-                    setFavoriteMatchIcon()
+                    changeFavoriteMatchState()
                 }
-
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -400,8 +401,11 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
                     }
                 }
             }
-            // todo: tinggal tambahin undo action
-            match_detail_swipe_refresh_layout.snackbar("Add an event into favorites").show()
+            match_detail_swipe_refresh_layout.snackbar("Add an event into favorites").setAction(
+                getString(
+                    R.string.undo
+                )
+            ) { changeFavoriteMatchState() }.show()
         } catch (e: SQLiteConstraintException) {
             match_detail_swipe_refresh_layout.snackbar(e.localizedMessage).show()
         }
@@ -417,11 +421,21 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
                 )
 
             }
-            // todo : tinggal tambahin undo
-            match_detail_swipe_refresh_layout.snackbar("Remove an event from favorites").show()
+            match_detail_swipe_refresh_layout.snackbar("Remove an event from favorites").setAction(
+                getString(
+                    R.string.undo
+                )
+            ) { changeFavoriteMatchState() }.show()
         } catch (e: SQLiteConstraintException) {
             match_detail_swipe_refresh_layout.snackbar(e.localizedMessage).show()
         }
+    }
+
+    private fun changeFavoriteMatchState() {
+        if (isEventFavorite) removeMatchFromFavoriteMatches() else addMatchToFavoriteMatches()
+
+        isEventFavorite = !isEventFavorite
+        setFavoriteMatchIcon()
     }
 
     private fun setFavoriteMatchIcon() {

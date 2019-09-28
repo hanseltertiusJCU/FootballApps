@@ -229,12 +229,9 @@ class LeagueTeamsFragment : Fragment(), TeamsView, FragmentLifecycle{
         leagueTeamsRvAdapter.notifyDataSetChanged()
     }
 
-    // todo : tinggal pake lifecycle on pause fragment saja
     override fun onPauseFragment() {
         leagueTeamSearchItem?.collapseActionView()
     }
-
-    override fun onResumeFragment() {}
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_search, menu)

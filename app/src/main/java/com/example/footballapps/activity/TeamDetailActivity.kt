@@ -30,7 +30,6 @@ class TeamDetailActivity : AppCompatActivity() {
     private lateinit var teamName: String
     private lateinit var teamId: String
 
-    // todo : fragmentpageradapter ganti jadi teamdetailviewpageradapter, mungkin viewpageradapter bisa di jadiin 1 aja
     private lateinit var teamDetailViewPagerAdapter: ViewPagerAdapter
 
     private val teamDetailInfoFragment = TeamDetailInfoFragment()
@@ -42,7 +41,6 @@ class TeamDetailActivity : AppCompatActivity() {
 
     private var currentPosition: Int = 0
 
-    // todo : rapiin beberapa section dari code
     private var menu: Menu? = null
     private var isTeamFavorite: Boolean = false
 
@@ -57,8 +55,8 @@ class TeamDetailActivity : AppCompatActivity() {
 
     private fun initData() {
         val intent = intent
-        teamItem = intent.getParcelableExtra<TeamItem>("teamItem")
-        favTeamItem = intent.getParcelableExtra<FavoriteTeamItem>("favoriteTeamItem")
+        teamItem = intent.getParcelableExtra("teamItem")
+        favTeamItem = intent.getParcelableExtra("favoriteTeamItem")
 
         when {
             teamItem != null -> {
@@ -120,7 +118,6 @@ class TeamDetailActivity : AppCompatActivity() {
                 val newPosition = tab?.position!!
 
                 if(currentPosition == 1) {
-                    // todo: tinggal pake pause di fragment lifecycle
                     val fragmentToHide =
                         teamDetailViewPagerAdapter.getItem(currentPosition) as FragmentLifecycle
                     fragmentToHide.onPauseFragment()
@@ -154,10 +151,7 @@ class TeamDetailActivity : AppCompatActivity() {
             }
             R.id.action_add_to_favorite -> {
                 if (favTeamItem != null || teamItem != null) {
-                    if (isTeamFavorite) removeTeamFromFavoriteTeams() else addTeamToFavoriteTeams()
-
-                    isTeamFavorite = !isTeamFavorite
-                    setFavoriteTeamIcon()
+                    changeFavoriteTeamState()
                 }
                 true
             }
@@ -189,7 +183,7 @@ class TeamDetailActivity : AppCompatActivity() {
                     }
                 }
             }
-            team_detail_coordinator_layout.snackbar("Add a team into favorites").show()
+            team_detail_coordinator_layout.snackbar("Add a team into favorites").setAction(getString(R.string.undo)){changeFavoriteTeamState()}.show()
         } catch (e: SQLiteConstraintException) {
             team_detail_coordinator_layout.snackbar(e.localizedMessage).show()
         }
@@ -204,7 +198,7 @@ class TeamDetailActivity : AppCompatActivity() {
                     "teamId" to teamId
                 )
             }
-            team_detail_coordinator_layout.snackbar("Remove a team from favorites").show()
+            team_detail_coordinator_layout.snackbar("Remove a team from favorites").setAction(getString(R.string.undo)){changeFavoriteTeamState()}.show()
         } catch (e: SQLiteConstraintException) {
             team_detail_coordinator_layout.snackbar(e.localizedMessage).show()
         }
@@ -218,6 +212,13 @@ class TeamDetailActivity : AppCompatActivity() {
             this.menu?.getItem(0)?.icon =
                 ContextCompat.getDrawable(this, R.drawable.ic_add_to_favorites)
         }
+    }
+
+    private fun changeFavoriteTeamState() {
+        if (isTeamFavorite) removeTeamFromFavoriteTeams() else addTeamToFavoriteTeams()
+
+        isTeamFavorite = !isTeamFavorite
+        setFavoriteTeamIcon()
     }
 
     private fun checkFavoriteTeamState() {

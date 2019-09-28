@@ -259,8 +259,6 @@ class LeagueMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
         leagueMatchSearchItem?.collapseActionView()
     }
 
-    override fun onResumeFragment() {}
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_search, menu)
 

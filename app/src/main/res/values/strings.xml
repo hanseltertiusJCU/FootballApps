@@ -199,9 +199,8 @@
     <string name="player_description">Player Description</string>
 
 
-
-
-    <!-- Unknown player data -->
+    <!-- Snackbar Action -->
+    <string name="undo">UNDO</string>
 
 
 </resources>

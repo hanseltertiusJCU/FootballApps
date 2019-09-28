@@ -37,9 +37,6 @@ import org.jetbrains.anko.support.v4.swipeRefreshLayout
 import org.jetbrains.anko.themedTextView
 import org.jetbrains.anko.wrapContent
 
-/**
- * A simple [Fragment] subclass.
- */
 class TeamPlayersFragment : Fragment(), PlayersView {
 
     private lateinit var teamPlayersRecyclerView : RecyclerView
@@ -107,9 +104,7 @@ class TeamPlayersFragment : Fragment(), PlayersView {
     private fun initData(){
         teamId = arguments?.getString("teamId") ?: "133604"
 
-        // todo : tinggal pake adapter
         teamPlayersRvAdapter = PlayerRecyclerViewAdapter(context!!, teamPlayers){
-            // todo: implement it
             startActivity<PlayerDetailActivity>("playerItem" to it)
         }
 

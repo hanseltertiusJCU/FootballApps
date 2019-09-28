@@ -147,8 +147,8 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
                 leagueDetailInfoProgressBar = progressBar {
                     id = R.id.progress_bar
                 }.lparams {
-                    width = convertDpToPx(48f)
-                    height = convertDpToPx(48f)
+                    width = dip(48)
+                    height = dip(48)
                     topToTop = R.id.container_layout_league_detail
                     startToStart = R.id.container_layout_league_detail
                     endToEnd = R.id.container_layout_league_detail
@@ -241,17 +241,6 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
                 StringBuilder("est. ${leagueDetailItem.leagueFormedYear}")
             tvLeagueDetailCountry.text = StringBuilder("Based in ${leagueDetailItem.leagueCountry}")
         }
-    }
-
-
-    private fun convertDpToPx(dp: Float): Int {
-        val r = resources
-        val px = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            dp,
-            r.displayMetrics
-        )
-        return px.toInt()
     }
 
     @Suppress("DEPRECATION")
