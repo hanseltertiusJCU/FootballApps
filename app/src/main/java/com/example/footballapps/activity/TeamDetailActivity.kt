@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.example.footballapps.R
-import com.example.footballapps.adapter.TeamDetailViewPagerAdapter
+import com.example.footballapps.adapter.ViewPagerAdapter
 import com.example.footballapps.favorite.FavoriteTeamItem
 import com.example.footballapps.fragment.TeamDetailInfoFragment
 import com.example.footballapps.fragment.TeamMatchesFragment
@@ -31,7 +31,7 @@ class TeamDetailActivity : AppCompatActivity() {
     private lateinit var teamId: String
 
     // todo : fragmentpageradapter ganti jadi teamdetailviewpageradapter, mungkin viewpageradapter bisa di jadiin 1 aja
-    private lateinit var teamDetailViewPagerAdapter: TeamDetailViewPagerAdapter
+    private lateinit var teamDetailViewPagerAdapter: ViewPagerAdapter
 
     private val teamDetailInfoFragment = TeamDetailInfoFragment()
     private val teamMatchesFragment = TeamMatchesFragment()
@@ -93,7 +93,7 @@ class TeamDetailActivity : AppCompatActivity() {
     }
 
     private fun setupViewPager(viewPager: ViewPager) {
-        teamDetailViewPagerAdapter = TeamDetailViewPagerAdapter(supportFragmentManager)
+        teamDetailViewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
         teamDetailViewPagerAdapter.addFragment(teamDetailInfoFragment, "Info")
         teamDetailViewPagerAdapter.addFragment(teamMatchesFragment, "Matches")
         teamDetailViewPagerAdapter.addFragment(teamPlayersFragment, "Players")

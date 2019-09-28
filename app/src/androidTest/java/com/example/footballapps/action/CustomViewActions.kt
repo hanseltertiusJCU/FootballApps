@@ -27,24 +27,6 @@ class CustomViewActions {
                 }
             }
         }
-
-        fun expandAppBarLayout(): ViewAction {
-            return object : ViewAction {
-                override fun getConstraints(): Matcher<View> {
-                    return isAssignableFrom(AppBarLayout::class.java)
-                }
-
-                override fun getDescription(): String {
-                    return "Collapse App Bar Layout"
-                }
-
-                override fun perform(uiController: UiController, view: View) {
-                    val appBarLayout = view as AppBarLayout
-                    appBarLayout.setExpanded(true)
-                    uiController.loopMainThreadUntilIdle()
-                }
-            }
-        }
     }
 
 

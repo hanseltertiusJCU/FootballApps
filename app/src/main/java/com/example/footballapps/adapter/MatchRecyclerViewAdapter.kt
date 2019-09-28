@@ -10,6 +10,7 @@ import com.example.footballapps.R
 import com.example.footballapps.application.FootballApps
 import com.example.footballapps.model.MatchItem
 import kotlinx.android.synthetic.main.item_match_data.view.*
+import java.lang.StringBuilder
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -40,22 +41,15 @@ class MatchRecyclerViewAdapter(
     class MatchViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         companion object {
-            // todo : mungkin pake unknown aja biar lebih efisien
-            val leagueNameUnknown = FootballApps.res.getString(R.string.league_unknown)
-            val matchWeekUnknown = FootballApps.res.getString(R.string.match_week_unknown)
-            val homeTeamNameUnknown = FootballApps.res.getString(R.string.home_team_unknown)
-            val awayTeamNameUnknown = FootballApps.res.getString(R.string.away_team_unknown)
             val dateUnknown = FootballApps.res.getString(R.string.date_unknown)
             val timeUnknown = FootballApps.res.getString(R.string.time_unknown)
+            val valueUnknown = FootballApps.res.getString(R.string.value_unknown)
+            val valueNone = FootballApps.res.getString(R.string.value_none)
         }
 
         fun bindItem(matchItem: MatchItem, clickListener: (MatchItem) -> Unit) {
-            // todo : tinggal benahin unknown nya
-            itemView.league_item_name.text = matchItem.leagueName ?: leagueNameUnknown
-            itemView.league_item_match_week.text = when {
-                matchItem.leagueMatchWeek != null -> StringBuilder("Week ${matchItem.leagueMatchWeek}")
-                else -> matchWeekUnknown
-            }
+            itemView.league_item_name.text = matchItem.leagueName ?: StringBuilder("League ${formatValue(matchItem.leagueName)}")
+            itemView.league_item_match_week.text = StringBuilder("Week ${formatValue(matchItem.leagueMatchWeek)}")
 
             val arrayLocalTimeDt = convertDateTimeToLocalTimeZone(
                 formatDate(matchItem.dateEvent),
@@ -66,17 +60,32 @@ class MatchRecyclerViewAdapter(
 
             itemView.league_item_event_time.text = arrayLocalTimeDt[1]
 
-            // todo : tinggal pasang unknown and - value
-            itemView.league_item_home_team_name.text = matchItem.homeTeamName ?: homeTeamNameUnknown
+            itemView.league_item_home_team_name.text = formatValue(matchItem.homeTeamName)
 
-            itemView.league_item_home_team_score.text = matchItem.homeTeamScore ?: "-"
+            itemView.league_item_home_team_score.text = formatValueData(matchItem.homeTeamScore)
 
-            itemView.league_item_away_team_score.text = matchItem.awayTeamScore ?: "-"
+            itemView.league_item_away_team_score.text = formatValueData(matchItem.awayTeamScore)
 
-            itemView.league_item_away_team_name.text = matchItem.awayTeamName ?: awayTeamNameUnknown
+            itemView.league_item_away_team_name.text = formatValue(matchItem.awayTeamName)
 
             itemView.setOnClickListener {
                 clickListener(matchItem)
+            }
+        }
+
+        private fun formatValueData(valueData : String?) : String{
+            return if(valueData != null && valueData.trim().isNotEmpty()){
+                valueData
+            } else {
+                valueNone
+            }
+        }
+
+        private fun formatValue(stringValue : String?) : String {
+            return if(stringValue != null && stringValue.trim().isNotEmpty()) {
+                stringValue
+            } else {
+                valueUnknown
             }
         }
 

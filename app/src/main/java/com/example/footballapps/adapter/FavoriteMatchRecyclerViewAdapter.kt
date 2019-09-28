@@ -36,41 +36,52 @@ class FavoriteMatchRecyclerViewAdapter(
     class FavoriteMatchViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         companion object {
-            val leagueNameUnknown = FootballApps.res.getString(R.string.league_unknown)
-            val matchWeekUnknown = FootballApps.res.getString(R.string.match_week_unknown)
-            val homeTeamNameUnknown = FootballApps.res.getString(R.string.home_team_unknown)
-            val awayTeamNameUnknown = FootballApps.res.getString(R.string.away_team_unknown)
             val dateUnknown = FootballApps.res.getString(R.string.date_unknown)
             val timeUnknown = FootballApps.res.getString(R.string.time_unknown)
+            val valueUnknown = FootballApps.res.getString(R.string.value_unknown)
+            val valueNone = FootballApps.res.getString(R.string.value_none)
         }
 
         fun bindItem(
             favoriteMatchItem: FavoriteMatchItem,
             clickListener: (FavoriteMatchItem) -> Unit
         ) {
-            itemView.league_item_name.text = favoriteMatchItem.leagueName ?: leagueNameUnknown
-            itemView.league_item_match_week.text = when {
-                favoriteMatchItem.leagueMatchWeek != null -> StringBuilder("Week ${favoriteMatchItem.leagueMatchWeek}")
-                else -> matchWeekUnknown
-            }
+            itemView.league_item_name.text = favoriteMatchItem.leagueName ?: StringBuilder(
+                "League ${formatValue(favoriteMatchItem.leagueName)}"
+            )
+            itemView.league_item_match_week.text = StringBuilder("Week ${formatValue(favoriteMatchItem.leagueMatchWeek)}")
 
             val arrayLocalTimeDt = convertDateTimeToLocalTimeZone(formatDate(favoriteMatchItem.dateEvent), formatTime(favoriteMatchItem.timeEvent))
 
             itemView.league_item_event_date.text = arrayLocalTimeDt[0]
             itemView.league_item_event_time.text = arrayLocalTimeDt[1]
 
-            itemView.league_item_home_team_name.text =
-                favoriteMatchItem.homeTeamName ?: homeTeamNameUnknown
+            itemView.league_item_home_team_name.text = formatValue(favoriteMatchItem.homeTeamName)
 
-            itemView.league_item_home_team_score.text = favoriteMatchItem.homeTeamScore ?: "-"
+            itemView.league_item_home_team_score.text = formatValueData(favoriteMatchItem.homeTeamScore)
 
-            itemView.league_item_away_team_score.text = favoriteMatchItem.awayTeamScore ?: "-"
+            itemView.league_item_away_team_score.text = formatValueData(favoriteMatchItem.awayTeamScore)
 
-            itemView.league_item_away_team_name.text =
-                favoriteMatchItem.awayTeamName ?: awayTeamNameUnknown
+            itemView.league_item_away_team_name.text = formatValue(favoriteMatchItem.awayTeamName)
 
             itemView.setOnClickListener {
                 clickListener(favoriteMatchItem)
+            }
+        }
+
+        private fun formatValueData(valueData : String?) : String{
+            return if(valueData != null && valueData.trim().isNotEmpty()){
+                valueData
+            } else {
+                valueNone
+            }
+        }
+
+        private fun formatValue(stringValue : String?) : String {
+            return if(stringValue != null && stringValue.trim().isNotEmpty()) {
+                stringValue
+            } else {
+                valueUnknown
             }
         }
 

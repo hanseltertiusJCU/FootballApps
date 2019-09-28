@@ -36,10 +36,8 @@ class PlayerRecyclerViewAdapter
 
     class PlayerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         companion object {
-            val playerNameUnknown = FootballApps.res.getString(R.string.player_name_unknown)
-            val playerNationalityUnknown = FootballApps.res.getString(R.string.player_nationality_unknown)
-            val playerPositionUnknown = FootballApps.res.getString(R.string.player_position_unknown)
-            val playerNumberUnknown = FootballApps.res.getString(R.string.player_number_unknown)
+            val valueUnknown = FootballApps.res.getString(R.string.value_unknown)
+            val valueNone = FootballApps.res.getString(R.string.value_none)
         }
 
         fun bindItem(playerItem: PlayerItem, clickListener: (PlayerItem) -> Unit) {
@@ -48,15 +46,24 @@ class PlayerRecyclerViewAdapter
                 .placeholder(R.drawable.ic_player_picture_placeholder)
                 .into(itemView.iv_player_photo)
 
-            itemView.tv_player_name.text = playerItem.playerName ?: playerNameUnknown
+            itemView.tv_player_name.text = playerItem.playerName ?: valueUnknown
             itemView.tv_player_nationality.text =
-                playerItem.playerNationality ?: playerNationalityUnknown
-            itemView.tv_player_position.text = playerItem.playerPosition ?: playerPositionUnknown
-            itemView.tv_player_number.text = playerItem.playerShirtNumber ?: playerNumberUnknown
+                playerItem.playerNationality ?: valueUnknown
+            itemView.tv_player_position.text = playerItem.playerPosition ?: valueUnknown
+            itemView.tv_player_number.text = StringBuilder("#${formatValueData(playerItem.playerShirtNumber)}")
 
             itemView.setOnClickListener {
                 clickListener(playerItem)
             }
         }
+
+        private fun formatValueData(valueData : String?) : String{
+            return if(valueData != null && valueData.trim().isNotEmpty()){
+                valueData
+            } else {
+                valueNone
+            }
+        }
+
     }
 }

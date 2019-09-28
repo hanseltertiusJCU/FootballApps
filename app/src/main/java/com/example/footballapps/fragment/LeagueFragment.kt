@@ -25,6 +25,7 @@ import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.dip
 import org.jetbrains.anko.support.v4.startActivity
+import org.jetbrains.anko.wrapContent
 
 /**
  * A simple [Fragment] subclass.
@@ -79,6 +80,9 @@ class LeagueFragment : Fragment(), AnkoComponent<Context>, LeagueView {
             recyclerViewLeagueList = recyclerView {
                 id = R.id.rv_league_list
                 isNestedScrollingEnabled = false
+            }.lparams {
+                width = matchParent
+                height = wrapContent
             }
         }
     }

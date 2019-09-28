@@ -5,7 +5,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.example.footballapps.R
-import com.example.footballapps.adapter.LeagueDetailViewPagerAdapter
+import com.example.footballapps.adapter.ViewPagerAdapter
 import com.example.footballapps.fragment.LeagueDetailInfoFragment
 import com.example.footballapps.fragment.LeagueMatchesFragment
 import com.example.footballapps.fragment.LeagueTableFragment
@@ -22,7 +22,7 @@ class LeagueDetailActivity : AppCompatActivity() {
     private lateinit var leagueName: String
     private lateinit var leagueId: String
 
-    lateinit var leagueDetailViewPagerAdapter: LeagueDetailViewPagerAdapter
+    lateinit var leagueDetailViewPagerAdapter: ViewPagerAdapter
 
     private val leagueDetailInfoFragment = LeagueDetailInfoFragment()
     private val leagueTableFragment = LeagueTableFragment()
@@ -71,7 +71,7 @@ class LeagueDetailActivity : AppCompatActivity() {
     }
 
     private fun setupViewPager(viewPager: ViewPager) {
-        leagueDetailViewPagerAdapter = LeagueDetailViewPagerAdapter(supportFragmentManager)
+        leagueDetailViewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
         leagueDetailViewPagerAdapter.addFragment(leagueDetailInfoFragment, "Info")
         leagueDetailViewPagerAdapter.addFragment(leagueTableFragment, "Table")
         leagueDetailViewPagerAdapter.addFragment(leagueTeamsFragment, "Teams")

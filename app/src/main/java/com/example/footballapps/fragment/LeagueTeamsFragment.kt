@@ -82,8 +82,6 @@ class LeagueTeamsFragment : Fragment(), TeamsView, FragmentLifecycle{
                     leagueTeamsRecyclerView = recyclerView {
                         id = R.id.rv_league_teams
                         lparams(width = matchParent, height = wrapContent)
-                        // todo : layout managernya d ganti
-                        layoutManager = LinearLayoutManager(context)
                     }
 
                 }.lparams{

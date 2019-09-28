@@ -31,6 +31,7 @@ import kotlinx.android.synthetic.main.activity_match_detail.*
 import kotlinx.android.synthetic.main.layout_match_detail_event_info.*
 import kotlinx.android.synthetic.main.layout_match_detail_teams_info.*
 import kotlinx.android.synthetic.main.layout_match_detail_teams_stats.*
+import okhttp3.internal.format
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.delete
 import org.jetbrains.anko.db.insert
@@ -156,11 +157,8 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
         val matchDetailResponse = combinedMatchTeamsResponse.matchDetailResponse
         val matchDetailItem = matchDetailResponse.events?.first()
 
-        match_detail_league_name.text = matchDetailItem?.leagueName ?: "-"
-        match_detail_match_week.text = when {
-            matchDetailItem?.leagueMatchWeek != null -> StringBuilder("Week ${matchDetailItem.leagueMatchWeek}")
-            else -> resources.getString(R.string.match_week_unknown)
-        }
+        match_detail_league_name.text = matchDetailItem?.leagueName ?: resources.getString(R.string.value_none)
+        match_detail_match_week.text = StringBuilder("Week ${formatValue(matchDetailItem?.leagueMatchWeek)}")
 
         val localizedDateTime = convertDateTimeToLocalTimeZone(
             formatDate(matchDetailItem?.dateEvent),
@@ -170,15 +168,12 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
         match_detail_event_date.text = localizedDateTime[0]
         match_detail_event_time.text = localizedDateTime[1]
 
-        match_detail_home_team_name.text = matchDetailItem?.homeTeamName ?: "-"
-        match_detail_home_team_score.text = matchDetailItem?.homeTeamScore ?: "-"
-        match_detail_away_team_score.text = matchDetailItem?.awayTeamScore ?: "-"
-        match_detail_away_team_name.text = matchDetailItem?.awayTeamName ?: "-"
+        match_detail_home_team_name.text = matchDetailItem?.homeTeamName ?: resources.getString(R.string.value_none)
+        match_detail_home_team_score.text = matchDetailItem?.homeTeamScore ?: resources.getString(R.string.value_none)
+        match_detail_away_team_score.text = matchDetailItem?.awayTeamScore ?: resources.getString(R.string.value_none)
+        match_detail_away_team_name.text = matchDetailItem?.awayTeamName ?: resources.getString(R.string.value_none)
 
-        tv_match_detail_spectators.text = when {
-            matchDetailItem?.spectators != null -> StringBuilder("Spectators : ${matchDetailItem.spectators}")
-            else -> resources.getString(R.string.spectators_unknown)
-        }
+        tv_match_detail_spectators.text = StringBuilder("Spectators : ${formatValue(matchDetailItem?.spectators)}")
 
         match_detail_home_goal_scorers.text =
             createTextFromStringValue(matchDetailItem?.homeTeamGoalDetails)
@@ -253,6 +248,14 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
             .into(match_detail_away_team_logo)
     }
 
+    private fun formatValue(stringValue : String?) : String {
+        return if(stringValue != null && stringValue.trim().isNotEmpty()) {
+            stringValue
+        } else {
+            resources.getString(R.string.value_unknown)
+        }
+    }
+
     private fun createTextFromStringValue(stringValue: String?): String {
         if (stringValue != null && stringValue.isNotEmpty()) {
             val arrayStringValue = stringValue.split(";")
@@ -271,7 +274,7 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
 
             return stringBuilder.toString()
         } else {
-            return "-"
+            return resources.getString(R.string.value_none)
         }
 
     }

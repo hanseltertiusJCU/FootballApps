@@ -3,8 +3,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp">
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp">
 
     <View
         android:layout_width="match_parent"
@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             style="@style/text_content"
             android:layout_weight="1"
+            android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/position"/>
 
@@ -33,6 +34,7 @@
             android:layout_height="wrap_content"
             style="@style/text_content"
             android:layout_weight="4"
+            android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/team_name"/>
 
@@ -42,6 +44,7 @@
             android:layout_height="wrap_content"
             style="@style/text_content"
             android:layout_weight="1"
+            android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/games_played"/>
 
@@ -51,6 +54,7 @@
             android:layout_height="wrap_content"
             style="@style/text_content"
             android:layout_weight="1"
+            android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/game_won"/>
 
@@ -60,6 +64,7 @@
             android:layout_height="wrap_content"
             style="@style/text_content"
             android:layout_weight="1"
+            android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/game_tied"/>
 
@@ -69,6 +74,7 @@
             android:layout_height="wrap_content"
             style="@style/text_content"
             android:layout_weight="1"
+            android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/game_lost"/>
 
@@ -78,6 +84,7 @@
             android:layout_height="wrap_content"
             style="@style/text_content"
             android:layout_weight="1"
+            android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/goal_scored"/>
 
@@ -87,6 +94,7 @@
             android:layout_height="wrap_content"
             style="@style/text_content"
             android:layout_weight="1"
+            android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/goal_conceded"/>
 
@@ -96,6 +104,7 @@
             android:layout_height="wrap_content"
             style="@style/text_content"
             android:layout_weight="1"
+            android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/goal_difference"/>
 
@@ -105,6 +114,7 @@
             android:layout_height="wrap_content"
             style="@style/text_content_bold"
             android:layout_weight="1"
+            android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/pts"/>
 
