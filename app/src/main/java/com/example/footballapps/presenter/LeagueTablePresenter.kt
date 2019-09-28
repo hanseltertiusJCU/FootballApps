@@ -12,8 +12,6 @@ class LeagueTablePresenter(
     fun getLeagueTableInfo(leagueId : String, leagueSeason : String){
         leagueTableView.dataIsLoading()
 
-        // todo : tinggal modif
-
         leagueTableRepository.getLeagueTable(
             leagueId,
             leagueSeason,

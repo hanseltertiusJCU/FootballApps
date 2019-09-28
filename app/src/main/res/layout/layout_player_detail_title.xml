@@ -11,8 +11,8 @@
 
     <ImageView
         android:id="@+id/player_detail_photo"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
         android:layout_gravity="center_horizontal"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_player_picture_placeholder"

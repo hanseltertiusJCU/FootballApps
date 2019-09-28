@@ -14,7 +14,7 @@ class LeagueTableRepository {
     fun getLeagueTable(id: String, season: String, callback : LeagueTableRepositoryCallback<LeagueTableResponse?>){
         RetrofitClient
             .createService(LeagueTableService::class.java)
-            .getLeagueTableResponseSeason(id, season)
+            .getLeagueTableResponse(id, season)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : Observer<LeagueTableResponse> {

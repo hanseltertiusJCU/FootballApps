@@ -94,5 +94,7 @@ data class TeamItem(
     @SerializedName("strTeamBadge")
     var teamBadge: String?,
     @SerializedName("strSport")
-    var sportType : String?
+    var sportType : String?,
+    @SerializedName("strTeamJersey")
+    var teamJersey : String?
 ) : Parcelable

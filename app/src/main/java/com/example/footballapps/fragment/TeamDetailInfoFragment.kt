@@ -45,6 +45,7 @@ class TeamDetailInfoFragment : Fragment(), TeamDetailView {
     private lateinit var tvTeamDetailInfoStadiumDescription : TextView
     private lateinit var tvTeamDetailInfoDescription : TextView
     private lateinit var ivTeamDetailInfoBadge : ImageView
+    private lateinit var ivTeamDetailJersey : ImageView
 
     private lateinit var teamDetailPresenter: TeamDetailPresenter
 
@@ -74,8 +75,8 @@ class TeamDetailInfoFragment : Fragment(), TeamDetailView {
                             ivTeamDetailInfoBadge = imageView {
                                 id = R.id.iv_team_detail_image
                             }.lparams{
-                                width = dip(96)
-                                height = dip(96)
+                                width = dip(128)
+                                height = dip(128)
                                 gravity = Gravity.CENTER_HORIZONTAL
                             }
 
@@ -169,6 +170,29 @@ class TeamDetailInfoFragment : Fragment(), TeamDetailView {
                             tvTeamDetailInfoStadiumDescription = themedTextView(R.style.text_content){
                                 id = R.id.tv_stadium_description
                             }.lparams{
+                                topMargin = dip(8)
+                            }
+
+                            view {
+                                background = ContextCompat.getDrawable(context, R.color.color_grey_line)
+                            }.lparams {
+                                width = matchParent
+                                height = dip(1)
+                                topMargin = dip(8)
+                            }
+
+                            themedTextView("Team Jersey : ", R.style.text_section){
+                                id = R.id.tv_team_description_title
+                            }.lparams{
+                                topMargin = dip(8)
+                            }
+
+                            ivTeamDetailJersey = imageView{
+                                id = R.id.tv_team_jersey
+                            }.lparams{
+                                width = dip(128)
+                                height = dip(128)
+                                gravity = Gravity.CENTER_HORIZONTAL
                                 topMargin = dip(8)
                             }
 
@@ -281,6 +305,11 @@ class TeamDetailInfoFragment : Fragment(), TeamDetailView {
                 .load(teamItem.teamBadge)
                 .placeholder(R.drawable.team_badge_placeholder)
                 .into(ivTeamDetailInfoBadge)
+
+            Glide.with(context!!)
+                .load(teamItem.teamJersey)
+                .placeholder(R.drawable.jersey_placeholder)
+                .into(ivTeamDetailJersey)
 
             tvTeamDetailInfoName.text = teamItem.teamName
             tvTeamDetailInfoFormedYear.text = StringBuilder("est. ${teamItem.teamFormedYear}")

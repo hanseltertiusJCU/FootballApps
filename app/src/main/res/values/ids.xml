@@ -11,10 +11,7 @@
     <item name="toolbar_league_detail" type="id" />
     <item name="container_layout_league_detail" type="id" />
     <item name="league_detail_layout" type="id" />
-
-    <!-- Last match fragment -->
-
-    <!-- Next match fragment -->
+    <item name="iv_league_detail_trophy" type="id" />
 
     <!-- Favorite match fragment -->
     <item name="favorite_match_parent_layout" type="id" />
@@ -51,6 +48,7 @@
     <item name="container_layout_team_detail" type="id" />
     <item name="team_detail_layout" type="id" />
     <item name="iv_team_detail_image" type="id" />
+    <item name="tv_team_jersey" type="id" />
     <item name="tv_team_detail_name" type="id" />
     <item name="tv_team_detail_formed_year" type="id" />
     <item name="tv_team_detail_country" type="id" />
@@ -79,7 +77,6 @@
     <!-- Favorite team item -->
     <item name="favorite_team_badge" type="id" />
     <item name="favorite_team_name" type="id" />
-
 
 
 </resources>

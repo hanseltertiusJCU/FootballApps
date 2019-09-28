@@ -41,6 +41,7 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
     private lateinit var tvLeagueDetailFormedYear: TextView
     private lateinit var tvLeagueDetailCountry: TextView
     private lateinit var ivLeagueDetailImage: ImageView
+    private lateinit var ivLeagueDetailTrophy: ImageView
     private lateinit var tvLeagueDetailDesc: TextView
 
     private lateinit var leagueDetailPresenter: LeagueDetailPresenter
@@ -72,8 +73,8 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
                             ivLeagueDetailImage = imageView {
                                 id = R.id.iv_league_detail_image
                             }.lparams {
-                                width = convertDpToPx(96f)
-                                height = convertDpToPx(96f)
+                                width = dip(128)
+                                height = dip(128)
                                 gravity = Gravity.CENTER_HORIZONTAL
                             }
 
@@ -94,6 +95,28 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
                             tvLeagueDetailCountry = themedTextView(R.style.text_content) {
                                 id = R.id.tv_league_detail_country
                             }.lparams {
+                                gravity = Gravity.CENTER_HORIZONTAL
+                                topMargin = dip(8)
+                            }
+
+                            view {
+                                background = ContextCompat.getDrawable(context, R.color.color_grey_line)
+                            }.lparams {
+                                width = matchParent
+                                height = dip(1)
+                                topMargin = dip(8)
+                            }
+
+                            themedTextView("Trophy : ", R.style.text_section) {
+                                id = R.id.tv_desc_title
+                            }.lparams {
+                                topMargin = dip(8)
+                            }
+                            ivLeagueDetailTrophy = imageView {
+                                id = R.id.iv_league_detail_trophy
+                            }.lparams {
+                                width = dip(128)
+                                height = dip(128)
                                 gravity = Gravity.CENTER_HORIZONTAL
                                 topMargin = dip(8)
                             }
@@ -208,6 +231,11 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
                 .load(leagueDetailItem.leagueBadge)
                 .placeholder(R.drawable.empty_league_image_info)
                 .into(ivLeagueDetailImage)
+
+            Glide.with(context!!)
+                .load(leagueDetailItem.leagueTrophy)
+                .placeholder(R.drawable.trophy_placeholder)
+                .into(ivLeagueDetailTrophy)
 
             tvLeagueDetailFormedYear.text =
                 StringBuilder("est. ${leagueDetailItem.leagueFormedYear}")

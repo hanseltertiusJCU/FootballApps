@@ -2,7 +2,6 @@ package com.example.footballapps.model
 
 data class SeasonOption(val season : String, val seasonString : String) {
 
-    // todo : to string
     override fun toString() : String {
         return seasonString
     }
