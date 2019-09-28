@@ -50,6 +50,7 @@ class MatchRecyclerViewAdapter(
         }
 
         fun bindItem(matchItem: MatchItem, clickListener: (MatchItem) -> Unit) {
+            // todo : tinggal benahin unknown nya
             itemView.league_item_name.text = matchItem.leagueName ?: leagueNameUnknown
             itemView.league_item_match_week.text = when {
                 matchItem.leagueMatchWeek != null -> StringBuilder("Week ${matchItem.leagueMatchWeek}")
@@ -65,6 +66,7 @@ class MatchRecyclerViewAdapter(
 
             itemView.league_item_event_time.text = arrayLocalTimeDt[1]
 
+            // todo : tinggal pasang unknown and - value
             itemView.league_item_home_team_name.text = matchItem.homeTeamName ?: homeTeamNameUnknown
 
             itemView.league_item_home_team_score.text = matchItem.homeTeamScore ?: "-"

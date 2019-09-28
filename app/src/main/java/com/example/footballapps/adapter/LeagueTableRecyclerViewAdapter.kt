@@ -31,6 +31,9 @@ class LeagueTableRecyclerViewAdapter(
     }
 
     class LeagueTableViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+        // todo : itnggal modify aja
+
         fun bindItem(teamInLeagueTable: TeamInTableItem, position: Int) {
             val teamPosition = position + 1
 

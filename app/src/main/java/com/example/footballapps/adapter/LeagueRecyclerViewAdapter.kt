@@ -82,7 +82,7 @@ class LeagueRecyclerViewAdapter(
                         contentDescription = R.string.league_image.toString()
                     }.lparams {
                         width = matchParent
-                        height = convertDpToPx(128f, context)
+                        height = dip(128)
                     }
 
                     themedTextView(R.style.text_content) {
@@ -97,14 +97,6 @@ class LeagueRecyclerViewAdapter(
 
                 }.lparams(width = matchParent, height = matchParent)
             }
-        }
-
-        private fun convertDpToPx(dp: Float, context: Context): Int {
-            return TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                dp,
-                context.resources.displayMetrics
-            ).toInt()
         }
 
     }

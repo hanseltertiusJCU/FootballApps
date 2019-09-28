@@ -74,8 +74,8 @@ class TeamDetailInfoFragment : Fragment(), TeamDetailView {
                             ivTeamDetailInfoBadge = imageView {
                                 id = R.id.iv_team_detail_image
                             }.lparams{
-                                width = convertDpToPx(96f)
-                                height = convertDpToPx(96f)
+                                width = dip(96)
+                                height = dip(96)
                                 gravity = Gravity.CENTER_HORIZONTAL
                             }
 
@@ -172,6 +172,14 @@ class TeamDetailInfoFragment : Fragment(), TeamDetailView {
                                 topMargin = dip(8)
                             }
 
+                            view {
+                                background = ContextCompat.getDrawable(context, R.color.color_grey_line)
+                            }.lparams {
+                                width = matchParent
+                                height = dip(1)
+                                topMargin = dip(8)
+                            }
+
                             themedTextView("Team Description : ", R.style.text_section){
                                 id = R.id.tv_team_description_title
                             }.lparams{
@@ -191,8 +199,8 @@ class TeamDetailInfoFragment : Fragment(), TeamDetailView {
                 }
 
                 teamDetailInfoProgressBar = progressBar().lparams {
-                    width = convertDpToPx(48f)
-                    height = convertDpToPx(48f)
+                    width = dip(48)
+                    height = dip(48)
                     topToTop = R.id.container_layout_team_detail
                     startToStart = R.id.container_layout_team_detail
                     endToEnd = R.id.container_layout_team_detail
@@ -278,7 +286,6 @@ class TeamDetailInfoFragment : Fragment(), TeamDetailView {
             tvTeamDetailInfoFormedYear.text = StringBuilder("est. ${teamItem.teamFormedYear}")
             tvTeamDetailInfoCountry.text = StringBuilder("Based in ${teamItem.teamCountry}")
 
-            // todo : tinggal pake string builder untuk beberapa section
             tvTeamDetailInfoLeague.text = teamItem.teamLeague
 
             tvTeamDetailInfoStadiumName.text = StringBuilder("Name : ${teamItem.teamStadium}")
@@ -290,17 +297,6 @@ class TeamDetailInfoFragment : Fragment(), TeamDetailView {
         }
     }
 
-    // todo : mungkin dp to px itu ga perlu
-
-    private fun convertDpToPx(dp: Float): Int {
-        val r = resources
-        val px = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            dp,
-            r.displayMetrics
-        )
-        return px.toInt()
-    }
 
     @Suppress("DEPRECATION")
     private fun checkNetworkConnection(): Boolean {

@@ -11,10 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.NumberPicker
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +21,7 @@ import com.example.footballapps.R
 import com.example.footballapps.adapter.LeagueTableRecyclerViewAdapter
 import com.example.footballapps.espresso.EspressoIdlingResource
 import com.example.footballapps.model.LeagueTableResponse
+import com.example.footballapps.model.SeasonOption
 import com.example.footballapps.model.TeamInTableItem
 import com.example.footballapps.presenter.LeagueTablePresenter
 import com.example.footballapps.repository.LeagueTableRepository
@@ -47,6 +45,7 @@ class LeagueTableFragment : Fragment(), LeagueTableView{
     private lateinit var leagueTableSwipeRefreshLayout : SwipeRefreshLayout
     private lateinit var leagueTableErrorText : TextView
     private lateinit var leagueTableLayout : LinearLayout
+    private lateinit var leagueTableSpinner : Spinner
 
     private lateinit var leagueTablePresenter: LeagueTablePresenter
 
@@ -54,6 +53,8 @@ class LeagueTableFragment : Fragment(), LeagueTableView{
     private lateinit var leagueTableRvAdapter : LeagueTableRecyclerViewAdapter
 
     private lateinit var leagueId : String
+
+    private lateinit var seasonValue : String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,6 +65,29 @@ class LeagueTableFragment : Fragment(), LeagueTableView{
             constraintLayout {
                 id = R.id.league_table_parent_layout
                 lparams(width = matchParent, height = matchParent)
+
+                themedTextView("Season :", R.style.text_section){
+                    id = R.id.season_title
+                }.lparams {
+                    topToTop = R.id.league_table_parent_layout
+                    leftToLeft = R.id.league_table_parent_layout
+                    rightToRight = R.id.league_table_parent_layout
+                    horizontalBias = 0f
+                    topMargin = dip(16)
+                    leftMargin = dip(16)
+                }
+
+                leagueTableSpinner = spinner {
+                    id = R.id.league_table_spinner
+                }.lparams {
+                    width = matchParent
+                    height = wrapContent
+                    margin = dip(8)
+                    topToBottom = R.id.season_title
+                    leftToLeft = R.id.league_table_parent_layout
+                    rightToRight = R.id.league_table_parent_layout
+                    horizontalBias = 0f
+                }
 
                 leagueTableSwipeRefreshLayout = swipeRefreshLayout {
 
@@ -88,8 +112,7 @@ class LeagueTableFragment : Fragment(), LeagueTableView{
                 }.lparams{
                     width = matchConstraint
                     height = matchConstraint
-                    margin = dip(16)
-                    topToTop = R.id.league_table_parent_layout
+                    topToBottom = R.id.league_table_spinner
                     leftToLeft = R.id.league_table_parent_layout
                     rightToRight = R.id.league_table_parent_layout
                     bottomToBottom = R.id.league_table_parent_layout
@@ -128,12 +151,37 @@ class LeagueTableFragment : Fragment(), LeagueTableView{
 
         leagueTablePresenter = LeagueTablePresenter(this, LeagueTableRepository())
 
-        EspressoIdlingResource.increment()
-        leagueTablePresenter.getLeagueTableInfo(leagueId)
+        val seasonValueList = resources.getStringArray(R.array.seasons_value)
+        val seasonTextList = resources.getStringArray(R.array.seasons_text)
+
+        val seasonOptions = mutableListOf<SeasonOption>()
+
+        for(i in seasonValueList.indices){
+            seasonOptions.add(SeasonOption(seasonValueList[i], seasonTextList[i]))
+        }
+
+        val spinnerAdapter = ArrayAdapter(activity!!.applicationContext, android.R.layout.simple_spinner_dropdown_item, seasonOptions)
+
+        leagueTableSpinner.adapter = spinnerAdapter
+
+        leagueTableSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedLeagueOption = parent!!.selectedItem as SeasonOption
+
+                seasonValue = selectedLeagueOption.season
+
+                EspressoIdlingResource.increment()
+                leagueTablePresenter.getLeagueTableInfo(leagueId, seasonValue)
+            }
+
+        }
+
 
         leagueTableSwipeRefreshLayout.onRefresh {
             EspressoIdlingResource.increment()
-            leagueTablePresenter.getLeagueTableInfo(leagueId)
+            leagueTablePresenter.getLeagueTableInfo(leagueId, seasonValue)
         }
     }
 

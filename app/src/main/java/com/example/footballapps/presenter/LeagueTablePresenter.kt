@@ -9,11 +9,14 @@ class LeagueTablePresenter(
     private val leagueTableView : LeagueTableView,
     private val leagueTableRepository : LeagueTableRepository
 ) {
-    fun getLeagueTableInfo(leagueId : String){
+    fun getLeagueTableInfo(leagueId : String, leagueSeason : String){
         leagueTableView.dataIsLoading()
+
+        // todo : tinggal modif
 
         leagueTableRepository.getLeagueTable(
             leagueId,
+            leagueSeason,
             object : LeagueTableRepositoryCallback<LeagueTableResponse?> {
             override fun onDataLoaded(data: LeagueTableResponse?) {
                 leagueTableView.showLeagueTable(data!!)

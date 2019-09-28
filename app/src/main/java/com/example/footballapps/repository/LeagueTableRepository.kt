@@ -11,10 +11,10 @@ import io.reactivex.schedulers.Schedulers
 
 class LeagueTableRepository {
 
-    fun getLeagueTable(id: String, callback : LeagueTableRepositoryCallback<LeagueTableResponse?>){
+    fun getLeagueTable(id: String, season: String, callback : LeagueTableRepositoryCallback<LeagueTableResponse?>){
         RetrofitClient
             .createService(LeagueTableService::class.java)
-            .getLeagueTableResponseSeason(id, "1920")
+            .getLeagueTableResponseSeason(id, season)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : Observer<LeagueTableResponse> {

@@ -35,7 +35,9 @@
 
     <!-- League Table -->
     <item name="league_table_parent_layout" type="id" />
+    <item name="season_title" type="id" />
     <item name="rv_league_table" type="id" />
+    <item name="league_table_spinner" type="id" />
 
     <!-- League Matches -->
     <item name="league_match_parent_layout" type="id" />
@@ -77,6 +79,7 @@
     <!-- Favorite team item -->
     <item name="favorite_team_badge" type="id" />
     <item name="favorite_team_name" type="id" />
+
 
 
 </resources>

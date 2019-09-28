@@ -40,10 +40,12 @@ class LeagueTablePresenterTest {
 
         val id = "4328"
 
-        leagueTablePresenter.getLeagueTableInfo(id)
+        val season = "1920"
+
+        leagueTablePresenter.getLeagueTableInfo(id, season)
 
         argumentCaptor<LeagueTableRepositoryCallback<LeagueTableResponse?>>().apply {
-            verify(leagueTableRepository).getLeagueTable(eq(id), capture())
+            verify(leagueTableRepository).getLeagueTable(eq(id), eq(season), capture())
             firstValue.onDataLoaded(leagueTableResponse)
         }
 
@@ -58,10 +60,12 @@ class LeagueTablePresenterTest {
     fun getFailedLeagueTableInfoTest() {
         val id = ""
 
-        leagueTablePresenter.getLeagueTableInfo(id)
+        val season = ""
+
+        leagueTablePresenter.getLeagueTableInfo(id, season)
 
         argumentCaptor<LeagueTableRepositoryCallback<LeagueTableResponse?>>().apply {
-            verify(leagueTableRepository).getLeagueTable(eq(id), capture())
+            verify(leagueTableRepository).getLeagueTable(eq(id), eq(season), capture())
             firstValue.onDataError()
         }
 

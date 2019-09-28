@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">FootballApps</string>
 
+    <!-- League -->
     <string name="league_image">League Image</string>
 
     <string-array name="league_id">
@@ -109,6 +110,33 @@
     <string name="soccer_ball">Soccer Ball</string>
     <string name="yellow_cards">Yellow Cards</string>
     <string name="red_cards">Red Cards</string>
+
+    <!-- League Seasons -->
+    <string-array name="seasons_value">
+        <item>1920</item>
+        <item>1819</item>
+        <item>1718</item>
+        <item>1617</item>
+        <item>1516</item>
+        <item>1415</item>
+        <item>1314</item>
+        <item>1213</item>
+        <item>1112</item>
+        <item>1011</item>
+    </string-array>
+
+    <string-array name="seasons_text">
+        <item>2019/20</item>
+        <item>2018/19</item>
+        <item>2017/18</item>
+        <item>2016/17</item>
+        <item>2015/16</item>
+        <item>2014/15</item>
+        <item>2013/14</item>
+        <item>2012/13</item>
+        <item>2011/12</item>
+        <item>2010/11</item>
+    </string-array>
 
     <!-- Team in League Table item -->
     <string name="position">P</string>
