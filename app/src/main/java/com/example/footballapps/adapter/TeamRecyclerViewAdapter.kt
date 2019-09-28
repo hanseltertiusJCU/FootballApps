@@ -1,5 +1,7 @@
 package com.example.footballapps.adapter
 
+import android.graphics.drawable.GradientDrawable
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -11,6 +13,7 @@ import com.example.footballapps.R
 import com.example.footballapps.model.TeamItem
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.*
+import org.jetbrains.anko.cardview.v7.cardView
 
 class TeamRecyclerViewAdapter(
     private val teams: List<TeamItem>,
@@ -28,31 +31,36 @@ class TeamRecyclerViewAdapter(
     class TeamUI : AnkoComponent<ViewGroup> {
         override fun createView(ui: AnkoContext<ViewGroup>): View {
             return with(ui) {
-                linearLayout {
+                cardView {
+                    background = GradientDrawable().apply {
+                        shape = GradientDrawable.RECTANGLE
+                        cornerRadius = dip(5).toFloat()
+                        setStroke(1, ContextCompat.getColor(context, android.R.color.darker_gray))
+                        elevation = dip(4).toFloat()
+                    }
                     lparams(width = matchParent, height = wrapContent)
-                    padding = dip(16)
-                    orientation = LinearLayout.HORIZONTAL
-                    backgroundResource = attr(R.attr.selectableItemBackground).resourceId
 
-                    imageView {
-                        id = R.id.team_badge
-                    }.lparams {
-                        height = dip(48)
-                        width = dip(48)
-                    }
+                    verticalLayout {
+                        backgroundResource = attr(R.attr.selectableItemBackgroundBorderless).resourceId
 
-                    themedTextView(R.style.text_content) {
-                        id = R.id.team_name
-                    }.lparams {
-                        margin = dip(16)
-                    }
+                        imageView {
+                            id = R.id.team_badge
+                            scaleType = ImageView.ScaleType.CENTER_CROP
+                        }.lparams {
+                            width = matchParent
+                            height = dip(128)
+                        }
 
-//                    view {
-//                        background = ContextCompat.getDrawable(context, R.color.color_grey_line)
-//                    }.lparams {
-//                        width = matchParent
-//                        height = dip(1)
-//                    }
+                        themedTextView(R.style.text_content) {
+                            id = R.id.team_name
+                            gravity = Gravity.CENTER
+                        }.lparams {
+                            margin = dip(8)
+                            width = matchParent
+                            height = matchParent
+                        }
+
+                    }.lparams(width = matchParent, height = matchParent)
                 }
             }
         }
@@ -64,10 +72,8 @@ class TeamRecyclerViewAdapter(
         private val teamName: TextView = view.find(R.id.team_name)
 
         fun bindItem(team: TeamItem, listener: (TeamItem) -> Unit) {
-            Picasso.get()
-                .load(team.teamBadge)
-                .placeholder(R.drawable.team_badge_placeholder)
-                .into(teamBadge)
+
+            team.teamBadge.let { Picasso.get().load(it).placeholder(R.drawable.team_badge_placeholder).fit().into(teamBadge) }
 
             teamName.text = team.teamName
             itemView.setOnClickListener { listener(team) }

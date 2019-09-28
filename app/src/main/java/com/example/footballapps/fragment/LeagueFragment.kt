@@ -23,6 +23,7 @@ import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.constraint.layout.constraintLayout
 import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.recyclerview.v7.recyclerView
+import org.jetbrains.anko.support.v4.dip
 import org.jetbrains.anko.support.v4.startActivity
 
 /**
@@ -87,17 +88,7 @@ class LeagueFragment : Fragment(), AnkoComponent<Context>, LeagueView {
         recyclerViewLeagueList.adapter = LeagueRecyclerViewAdapter(leagueInfoList) {
             startActivity<LeagueDetailActivity>("leagueItem" to it)
         }
-        recyclerViewLeagueList.addItemDecoration(GridSpacingItemDecoration(spanCount = spanCount, space = convertDpToPx(16f), includeEdge = includeEdge))
-    }
-
-    private fun convertDpToPx(dp: Float): Int {
-        val r = resources
-        val px = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            dp,
-            r.displayMetrics
-        )
-        return px.toInt()
+        recyclerViewLeagueList.addItemDecoration(GridSpacingItemDecoration(spanCount = spanCount, space = dip(16), includeEdge = includeEdge))
     }
 
 

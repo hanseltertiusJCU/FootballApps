@@ -15,6 +15,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -24,6 +25,7 @@ import com.example.footballapps.adapter.FavoriteTeamRecyclerViewAdapter
 import com.example.footballapps.favorite.FavoriteTeamItem
 import com.example.footballapps.lifecycle.FragmentLifecycle
 import com.example.footballapps.presenter.FavoriteTeamPresenter
+import com.example.footballapps.utils.GridSpacingItemDecoration
 import com.example.footballapps.utils.gone
 import com.example.footballapps.utils.invisible
 import com.example.footballapps.utils.visible
@@ -32,6 +34,7 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.constraint.layout.constraintLayout
 import org.jetbrains.anko.constraint.layout.matchConstraint
 import org.jetbrains.anko.recyclerview.v7.recyclerView
+import org.jetbrains.anko.support.v4.dip
 import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 
@@ -52,6 +55,9 @@ class FavoriteTeamFragment : Fragment(), AnkoComponent<Context>, FavoriteTeamVie
     private var isDataLoading = false
     private var isSearching = false
 
+    private val spanCount = 2
+    private val includeEdge = true
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -68,7 +74,6 @@ class FavoriteTeamFragment : Fragment(), AnkoComponent<Context>, FavoriteTeamVie
             favoriteTeamRecyclerView = recyclerView {
                 id = R.id.rv_favorite_team
                 lparams(width = matchParent, height = wrapContent)
-                layoutManager = LinearLayoutManager(context)
             }
 
             favoriteTeamProgressBar = progressBar().lparams{
@@ -199,7 +204,11 @@ class FavoriteTeamFragment : Fragment(), AnkoComponent<Context>, FavoriteTeamVie
             context?.startActivity<TeamDetailActivity>("favoriteTeamItem" to it)
         }
 
+        favoriteTeamRecyclerView.layoutManager = GridLayoutManager(context, spanCount)
+
         favoriteTeamRecyclerView.adapter = favoriteTeamRvAdapter
+
+        favoriteTeamRecyclerView.addItemDecoration(GridSpacingItemDecoration(spanCount = spanCount, space = dip(16), includeEdge = includeEdge))
 
         favoriteTeamPresenter = FavoriteTeamPresenter(this, context!!)
 

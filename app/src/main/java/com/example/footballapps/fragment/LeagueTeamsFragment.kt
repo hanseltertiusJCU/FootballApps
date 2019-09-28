@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -26,6 +27,7 @@ import com.example.footballapps.model.TeamItem
 import com.example.footballapps.model.TeamResponse
 import com.example.footballapps.presenter.TeamsPresenter
 import com.example.footballapps.repository.TeamsRepository
+import com.example.footballapps.utils.GridSpacingItemDecoration
 import com.example.footballapps.utils.gone
 import com.example.footballapps.utils.invisible
 import com.example.footballapps.utils.visible
@@ -35,10 +37,7 @@ import org.jetbrains.anko.constraint.layout.matchConstraint
 import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.progressBar
 import org.jetbrains.anko.recyclerview.v7.recyclerView
-import org.jetbrains.anko.support.v4.UI
-import org.jetbrains.anko.support.v4.onRefresh
-import org.jetbrains.anko.support.v4.startActivity
-import org.jetbrains.anko.support.v4.swipeRefreshLayout
+import org.jetbrains.anko.support.v4.*
 import org.jetbrains.anko.themedTextView
 import org.jetbrains.anko.wrapContent
 
@@ -56,11 +55,14 @@ class LeagueTeamsFragment : Fragment(), TeamsView, FragmentLifecycle{
 
     private lateinit var leagueId : String
 
-    var leagueTeamSearchItem : MenuItem? = null
+    private var leagueTeamSearchItem : MenuItem? = null
     private var leagueTeamSearchView : SearchView? = null
 
     private var isDataLoading = false
     private var isSearching = false
+
+    private val spanCount = 2
+    private val includeEdge = true
 
 
     override fun onCreateView(
@@ -80,6 +82,7 @@ class LeagueTeamsFragment : Fragment(), TeamsView, FragmentLifecycle{
                     leagueTeamsRecyclerView = recyclerView {
                         id = R.id.rv_league_teams
                         lparams(width = matchParent, height = wrapContent)
+                        // todo : layout managernya d ganti
                         layoutManager = LinearLayoutManager(context)
                     }
 
@@ -123,7 +126,11 @@ class LeagueTeamsFragment : Fragment(), TeamsView, FragmentLifecycle{
             startActivity<TeamDetailActivity>("teamItem" to it)
         }
 
+        leagueTeamsRecyclerView.layoutManager = GridLayoutManager(context, spanCount)
+
         leagueTeamsRecyclerView.adapter = leagueTeamsRvAdapter
+
+        leagueTeamsRecyclerView.addItemDecoration(GridSpacingItemDecoration(spanCount = spanCount, space = dip(16), includeEdge = includeEdge))
 
         leagueTeamsPresenter = TeamsPresenter(this, TeamsRepository())
 

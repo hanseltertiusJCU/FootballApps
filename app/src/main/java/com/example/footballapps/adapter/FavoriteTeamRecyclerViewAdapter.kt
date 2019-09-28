@@ -1,16 +1,20 @@
 package com.example.footballapps.adapter
 
 import android.content.Context
+import android.graphics.drawable.GradientDrawable
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.footballapps.R
 import com.example.footballapps.favorite.FavoriteTeamItem
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.*
+import org.jetbrains.anko.cardview.v7.cardView
 
 class FavoriteTeamRecyclerViewAdapter (private val favoriteTeamItemList : List<FavoriteTeamItem>, private val clickListener : (FavoriteTeamItem) -> Unit) : RecyclerView.Adapter<FavoriteTeamRecyclerViewAdapter.FavoriteTeamViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteTeamViewHolder =
@@ -26,24 +30,37 @@ class FavoriteTeamRecyclerViewAdapter (private val favoriteTeamItemList : List<F
     class FavoriteTeamUI : AnkoComponent<ViewGroup> {
         override fun createView(ui: AnkoContext<ViewGroup>): View {
             return with(ui){
-                linearLayout {
+
+                cardView {
+                    background = GradientDrawable().apply {
+                        shape = GradientDrawable.RECTANGLE
+                        cornerRadius = dip(5).toFloat()
+                        setStroke(1, ContextCompat.getColor(context, android.R.color.darker_gray))
+                        elevation = dip(4).toFloat()
+                    }
                     lparams(width = matchParent, height = wrapContent)
-                    padding = dip(16)
-                    orientation = LinearLayout.HORIZONTAL
-                    backgroundResource = attr(R.attr.selectableItemBackground).resourceId
 
-                    imageView {
-                        id = R.id.favorite_team_badge
-                    }.lparams{
-                        height = dip(48)
-                        width = dip(48)
-                    }
+                    verticalLayout {
+                        backgroundResource = attr(R.attr.selectableItemBackgroundBorderless).resourceId
 
-                    themedTextView(R.style.text_content) {
-                        id = R.id.favorite_team_name
-                    }.lparams{
-                        margin = dip(16)
-                    }
+                        imageView {
+                            id = R.id.favorite_team_badge
+                            scaleType = ImageView.ScaleType.CENTER_CROP
+                        }.lparams{
+                            width = matchParent
+                            height = dip(128)
+                        }
+
+                        themedTextView(R.style.text_content) {
+                            id = R.id.favorite_team_name
+                            gravity = Gravity.CENTER
+                        }.lparams{
+                            margin = dip(8)
+                            width = matchParent
+                            height = matchParent
+                        }
+
+                    }.lparams(width = matchParent, height = matchParent)
                 }
             }
         }
@@ -55,7 +72,8 @@ class FavoriteTeamRecyclerViewAdapter (private val favoriteTeamItemList : List<F
         private val favoriteTeamName : TextView = view.find(R.id.favorite_team_name)
 
         fun bindItem(favoriteTeam : FavoriteTeamItem, listener : (FavoriteTeamItem) -> Unit) {
-            Picasso.get().load(favoriteTeam.teamBadgeUrl).placeholder(R.drawable.team_badge_placeholder).into(favoriteTeamBadge)
+
+            favoriteTeam.teamBadgeUrl.let { Picasso.get().load(it).placeholder(R.drawable.team_badge_placeholder).fit().into(favoriteTeamBadge) }
 
             favoriteTeamName.text = favoriteTeam.teamName
             itemView.setOnClickListener { listener(favoriteTeam) }

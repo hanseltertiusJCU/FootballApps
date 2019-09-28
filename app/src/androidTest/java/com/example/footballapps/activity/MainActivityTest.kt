@@ -1,11 +1,13 @@
 package com.example.footballapps.activity
 
+import android.view.View
 import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.UiController
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
@@ -21,6 +23,10 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import com.google.android.material.appbar.AppBarLayout
+import androidx.test.espresso.ViewAction
+import com.example.footballapps.action.CustomViewActions
+import org.hamcrest.Matcher
 
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest {
@@ -154,11 +160,8 @@ class MainActivityTest {
         onView(withId(R.id.rv_team_players)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(20))
         onView(withId(R.id.rv_team_players)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(20, click()))
 
+        onView(withId(R.id.player_detail_app_bar_layout)).perform(CustomViewActions.collapseAppBarLayout())
         onView(withId(R.id.layout_player_detail_data)).check(matches(isDisplayed()))
-        onView(withId(R.id.scroll_view_player_detail)).perform(swipeUp())
-        Thread.sleep(1000)
-        onView(withId(R.id.scroll_view_player_detail)).perform(swipeDown())
-        Thread.sleep(1000)
         Espresso.pressBack() // to team detail
         Espresso.pressBack() // to league detail
 
