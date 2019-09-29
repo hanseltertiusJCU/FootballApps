@@ -15,12 +15,11 @@ import androidx.test.rule.ActivityTestRule
 import com.example.footballapps.R
 import com.example.footballapps.espresso.EspressoIdlingResource
 import org.hamcrest.Matchers.*
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
+import org.junit.runners.MethodSorters
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest {
     @Rule
@@ -33,7 +32,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun testLeagueDetail() {
+    fun testCaseALeagueDetail() {
         onView(withId(R.id.rv_league_list)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_league_list)).perform(
             RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
@@ -111,7 +110,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun testTeamAndPlayerDetail() {
+    fun testCaseBTeamAndPlayerDetail() {
         onView(withId(R.id.rv_league_list)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_league_list)).perform(
             RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
@@ -302,7 +301,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun testFavoriteItem() {
+    fun testCaseCFavoriteItem() {
 
         onView(withId(R.id.menu_item_favorite)).perform(click())
         onView(withId(R.id.rv_favorite_match)).check(matches(isDisplayed()))
