@@ -7,7 +7,7 @@ object EspressoIdlingResource {
     private const val RESOURCE = "GLOBAL"
     private val countingIdlingResource = CountingIdlingResource(RESOURCE)
 
-    val idlingResource : IdlingResource
+    val idlingResource: IdlingResource
         get() = countingIdlingResource
 
     fun increment() {

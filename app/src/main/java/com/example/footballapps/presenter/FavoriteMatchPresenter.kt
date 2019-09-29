@@ -2,8 +2,6 @@ package com.example.footballapps.presenter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import com.example.footballapps.R
-import com.example.footballapps.application.FootballApps
 import com.example.footballapps.favorite.FavoriteMatchItem
 import com.example.footballapps.helper.database
 import com.example.footballapps.view.FavoriteMatchView

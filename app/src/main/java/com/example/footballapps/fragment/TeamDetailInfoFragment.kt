@@ -9,13 +9,16 @@ import android.net.NetworkInfo
 import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
+import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.example.footballapps.R
@@ -24,7 +27,6 @@ import com.example.footballapps.model.TeamResponse
 import com.example.footballapps.presenter.TeamDetailPresenter
 import com.example.footballapps.repository.TeamDetailRepository
 import com.example.footballapps.utils.gone
-import com.example.footballapps.utils.invisible
 import com.example.footballapps.utils.visible
 import com.example.footballapps.view.TeamDetailView
 import org.jetbrains.anko.*
@@ -32,27 +34,26 @@ import org.jetbrains.anko.constraint.layout.constraintLayout
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.nestedScrollView
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
-import java.lang.StringBuilder
 
 class TeamDetailInfoFragment : Fragment(), TeamDetailView {
 
-    private lateinit var tvTeamDetailInfoLeague : TextView
-    private lateinit var tvTeamDetailInfoStadiumName : TextView
-    private lateinit var tvTeamDetailInfoStadiumLocation : TextView
-    private lateinit var tvTeamDetailInfoStadiumCapacity : TextView
-    private lateinit var tvTeamDetailInfoStadiumDescription : TextView
-    private lateinit var tvTeamDetailInfoDescription : TextView
-    private lateinit var ivTeamDetailJersey : ImageView
+    private lateinit var tvTeamDetailInfoLeague: TextView
+    private lateinit var tvTeamDetailInfoStadiumName: TextView
+    private lateinit var tvTeamDetailInfoStadiumLocation: TextView
+    private lateinit var tvTeamDetailInfoStadiumCapacity: TextView
+    private lateinit var tvTeamDetailInfoStadiumDescription: TextView
+    private lateinit var tvTeamDetailInfoDescription: TextView
+    private lateinit var ivTeamDetailJersey: ImageView
 
     private lateinit var teamDetailPresenter: TeamDetailPresenter
 
-    private lateinit var teamDetailInfoNestedScrollView : NestedScrollView
+    private lateinit var teamDetailInfoNestedScrollView: NestedScrollView
     private lateinit var teamDetailInfoSwipeRefreshLayout: SwipeRefreshLayout
-    private lateinit var teamDetailInfoLayout : LinearLayout
-    private lateinit var teamDetailInfoErrorDataText : TextView
-    private lateinit var teamDetailInfoProgressBar : ProgressBar
+    private lateinit var teamDetailInfoLayout: LinearLayout
+    private lateinit var teamDetailInfoErrorDataText: TextView
+    private lateinit var teamDetailInfoProgressBar: ProgressBar
 
-    private lateinit var teamId : String
+    private lateinit var teamId: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -77,13 +78,13 @@ class TeamDetailInfoFragment : Fragment(), TeamDetailView {
                             id = R.id.team_detail_layout
                             padding = dip(16)
 
-                            themedTextView("Jersey : ", R.style.text_section){
+                            themedTextView("Jersey : ", R.style.text_section) {
                                 id = R.id.tv_team_description_title
                             }
 
-                            ivTeamDetailJersey = imageView{
+                            ivTeamDetailJersey = imageView {
                                 id = R.id.tv_team_jersey
-                            }.lparams{
+                            }.lparams {
                                 width = dip(128)
                                 height = dip(128)
                                 gravity = Gravity.CENTER_HORIZONTAL
@@ -91,7 +92,8 @@ class TeamDetailInfoFragment : Fragment(), TeamDetailView {
                             }
 
                             view {
-                                background = ContextCompat.getDrawable(context, R.color.color_grey_line)
+                                background =
+                                    ContextCompat.getDrawable(context, R.color.color_grey_line)
                             }.lparams {
                                 width = matchParent
                                 height = dip(1)
@@ -104,81 +106,85 @@ class TeamDetailInfoFragment : Fragment(), TeamDetailView {
                                 topMargin = dip(8)
                             }
 
-                            tvTeamDetailInfoLeague = themedTextView(R.style.text_content){
+                            tvTeamDetailInfoLeague = themedTextView(R.style.text_content) {
                                 id = R.id.tv_team_detail_league
                             }.lparams {
                                 topMargin = dip(8)
                             }
 
                             view {
-                                background = ContextCompat.getDrawable(context, R.color.color_grey_line)
+                                background =
+                                    ContextCompat.getDrawable(context, R.color.color_grey_line)
                             }.lparams {
                                 width = matchParent
                                 height = dip(1)
                                 topMargin = dip(8)
                             }
 
-                            themedTextView("Stadium : ", R.style.text_section){
+                            themedTextView("Stadium : ", R.style.text_section) {
                                 id = R.id.tv_stadium_title
                             }.lparams {
                                 topMargin = dip(8)
                             }
 
-                            tvTeamDetailInfoStadiumName = themedTextView(R.style.text_content){
+                            tvTeamDetailInfoStadiumName = themedTextView(R.style.text_content) {
                                 id = R.id.tv_team_stadium_name
-                            }.lparams{
+                            }.lparams {
                                 topMargin = dip(8)
                             }
 
-                            tvTeamDetailInfoStadiumLocation = themedTextView(R.style.text_content){
+                            tvTeamDetailInfoStadiumLocation = themedTextView(R.style.text_content) {
                                 id = R.id.tv_team_stadium_location
                             }.lparams {
                                 topMargin = dip(8)
                             }
 
-                            tvTeamDetailInfoStadiumCapacity = themedTextView(R.style.text_content){
+                            tvTeamDetailInfoStadiumCapacity = themedTextView(R.style.text_content) {
                                 id = R.id.tv_team_stadium_capacity
                             }.lparams {
                                 topMargin = dip(8)
                             }
 
                             view {
-                                background = ContextCompat.getDrawable(context, R.color.color_grey_line)
+                                background =
+                                    ContextCompat.getDrawable(context, R.color.color_grey_line)
                             }.lparams {
                                 width = matchParent
                                 height = dip(1)
                                 topMargin = dip(8)
                             }
 
-                            themedTextView("Stadium Description : ", R.style.text_section){
+                            themedTextView("Stadium Description : ", R.style.text_section) {
                                 id = R.id.tv_stadium_description_title
-                            }.lparams{
+                            }.lparams {
                                 topMargin = dip(8)
                             }
 
-                            tvTeamDetailInfoStadiumDescription = themedTextView(R.style.text_content){
-                                id = R.id.tv_stadium_description
-                            }.lparams{
-                                topMargin = dip(8)
-                            }
+                            tvTeamDetailInfoStadiumDescription =
+                                themedTextView(R.style.text_content) {
+                                    id = R.id.tv_stadium_description
+                                }.lparams {
+                                    topMargin = dip(8)
+                                }
 
                             view {
-                                background = ContextCompat.getDrawable(context, R.color.color_grey_line)
+                                background =
+                                    ContextCompat.getDrawable(context, R.color.color_grey_line)
                             }.lparams {
                                 width = matchParent
                                 height = dip(1)
                                 topMargin = dip(8)
                             }
 
-                            themedTextView("Team Description : ", R.style.text_section){
+                            themedTextView("Team Description : ", R.style.text_section) {
                                 id = R.id.tv_team_description_title
-                            }.lparams{
+                            }.lparams {
                                 topMargin = dip(8)
                             }
 
-                            tvTeamDetailInfoDescription = themedTextView(R.style.text_content){
+                            tvTeamDetailInfoDescription = themedTextView(R.style.text_content) {
                                 id = R.id.tv_team_description
-                            }.lparams{
+                            }.lparams {
                                 topMargin = dip(8)
                             }
 
@@ -214,7 +220,7 @@ class TeamDetailInfoFragment : Fragment(), TeamDetailView {
         initData()
     }
 
-    private fun initData(){
+    private fun initData() {
         teamId = arguments?.getString("teamId") ?: "133604"
 
         teamDetailPresenter = TeamDetailPresenter(this, TeamDetailRepository())
@@ -235,7 +241,7 @@ class TeamDetailInfoFragment : Fragment(), TeamDetailView {
     }
 
     override fun dataLoadingFinished() {
-        if(!EspressoIdlingResource.idlingResource.isIdleNow) {
+        if (!EspressoIdlingResource.idlingResource.isIdleNow) {
             EspressoIdlingResource.decrement()
         }
         teamDetailInfoSwipeRefreshLayout.isRefreshing = false
@@ -245,7 +251,7 @@ class TeamDetailInfoFragment : Fragment(), TeamDetailView {
     }
 
     override fun dataFailedToLoad() {
-        if(!EspressoIdlingResource.idlingResource.isIdleNow) {
+        if (!EspressoIdlingResource.idlingResource.isIdleNow) {
             EspressoIdlingResource.decrement()
         }
         teamDetailInfoSwipeRefreshLayout.isRefreshing = false
@@ -264,7 +270,7 @@ class TeamDetailInfoFragment : Fragment(), TeamDetailView {
     override fun showTeamDetailData(teamsResponse: TeamResponse) {
         val teamItemList = teamsResponse.teams
 
-        if(teamItemList != null){
+        if (teamItemList != null) {
             val teamItem = teamItemList.first()
 
             Glide.with(context!!)
@@ -275,8 +281,10 @@ class TeamDetailInfoFragment : Fragment(), TeamDetailView {
             tvTeamDetailInfoLeague.text = teamItem.teamLeague
 
             tvTeamDetailInfoStadiumName.text = StringBuilder("Name : ${teamItem.teamStadium}")
-            tvTeamDetailInfoStadiumLocation.text = StringBuilder("Located in : ${teamItem.teamStadiumLocation}")
-            tvTeamDetailInfoStadiumCapacity.text = StringBuilder("Capacity : ${teamItem.teamStadiumCapacity}")
+            tvTeamDetailInfoStadiumLocation.text =
+                StringBuilder("Located in : ${teamItem.teamStadiumLocation}")
+            tvTeamDetailInfoStadiumCapacity.text =
+                StringBuilder("Capacity : ${teamItem.teamStadiumCapacity}")
             tvTeamDetailInfoStadiumDescription.text = teamItem.teamStadiumDescription
 
             tvTeamDetailInfoDescription.text = teamItem.teamDesc

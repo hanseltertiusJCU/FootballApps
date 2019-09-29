@@ -11,7 +11,7 @@ import io.reactivex.schedulers.Schedulers
 
 class PlayerDetailRepository {
 
-    fun getPlayerDetail(id : String, callback : PlayerDetailRepositoryCallback<PlayerResponse?>) {
+    fun getPlayerDetail(id: String, callback: PlayerDetailRepositoryCallback<PlayerResponse?>) {
         RetrofitClient
             .createService(PlayersService::class.java)
             .getPlayerDetailResponse(id)
@@ -24,8 +24,8 @@ class PlayerDetailRepository {
 
                 override fun onNext(playerResponse: PlayerResponse) {
                     val playerDetail = playerResponse.playerDetail
-                    if(playerDetail != null){
-                        if(playerDetail.isNotEmpty()){
+                    if (playerDetail != null) {
+                        if (playerDetail.isNotEmpty()) {
                             callback.onDataLoaded(playerResponse)
                         } else {
                             callback.onDataError()

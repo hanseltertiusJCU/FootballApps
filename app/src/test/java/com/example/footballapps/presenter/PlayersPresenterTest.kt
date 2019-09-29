@@ -10,8 +10,6 @@ import com.nhaarman.mockito_kotlin.inOrder
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Before
 import org.junit.Test
-
-import org.junit.Assert.*
 import org.mockito.Mock
 import org.mockito.Mockito.times
 import org.mockito.MockitoAnnotations
@@ -27,7 +25,7 @@ class PlayersPresenterTest {
     @Mock
     private lateinit var playersResponse: PlayerResponse
 
-    private lateinit var playersPresenter : PlayersPresenter
+    private lateinit var playersPresenter: PlayersPresenter
 
     @Before
     fun setUp() {
@@ -56,7 +54,7 @@ class PlayersPresenterTest {
     }
 
     @Test
-    fun getFailedPlayersInfoTest(){
+    fun getFailedPlayersInfoTest() {
         val id = ""
 
         playersPresenter.getPlayersInfo(id)

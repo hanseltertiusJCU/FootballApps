@@ -5,15 +5,15 @@
     <item
         android:id="@+id/menu_item_leagues"
         android:enabled="true"
-        android:title="@string/leagues"
         android:icon="@drawable/ic_league"
-        app:showAsAction="ifRoom"/>
+        android:title="@string/leagues"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/menu_item_favorite"
         android:enabled="true"
         android:icon="@drawable/ic_favorite_item"
         android:title="@string/favorites"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
 
 </menu>

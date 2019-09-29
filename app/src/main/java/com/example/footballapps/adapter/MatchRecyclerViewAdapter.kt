@@ -10,7 +10,6 @@ import com.example.footballapps.R
 import com.example.footballapps.application.FootballApps
 import com.example.footballapps.model.MatchItem
 import kotlinx.android.synthetic.main.item_match_data.view.*
-import java.lang.StringBuilder
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -48,8 +47,10 @@ class MatchRecyclerViewAdapter(
         }
 
         fun bindItem(matchItem: MatchItem, clickListener: (MatchItem) -> Unit) {
-            itemView.league_item_name.text = matchItem.leagueName ?: StringBuilder("League ${formatValue(matchItem.leagueName)}")
-            itemView.league_item_match_week.text = StringBuilder("Week ${formatValue(matchItem.leagueMatchWeek)}")
+            itemView.league_item_name.text =
+                matchItem.leagueName ?: StringBuilder("League ${formatValue(matchItem.leagueName)}")
+            itemView.league_item_match_week.text =
+                StringBuilder("Week ${formatValue(matchItem.leagueMatchWeek)}")
 
             val arrayLocalTimeDt = convertDateTimeToLocalTimeZone(
                 formatDate(matchItem.dateEvent),
@@ -73,16 +74,16 @@ class MatchRecyclerViewAdapter(
             }
         }
 
-        private fun formatValueData(valueData : String?) : String{
-            return if(valueData != null && valueData.trim().isNotEmpty()){
+        private fun formatValueData(valueData: String?): String {
+            return if (valueData != null && valueData.trim().isNotEmpty()) {
                 valueData
             } else {
                 valueNone
             }
         }
 
-        private fun formatValue(stringValue : String?) : String {
-            return if(stringValue != null && stringValue.trim().isNotEmpty()) {
+        private fun formatValue(stringValue: String?): String {
+            return if (stringValue != null && stringValue.trim().isNotEmpty()) {
                 stringValue
             } else {
                 valueUnknown

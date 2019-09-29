@@ -29,7 +29,7 @@ object RetrofitClient {
         return retrofit
     }
 
-    fun <T> createService(service : Class<T>) : T {
+    fun <T> createService(service: Class<T>): T {
         return getRetrofit()!!.create(service)
     }
 }

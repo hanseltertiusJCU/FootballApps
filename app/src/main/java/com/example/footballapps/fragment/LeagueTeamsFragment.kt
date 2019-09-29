@@ -15,7 +15,6 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.footballapps.R
@@ -39,24 +38,23 @@ import org.jetbrains.anko.progressBar
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.*
 import org.jetbrains.anko.themedTextView
-import org.jetbrains.anko.wrapContent
 
-class LeagueTeamsFragment : Fragment(), TeamsView, FragmentLifecycle{
+class LeagueTeamsFragment : Fragment(), TeamsView, FragmentLifecycle {
 
-    private lateinit var leagueTeamsRecyclerView : RecyclerView
-    private lateinit var leagueTeamsProgressBar : ProgressBar
+    private lateinit var leagueTeamsRecyclerView: RecyclerView
+    private lateinit var leagueTeamsProgressBar: ProgressBar
     private lateinit var leagueTeamsSwipeRefreshLayout: SwipeRefreshLayout
-    private lateinit var leagueTeamsErrorText : TextView
+    private lateinit var leagueTeamsErrorText: TextView
 
-    private lateinit var leagueTeamsPresenter : TeamsPresenter
+    private lateinit var leagueTeamsPresenter: TeamsPresenter
 
-    private var leagueTeams : MutableList<TeamItem> = mutableListOf()
-    private lateinit var leagueTeamsRvAdapter : TeamRecyclerViewAdapter
+    private var leagueTeams: MutableList<TeamItem> = mutableListOf()
+    private lateinit var leagueTeamsRvAdapter: TeamRecyclerViewAdapter
 
-    private lateinit var leagueId : String
+    private lateinit var leagueId: String
 
-    private var leagueTeamSearchItem : MenuItem? = null
-    private var leagueTeamSearchView : SearchView? = null
+    private var leagueTeamSearchItem: MenuItem? = null
+    private var leagueTeamSearchView: SearchView? = null
 
     private var isDataLoading = false
     private var isSearching = false
@@ -64,7 +62,7 @@ class LeagueTeamsFragment : Fragment(), TeamsView, FragmentLifecycle{
     private val spanCount = 2
     private val includeEdge = true
 
-    private var searchQuery : String = ""
+    private var searchQuery: String = ""
 
 
     override fun onCreateView(
@@ -91,7 +89,7 @@ class LeagueTeamsFragment : Fragment(), TeamsView, FragmentLifecycle{
 
                         leagueTeamsRecyclerView = recyclerView {
                             id = R.id.rv_league_teams
-                        }.lparams{
+                        }.lparams {
                             width = matchConstraint
                             height = matchConstraint
                             topToTop = R.id.league_teams_parent_layout
@@ -101,14 +99,14 @@ class LeagueTeamsFragment : Fragment(), TeamsView, FragmentLifecycle{
                             verticalBias = 0f
                         }
 
-                        leagueTeamsProgressBar = progressBar().lparams{
+                        leagueTeamsProgressBar = progressBar().lparams {
                             topToTop = R.id.league_teams_parent_layout
                             leftToLeft = R.id.league_teams_parent_layout
                             rightToRight = R.id.league_teams_parent_layout
                             bottomToBottom = R.id.league_teams_parent_layout
                         }
 
-                        leagueTeamsErrorText = themedTextView(R.style.text_content).lparams{
+                        leagueTeamsErrorText = themedTextView(R.style.text_content).lparams {
                             topToTop = R.id.league_teams_parent_layout
                             leftToLeft = R.id.league_teams_parent_layout
                             rightToRight = R.id.league_teams_parent_layout
@@ -138,7 +136,13 @@ class LeagueTeamsFragment : Fragment(), TeamsView, FragmentLifecycle{
 
         leagueTeamsRecyclerView.adapter = leagueTeamsRvAdapter
 
-        leagueTeamsRecyclerView.addItemDecoration(GridSpacingItemDecoration(spanCount = spanCount, space = dip(16), includeEdge = includeEdge))
+        leagueTeamsRecyclerView.addItemDecoration(
+            GridSpacingItemDecoration(
+                spanCount = spanCount,
+                space = dip(16),
+                includeEdge = includeEdge
+            )
+        )
 
         leagueTeamsPresenter = TeamsPresenter(this, TeamsRepository())
 
@@ -147,7 +151,7 @@ class LeagueTeamsFragment : Fragment(), TeamsView, FragmentLifecycle{
 
         leagueTeamsSwipeRefreshLayout.onRefresh {
             EspressoIdlingResource.increment()
-            if(isSearching){
+            if (isSearching) {
                 leagueTeamsPresenter.getSearchTeamsInfo(searchQuery)
             } else {
                 leagueTeamsPresenter.getTeamsInfo(leagueId)
@@ -199,7 +203,7 @@ class LeagueTeamsFragment : Fragment(), TeamsView, FragmentLifecycle{
     }
 
     override fun dataLoadingFinished() {
-        if(!EspressoIdlingResource.idlingResource.isIdleNow){
+        if (!EspressoIdlingResource.idlingResource.isIdleNow) {
             EspressoIdlingResource.decrement()
         }
 
@@ -212,7 +216,7 @@ class LeagueTeamsFragment : Fragment(), TeamsView, FragmentLifecycle{
     }
 
     override fun dataFailedToLoad() {
-        if(!EspressoIdlingResource.idlingResource.isIdleNow){
+        if (!EspressoIdlingResource.idlingResource.isIdleNow) {
             EspressoIdlingResource.decrement()
         }
         leagueTeamsSwipeRefreshLayout.isRefreshing = false
@@ -221,7 +225,7 @@ class LeagueTeamsFragment : Fragment(), TeamsView, FragmentLifecycle{
         leagueTeamsRecyclerView.invisible()
 
         val isNetworkConnected = checkNetworkConnection()
-        if(isNetworkConnected){
+        if (isNetworkConnected) {
             leagueTeamsErrorText.text = resources.getString(R.string.no_data_to_show)
         } else {
             leagueTeamsErrorText.text = resources.getString(R.string.no_internet_connection)
@@ -233,7 +237,7 @@ class LeagueTeamsFragment : Fragment(), TeamsView, FragmentLifecycle{
     override fun showTeamsData(teamsResponse: TeamResponse) {
         leagueTeams.clear()
         val teamsList = teamsResponse.teams
-        if(teamsList != null){
+        if (teamsList != null) {
             leagueTeams.addAll(teamsList)
         }
         leagueTeamsRvAdapter.notifyDataSetChanged()
@@ -248,14 +252,20 @@ class LeagueTeamsFragment : Fragment(), TeamsView, FragmentLifecycle{
 
         leagueTeamSearchItem = menu.findItem(R.id.action_search)
 
-        val leagueTeamSearchManager : SearchManager = context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val leagueTeamSearchManager: SearchManager =
+            context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
 
-        if(leagueTeamSearchItem != null){
+        if (leagueTeamSearchItem != null) {
             leagueTeamSearchView = leagueTeamSearchItem?.actionView as SearchView
 
-            leagueTeamSearchView?.setSearchableInfo(leagueTeamSearchManager.getSearchableInfo(activity?.componentName))
+            leagueTeamSearchView?.setSearchableInfo(
+                leagueTeamSearchManager.getSearchableInfo(
+                    activity?.componentName
+                )
+            )
 
-            leagueTeamSearchItem?.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            leagueTeamSearchItem?.setOnActionExpandListener(object :
+                MenuItem.OnActionExpandListener {
                 override fun onMenuItemActionExpand(menuItem: MenuItem?): Boolean {
                     isSearching = true
                     EspressoIdlingResource.increment()
@@ -275,7 +285,7 @@ class LeagueTeamsFragment : Fragment(), TeamsView, FragmentLifecycle{
 
             leagueTeamSearchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
-                    if(!isDataLoading){
+                    if (!isDataLoading) {
                         searchQuery = query
                         EspressoIdlingResource.increment()
                         leagueTeamsPresenter.getSearchTeamsInfo(searchQuery)

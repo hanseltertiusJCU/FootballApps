@@ -47,14 +47,14 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
     private lateinit var eventName: String
     private lateinit var homeTeamId: String
     private lateinit var awayTeamId: String
-    private lateinit var dateEvent : String
-    private lateinit var timeEvent : String
-    private lateinit var leagueName : String
-    private lateinit var leagueMatchWeek : String
-    private lateinit var homeTeamName : String
-    private lateinit var awayTeamName : String
-    private lateinit var homeTeamScore : String
-    private lateinit var awayTeamScore : String
+    private lateinit var dateEvent: String
+    private lateinit var timeEvent: String
+    private lateinit var leagueName: String
+    private lateinit var leagueMatchWeek: String
+    private lateinit var homeTeamName: String
+    private lateinit var awayTeamName: String
+    private lateinit var homeTeamScore: String
+    private lateinit var awayTeamScore: String
 
     private var matchItem: MatchItem? = null
     private var favMatchItem: FavoriteMatchItem? = null

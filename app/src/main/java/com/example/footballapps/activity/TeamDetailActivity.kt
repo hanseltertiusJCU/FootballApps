@@ -25,7 +25,6 @@ import org.jetbrains.anko.db.delete
 import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
 import org.jetbrains.anko.design.snackbar
-import java.lang.StringBuilder
 import kotlin.math.abs
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -33,9 +32,9 @@ class TeamDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
 
     private lateinit var teamName: String
     private lateinit var teamId: String
-    private lateinit var teamBadgeUrl : String
-    private lateinit var teamFormedYear : String
-    private lateinit var teamCountry : String
+    private lateinit var teamBadgeUrl: String
+    private lateinit var teamFormedYear: String
+    private lateinit var teamCountry: String
 
     private lateinit var teamDetailViewPagerAdapter: ViewPagerAdapter
 
@@ -51,7 +50,7 @@ class TeamDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
     private var menu: Menu? = null
     private var isTeamFavorite: Boolean = false
 
-    var favoriteMenuItem : MenuItem? = null
+    var favoriteMenuItem: MenuItem? = null
 
     private var isShow = true
     private var scrollRange = -1
@@ -73,27 +72,31 @@ class TeamDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
             teamItem != null -> {
                 teamName = teamItem?.teamName ?: "Arsenal"
                 teamId = teamItem?.teamId ?: "133604"
-                teamBadgeUrl = teamItem?.teamBadge ?: "https://www.thesportsdb.com/images/media/team/badge/a1af2i1557005128.png"
+                teamBadgeUrl = teamItem?.teamBadge
+                    ?: "https://www.thesportsdb.com/images/media/team/badge/a1af2i1557005128.png"
                 teamFormedYear = teamItem?.teamFormedYear ?: "1892"
                 teamCountry = teamItem?.teamCountry ?: "England"
             }
             favTeamItem != null -> {
                 teamName = favTeamItem?.teamName ?: "Arsenal"
                 teamId = favTeamItem?.idTeam ?: "133604"
-                teamBadgeUrl = favTeamItem?.teamBadgeUrl ?: "https://www.thesportsdb.com/images/media/team/badge/a1af2i1557005128.png"
+                teamBadgeUrl = favTeamItem?.teamBadgeUrl
+                    ?: "https://www.thesportsdb.com/images/media/team/badge/a1af2i1557005128.png"
                 teamFormedYear = favTeamItem?.teamFormedYear ?: "1892"
                 teamCountry = favTeamItem?.teamCountry ?: "England"
             }
             else -> {
                 teamName = "Arsenal"
                 teamId = "133604"
-                teamBadgeUrl = "https://www.thesportsdb.com/images/media/team/badge/a1af2i1557005128.png"
+                teamBadgeUrl =
+                    "https://www.thesportsdb.com/images/media/team/badge/a1af2i1557005128.png"
                 teamFormedYear = "1892"
                 teamCountry = "England"
             }
         }
 
-        Glide.with(applicationContext).load(teamBadgeUrl).placeholder(R.drawable.team_badge_placeholder).into(iv_team_detail_logo)
+        Glide.with(applicationContext).load(teamBadgeUrl)
+            .placeholder(R.drawable.team_badge_placeholder).into(iv_team_detail_logo)
         tv_team_detail_title.text = teamName
         tv_team_detail_established.text = StringBuilder("est. $teamFormedYear")
         tv_team_detail_origin.text = StringBuilder("Based in $teamCountry")
@@ -117,7 +120,7 @@ class TeamDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
 
     override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
 
-        if(scrollRange == -1){
+        if (scrollRange == -1) {
             scrollRange = appBarLayout.totalScrollRange
         }
 
@@ -130,10 +133,14 @@ class TeamDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
                 collapsing_toolbar_layout_team_detail.title = " "
                 isShow = false
             }
-            abs(verticalOffset) == appBarLayout.totalScrollRange -> iv_team_detail_logo.contentDescription = getString(
-                            R.string.team_detail_logo_collapsed)
-            verticalOffset == 0 -> iv_team_detail_logo.contentDescription = getString(R.string.team_detail_logo_expanded)
-            else -> iv_team_detail_logo.contentDescription = getString(R.string.team_detail_logo_collapsing)
+            abs(verticalOffset) == appBarLayout.totalScrollRange -> iv_team_detail_logo.contentDescription =
+                getString(
+                    R.string.team_detail_logo_collapsed
+                )
+            verticalOffset == 0 -> iv_team_detail_logo.contentDescription =
+                getString(R.string.team_detail_logo_expanded)
+            else -> iv_team_detail_logo.contentDescription =
+                getString(R.string.team_detail_logo_collapsing)
         }
 
     }
@@ -152,7 +159,7 @@ class TeamDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
 
     }
 
-    private fun setListener(){
+    private fun setListener() {
         view_pager_team_detail.addOnPageChangeListener(
             TabLayout.TabLayoutOnPageChangeListener(tab_layout_team_detail)
         )
@@ -165,7 +172,7 @@ class TeamDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val newPosition = tab?.position!!
 
-                if(currentPosition == 1) {
+                if (currentPosition == 1) {
                     val fragmentToHide =
                         teamDetailViewPagerAdapter.getItem(currentPosition) as FragmentLifecycle
                     fragmentToHide.onPauseFragment()
@@ -226,7 +233,8 @@ class TeamDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
                     FavoriteTeamItem.TEAM_COUNTRY to teamCountry
                 )
             }
-            team_detail_coordinator_layout.snackbar("Add a team into favorites").setAction(getString(R.string.undo)){changeFavoriteTeamState()}.show()
+            team_detail_coordinator_layout.snackbar("Add a team into favorites")
+                .setAction(getString(R.string.undo)) { changeFavoriteTeamState() }.show()
         } catch (e: SQLiteConstraintException) {
             team_detail_coordinator_layout.snackbar(e.localizedMessage).show()
         }
@@ -241,7 +249,8 @@ class TeamDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
                     "teamId" to teamId
                 )
             }
-            team_detail_coordinator_layout.snackbar("Remove a team from favorites").setAction(getString(R.string.undo)){changeFavoriteTeamState()}.show()
+            team_detail_coordinator_layout.snackbar("Remove a team from favorites")
+                .setAction(getString(R.string.undo)) { changeFavoriteTeamState() }.show()
         } catch (e: SQLiteConstraintException) {
             team_detail_coordinator_layout.snackbar(e.localizedMessage).show()
         }

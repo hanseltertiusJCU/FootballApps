@@ -5,8 +5,11 @@ import com.example.footballapps.model.TeamResponse
 import com.example.footballapps.repository.TeamsRepository
 import com.example.footballapps.view.TeamsView
 
-class TeamsPresenter(private val teamsView: TeamsView, private val teamsRepository: TeamsRepository) {
-    fun getTeamsInfo(leagueId : String) {
+class TeamsPresenter(
+    private val teamsView: TeamsView,
+    private val teamsRepository: TeamsRepository
+) {
+    fun getTeamsInfo(leagueId: String) {
         teamsView.dataIsLoading()
 
         teamsRepository.getTeams(leagueId, object : TeamsRepositoryCallback<TeamResponse?> {
@@ -23,19 +26,21 @@ class TeamsPresenter(private val teamsView: TeamsView, private val teamsReposito
         })
     }
 
-    fun getSearchTeamsInfo(query : String){
+    fun getSearchTeamsInfo(query: String) {
         teamsView.dataIsLoading()
 
-        teamsRepository.getSearchResultTeams(query, object : TeamsRepositoryCallback<TeamResponse?> {
-            override fun onDataLoaded(data: TeamResponse?) {
-                teamsView.showTeamsData(data!!)
-                teamsView.dataLoadingFinished()
-            }
+        teamsRepository.getSearchResultTeams(
+            query,
+            object : TeamsRepositoryCallback<TeamResponse?> {
+                override fun onDataLoaded(data: TeamResponse?) {
+                    teamsView.showTeamsData(data!!)
+                    teamsView.dataLoadingFinished()
+                }
 
-            override fun onDataError() {
-                teamsView.dataFailedToLoad()
-            }
+                override fun onDataError() {
+                    teamsView.dataFailedToLoad()
+                }
 
-        })
+            })
     }
 }

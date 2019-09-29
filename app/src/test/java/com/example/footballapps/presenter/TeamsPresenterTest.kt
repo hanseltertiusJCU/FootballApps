@@ -10,8 +10,6 @@ import com.nhaarman.mockito_kotlin.inOrder
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Before
 import org.junit.Test
-
-import org.junit.Assert.*
 import org.mockito.Mock
 import org.mockito.Mockito.times
 import org.mockito.MockitoAnnotations
@@ -19,15 +17,15 @@ import org.mockito.MockitoAnnotations
 class TeamsPresenterTest {
 
     @Mock
-    private lateinit var teamsView : TeamsView
+    private lateinit var teamsView: TeamsView
 
     @Mock
-    private lateinit var teamsRepository : TeamsRepository
+    private lateinit var teamsRepository: TeamsRepository
 
     @Mock
-    private lateinit var teamsResponse : TeamResponse
+    private lateinit var teamsResponse: TeamResponse
 
-    private lateinit var teamsPresenter : TeamsPresenter
+    private lateinit var teamsPresenter: TeamsPresenter
 
     @Before
     fun setUp() {

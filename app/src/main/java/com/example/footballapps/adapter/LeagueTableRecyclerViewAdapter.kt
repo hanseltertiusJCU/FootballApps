@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.footballapps.R
+import com.example.footballapps.application.FootballApps
 import com.example.footballapps.model.TeamInTableItem
 import kotlinx.android.synthetic.main.item_team_in_league_table.view.*
 
@@ -32,21 +33,37 @@ class LeagueTableRecyclerViewAdapter(
 
     class LeagueTableViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        // todo : itnggal modify aja
+        companion object {
+            val valueNone = FootballApps.res.getString(R.string.value_none)
+        }
 
         fun bindItem(teamInLeagueTable: TeamInTableItem, position: Int) {
             val teamPosition = position + 1
 
             itemView.tv_team_position.text = teamPosition.toString()
-            itemView.tv_team_name.text = teamInLeagueTable.teamInTableName ?: "-"
-            itemView.tv_team_game_played.text = teamInLeagueTable.teamInTableGamesPlayed ?: "-"
-            itemView.tv_team_game_won.text = teamInLeagueTable.teamInTableGamesWon ?: "-"
-            itemView.tv_team_game_tied.text = teamInLeagueTable.teamInTableGamesTied ?: "-"
-            itemView.tv_team_game_lost.text = teamInLeagueTable.teamInTableGamesLost ?: "-"
-            itemView.tv_team_goals_scored.text = teamInLeagueTable.teamInTableGoalsScored ?: "-"
-            itemView.tv_team_goals_conceded.text = teamInLeagueTable.teamInTableGoalsConceded ?: "-"
-            itemView.tv_team_goal_difference.text = teamInLeagueTable.teamInTableGoalsDifference ?: "-"
-            itemView.tv_team_points.text = teamInLeagueTable.teamInTablePoints ?: "-"
+            itemView.tv_team_name.text = formatValueData(teamInLeagueTable.teamInTableName)
+            itemView.tv_team_game_played.text =
+                formatValueData(teamInLeagueTable.teamInTableGamesPlayed)
+            itemView.tv_team_game_won.text = formatValueData(teamInLeagueTable.teamInTableGamesWon)
+            itemView.tv_team_game_tied.text =
+                formatValueData(teamInLeagueTable.teamInTableGamesTied)
+            itemView.tv_team_game_lost.text =
+                formatValueData(teamInLeagueTable.teamInTableGamesLost)
+            itemView.tv_team_goals_scored.text =
+                formatValueData(teamInLeagueTable.teamInTableGoalsScored)
+            itemView.tv_team_goals_conceded.text =
+                formatValueData(teamInLeagueTable.teamInTableGoalsConceded)
+            itemView.tv_team_goal_difference.text =
+                formatValueData(teamInLeagueTable.teamInTableGoalsDifference)
+            itemView.tv_team_points.text = formatValueData(teamInLeagueTable.teamInTablePoints)
+        }
+
+        private fun formatValueData(valueData: String?): String {
+            return if (valueData != null && valueData.trim().isNotEmpty()) {
+                valueData
+            } else {
+                valueNone
+            }
         }
     }
 

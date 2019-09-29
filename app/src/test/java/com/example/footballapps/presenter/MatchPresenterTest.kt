@@ -145,7 +145,7 @@ class MatchPresenterTest {
     }
 
     @Test
-    fun getTeamPreviousMatchInfoTest(){
+    fun getTeamPreviousMatchInfoTest() {
 
         val id = "133604"
 
@@ -163,7 +163,7 @@ class MatchPresenterTest {
     }
 
     @Test
-    fun getFailedTeamPreviousMatchInfoTest(){
+    fun getFailedTeamPreviousMatchInfoTest() {
         val id = ""
 
         matchPresenter.getTeamLastMatchInfo(id)
@@ -179,7 +179,7 @@ class MatchPresenterTest {
     }
 
     @Test
-    fun getTeamNextMatchInfoTest(){
+    fun getTeamNextMatchInfoTest() {
         val id = "133604"
 
         matchPresenter.getTeamNextMatchInfo(id)
@@ -197,7 +197,7 @@ class MatchPresenterTest {
     }
 
     @Test
-    fun getFailedTeamNextMatchInfoTest(){
+    fun getFailedTeamNextMatchInfoTest() {
         val id = ""
 
         matchPresenter.getTeamNextMatchInfo(id)

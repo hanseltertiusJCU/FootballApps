@@ -11,8 +11,8 @@
         android:id="@+id/player_detail_app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="256dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
@@ -27,10 +27,10 @@
                 android:id="@+id/iv_player_fanart"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:contentDescription="@string/player_fanart"
                 android:fitsSystemWindows="true"
                 android:scaleType="fitXY"
-                android:contentDescription="@string/player_fanart"
-                app:layout_collapseMode="parallax"/>
+                app:layout_collapseMode="parallax" />
 
 
             <androidx.appcompat.widget.Toolbar
@@ -38,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -53,7 +53,6 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.core.widget.NestedScrollView
-            android:id="@+id/scroll_view_player_detail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true">
@@ -73,15 +72,15 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0">
 
-                    <include layout="@layout/layout_player_detail_title"/>
+                    <include layout="@layout/layout_player_detail_title" />
 
-                    <include layout="@layout/layout_player_detail_physique"/>
+                    <include layout="@layout/layout_player_detail_physique" />
 
-                    <include layout="@layout/layout_player_detail_biodata"/>
+                    <include layout="@layout/layout_player_detail_biodata" />
 
-                    <include layout="@layout/layout_player_detail_team_info"/>
+                    <include layout="@layout/layout_player_detail_team_info" />
 
-                    <include layout="@layout/layout_player_detail_description"/>
+                    <include layout="@layout/layout_player_detail_description" />
 
 
                 </LinearLayout>

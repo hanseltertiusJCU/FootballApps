@@ -11,7 +11,10 @@ import io.reactivex.schedulers.Schedulers
 
 class LeagueDetailRepository {
 
-    fun getLeagueDetail(id : String, callback : LeagueDetailRepositoryCallback<LeagueDetailResponse?>) {
+    fun getLeagueDetail(
+        id: String,
+        callback: LeagueDetailRepositoryCallback<LeagueDetailResponse?>
+    ) {
         RetrofitClient
             .createService(LeagueDetailService::class.java)
             .getLeagueDetailResponse(id)
@@ -24,8 +27,8 @@ class LeagueDetailRepository {
 
                 override fun onNext(leagueDetailResponse: LeagueDetailResponse) {
                     val leaguesList = leagueDetailResponse.leagues
-                    if(leaguesList != null){
-                        if(leaguesList.isNotEmpty()){
+                    if (leaguesList != null) {
+                        if (leaguesList.isNotEmpty()) {
                             callback.onDataLoaded(leagueDetailResponse)
                         } else {
                             callback.onDataError()

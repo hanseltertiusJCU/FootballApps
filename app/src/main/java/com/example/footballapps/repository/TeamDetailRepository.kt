@@ -11,7 +11,7 @@ import io.reactivex.schedulers.Schedulers
 
 class TeamDetailRepository {
 
-    fun getTeamDetail(id : String, callback : TeamDetailRepositoryCallback<TeamResponse?>) {
+    fun getTeamDetail(id: String, callback: TeamDetailRepositoryCallback<TeamResponse?>) {
         RetrofitClient
             .createService(TeamService::class.java)
             .getTeamDetailResponse(id)
@@ -24,8 +24,8 @@ class TeamDetailRepository {
 
                 override fun onNext(teamResponse: TeamResponse) {
                     val teamDetailList = teamResponse.teams
-                    if(teamDetailList != null){
-                        if(teamDetailList.isNotEmpty()){
+                    if (teamDetailList != null) {
+                        if (teamDetailList.isNotEmpty()) {
                             callback.onDataLoaded(teamResponse)
                         } else {
                             callback.onDataError()

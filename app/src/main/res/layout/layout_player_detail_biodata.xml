@@ -1,80 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp"
     android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp">
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="8dp"
+    android:orientation="vertical">
 
     <TextView
+        style="@style/text_section"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/text_section"
-        android:text="@string/player_biodata"/>
+        android:text="@string/player_biodata" />
 
     <TextView
         android:id="@+id/tv_player_detail_date_of_birth"
+        style="@style/text_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/text_content"
         android:layout_marginTop="8dp"
-        android:text="@string/player_date_of_birth"/>
+        android:text="@string/player_date_of_birth" />
 
     <TextView
         android:id="@+id/tv_player_detail_nationality"
+        style="@style/text_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/text_content"
         android:layout_marginTop="8dp"
-        android:text="@string/player_nationality"/>
+        android:text="@string/player_nationality" />
 
     <TextView
         android:id="@+id/tv_player_detail_outfitter"
+        style="@style/text_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/text_content"
         android:layout_marginTop="8dp"
-        android:text="@string/player_outfitter"/>
+        android:text="@string/player_outfitter" />
 
     <TextView
         android:id="@+id/tv_player_detail_kit"
+        style="@style/text_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/text_content"
         android:layout_marginTop="8dp"
-        android:text="@string/player_kit"/>
+        android:text="@string/player_kit" />
 
     <TextView
         android:id="@+id/tv_player_detail_agent"
+        style="@style/text_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/text_content"
         android:layout_marginTop="8dp"
-        android:text="@string/player_agent"/>
+        android:text="@string/player_agent" />
 
     <TextView
         android:id="@+id/tv_player_detail_position"
+        style="@style/text_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/text_content"
         android:layout_marginTop="8dp"
-        android:text="@string/player_position"/>
+        android:text="@string/player_position" />
 
     <TextView
         android:id="@+id/tv_player_detail_preferred_foot"
+        style="@style/text_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/text_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:text="@string/player_preferred_foot"/>
+        android:text="@string/player_preferred_foot" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/color_grey_line"/>
+        android:background="@color/color_grey_line" />
 
 
 </LinearLayout>

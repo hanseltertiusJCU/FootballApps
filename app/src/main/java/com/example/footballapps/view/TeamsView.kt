@@ -6,5 +6,5 @@ interface TeamsView {
     fun dataIsLoading()
     fun dataLoadingFinished()
     fun dataFailedToLoad()
-    fun showTeamsData(teamsResponse : TeamResponse)
+    fun showTeamsData(teamsResponse: TeamResponse)
 }

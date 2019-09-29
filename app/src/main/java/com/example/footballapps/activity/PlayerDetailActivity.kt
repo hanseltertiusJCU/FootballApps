@@ -23,26 +23,26 @@ import com.example.footballapps.utils.visible
 import com.example.footballapps.view.PlayerDetailView
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_player_detail.*
-import kotlinx.android.synthetic.main.layout_player_detail_description.*
 import kotlinx.android.synthetic.main.layout_player_detail_biodata.*
-import kotlinx.android.synthetic.main.layout_player_detail_title.*
+import kotlinx.android.synthetic.main.layout_player_detail_description.*
 import kotlinx.android.synthetic.main.layout_player_detail_physique.*
 import kotlinx.android.synthetic.main.layout_player_detail_team_info.*
+import kotlinx.android.synthetic.main.layout_player_detail_title.*
 import java.text.SimpleDateFormat
 import java.util.*
-import java.lang.StringBuilder
 import kotlin.math.abs
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView, AppBarLayout.OnOffsetChangedListener {
+class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView,
+    AppBarLayout.OnOffsetChangedListener {
 
     private var playerItem: PlayerItem? = null
 
     private lateinit var playerDetailPresenter: PlayerDetailPresenter
 
-    private lateinit var playerId : String
-    private lateinit var playerFanArt : String
-    private lateinit var playerName : String
+    private lateinit var playerId: String
+    private lateinit var playerFanArt: String
+    private lateinit var playerName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,19 +55,21 @@ class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView, AppBarLayout
         val intent = intent
         playerItem = intent.getParcelableExtra("playerItem")
 
-        if(playerItem != null){
+        if (playerItem != null) {
             playerId = playerItem?.playerId ?: "34145444"
             playerName = playerItem?.playerName ?: "Ainsley Maitland-Niles"
-            playerFanArt = playerItem?.playerFanArt ?: "https://www.thesportsdb.com/images/media/player/thumb/3775d71510853007.jpg"
+            playerFanArt = playerItem?.playerFanArt
+                ?: "https://www.thesportsdb.com/images/media/player/thumb/3775d71510853007.jpg"
         } else {
             playerId = "34145444"
             playerName = "Ainsley Maitland-Niles"
-            playerFanArt = "https://www.thesportsdb.com/images/media/player/thumb/3775d71510853007.jpg"
+            playerFanArt =
+                "https://www.thesportsdb.com/images/media/player/thumb/3775d71510853007.jpg"
         }
 
         Glide.with(applicationContext)
             .load(playerFanArt)
-            .placeholder(R.drawable.ic_player_picture_placeholder)
+            .placeholder(R.drawable.profile_picture_placeholder)
             .into(iv_player_fanart)
 
         setToolbarBehavior()
@@ -95,9 +97,12 @@ class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView, AppBarLayout
     override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
 
         when {
-            abs(verticalOffset) == appBarLayout.totalScrollRange -> iv_player_fanart.contentDescription = getString(R.string.player_fanart_collapsed)
-            verticalOffset == 0 -> iv_player_fanart.contentDescription = getString(R.string.player_fanart_expanded)
-            else -> iv_player_fanart.contentDescription = getString(R.string.player_fanart_collapsing)
+            abs(verticalOffset) == appBarLayout.totalScrollRange -> iv_player_fanart.contentDescription =
+                getString(R.string.player_fanart_collapsed)
+            verticalOffset == 0 -> iv_player_fanart.contentDescription =
+                getString(R.string.player_fanart_expanded)
+            else -> iv_player_fanart.contentDescription =
+                getString(R.string.player_fanart_collapsing)
         }
 
     }
@@ -158,7 +163,7 @@ class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView, AppBarLayout
 
         Glide.with(applicationContext)
             .load(playerDetailItem?.playerPhoto)
-            .placeholder(R.drawable.ic_player_picture_placeholder)
+            .placeholder(R.drawable.profile_picture_placeholder)
             .into(player_detail_photo)
 
         player_detail_name.text = StringBuilder(formatValue(playerDetailItem?.playerName))
@@ -170,29 +175,41 @@ class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView, AppBarLayout
 
         val birthLocation = formatValue(playerDetailItem?.playerBirthLocation)
 
-        tv_player_detail_date_of_birth.text = StringBuilder("Place, Date of Birth : $birthLocation, $dateOfBirth")
+        tv_player_detail_date_of_birth.text =
+            StringBuilder("Place, Date of Birth : $birthLocation, $dateOfBirth")
 
-        tv_player_detail_nationality.text = StringBuilder("Nationality : ${formatValue(playerDetailItem?.playerNationality)}")
+        tv_player_detail_nationality.text =
+            StringBuilder("Nationality : ${formatValue(playerDetailItem?.playerNationality)}")
 
-        tv_player_detail_outfitter.text =  StringBuilder("Outfitter : ${formatValue(playerDetailItem?.playerOutfitter)}")
+        tv_player_detail_outfitter.text =
+            StringBuilder("Outfitter : ${formatValue(playerDetailItem?.playerOutfitter)}")
 
-        tv_player_detail_kit.text = StringBuilder("Kit : ${formatValue(playerDetailItem?.playerKit)}")
+        tv_player_detail_kit.text =
+            StringBuilder("Kit : ${formatValue(playerDetailItem?.playerKit)}")
 
-        tv_player_detail_agent.text = StringBuilder("Agent : ${formatValue(playerDetailItem?.playerAgent)}")
+        tv_player_detail_agent.text =
+            StringBuilder("Agent : ${formatValue(playerDetailItem?.playerAgent)}")
 
-        tv_player_detail_position.text = StringBuilder("Position : ${formatValue(playerDetailItem?.playerPosition)}")
+        tv_player_detail_position.text =
+            StringBuilder("Position : ${formatValue(playerDetailItem?.playerPosition)}")
 
-        tv_player_detail_preferred_foot.text = StringBuilder("Preferred Foot : ${formatValue(playerDetailItem?.playerStrongFoot)}")
+        tv_player_detail_preferred_foot.text =
+            StringBuilder("Preferred Foot : ${formatValue(playerDetailItem?.playerStrongFoot)}")
 
-        tv_player_detail_team_name.text = StringBuilder("Team Name : ${formatValue(playerDetailItem?.playerTeam)}")
+        tv_player_detail_team_name.text =
+            StringBuilder("Team Name : ${formatValue(playerDetailItem?.playerTeam)}")
 
-        tv_player_detail_team_date_signed.text = StringBuilder("Date Signed : ${formatDate(playerDetailItem?.playerSignedDate)}")
+        tv_player_detail_team_date_signed.text =
+            StringBuilder("Date Signed : ${formatDate(playerDetailItem?.playerSignedDate)}")
 
-        tv_player_detail_team_transfer_fee.text = StringBuilder("Transfer Fee : ${formatValue(playerDetailItem?.playerTransferFee)}")
+        tv_player_detail_team_transfer_fee.text =
+            StringBuilder("Transfer Fee : ${formatValue(playerDetailItem?.playerTransferFee)}")
 
-        tv_player_detail_team_wage.text = StringBuilder("Wage : ${formatValue(playerDetailItem?.playerWages)}")
+        tv_player_detail_team_wage.text =
+            StringBuilder("Wage : ${formatValue(playerDetailItem?.playerWages)}")
 
-        tv_player_detail_team_number.text = StringBuilder("Shirt Number : ${formatValue(playerDetailItem?.playerShirtNumber)}")
+        tv_player_detail_team_number.text =
+            StringBuilder("Shirt Number : ${formatValue(playerDetailItem?.playerShirtNumber)}")
 
         tv_player_detail_description.text = formatValue(playerDetailItem?.playerDescription)
 
@@ -220,8 +237,8 @@ class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView, AppBarLayout
         }
     }
 
-    private fun formatValue(stringValue : String?) : String {
-        return if(stringValue != null && stringValue.trim().isNotEmpty()) {
+    private fun formatValue(stringValue: String?): String {
+        return if (stringValue != null && stringValue.trim().isNotEmpty()) {
             stringValue
         } else {
             resources.getString(R.string.value_unknown)

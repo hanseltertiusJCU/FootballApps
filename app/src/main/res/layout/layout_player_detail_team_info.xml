@@ -1,64 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp"
     android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp">
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="8dp"
+    android:orientation="vertical">
 
     <TextView
+        style="@style/text_section"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/text_section"
-        android:text="@string/team_info"/>
+        android:text="@string/team_info" />
 
     <TextView
         android:id="@+id/tv_player_detail_team_name"
+        style="@style/text_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/text_content"
         android:layout_marginTop="8dp"
-        android:text="@string/team_name"/>
+        android:text="@string/team_name" />
 
     <TextView
         android:id="@+id/tv_player_detail_team_date_signed"
+        style="@style/text_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/text_content"
         android:layout_marginTop="8dp"
-        android:text="@string/team_date_signed"/>
+        android:text="@string/team_date_signed" />
 
     <TextView
         android:id="@+id/tv_player_detail_team_transfer_fee"
+        style="@style/text_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/text_content"
         android:layout_marginTop="8dp"
-        android:text="@string/team_transfer_fee"/>
+        android:text="@string/team_transfer_fee" />
 
 
     <TextView
         android:id="@+id/tv_player_detail_team_wage"
+        style="@style/text_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/text_content"
         android:layout_marginTop="8dp"
-        android:text="@string/team_wages"/>
+        android:text="@string/team_wages" />
 
     <TextView
         android:id="@+id/tv_player_detail_team_number"
+        style="@style/text_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/text_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:text="@string/team_number"/>
+        android:text="@string/team_number" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/color_grey_line"/>
+        android:background="@color/color_grey_line" />
 
 </LinearLayout>

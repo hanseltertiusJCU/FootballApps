@@ -22,7 +22,7 @@ import kotlin.math.abs
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class LeagueDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
 
-    private var leagueItem : LeagueItem? = null
+    private var leagueItem: LeagueItem? = null
 
     private lateinit var leagueName: String
     private lateinit var leagueId: String
@@ -91,7 +91,7 @@ class LeagueDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
     override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
 
-        if(scrollRange == -1){
+        if (scrollRange == -1) {
             scrollRange = appBarLayout.totalScrollRange
         }
 
@@ -104,9 +104,12 @@ class LeagueDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 collapsing_toolbar_layout_league_detail.title = " "
                 isShow = false
             }
-            abs(verticalOffset) == appBarLayout.totalScrollRange -> iv_league_detail_logo.contentDescription = getString(R.string.league_detail_logo_collapsed)
-            verticalOffset == 0 -> iv_league_detail_logo.contentDescription = getString(R.string.league_detail_logo_expanded)
-            else -> iv_league_detail_logo.contentDescription = getString(R.string.league_detail_logo_collapsing)
+            abs(verticalOffset) == appBarLayout.totalScrollRange -> iv_league_detail_logo.contentDescription =
+                getString(R.string.league_detail_logo_collapsed)
+            verticalOffset == 0 -> iv_league_detail_logo.contentDescription =
+                getString(R.string.league_detail_logo_expanded)
+            else -> iv_league_detail_logo.contentDescription =
+                getString(R.string.league_detail_logo_collapsing)
         }
 
     }
@@ -139,7 +142,7 @@ class LeagueDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val newPosition = tab?.position!!
 
-                if(currentPosition == 2 || currentPosition == 3) {
+                if (currentPosition == 2 || currentPosition == 3) {
                     val fragmentToHide =
                         leagueDetailViewPagerAdapter.getItem(currentPosition) as FragmentLifecycle
                     fragmentToHide.onPauseFragment()

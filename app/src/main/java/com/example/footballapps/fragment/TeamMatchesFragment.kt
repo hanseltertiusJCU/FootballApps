@@ -62,7 +62,7 @@ class TeamMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
 
     private lateinit var teamDetailActivity: TeamDetailActivity
 
-    private var searchQuery : String = ""
+    private var searchQuery: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

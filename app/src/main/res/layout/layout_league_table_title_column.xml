@@ -1,112 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp">
+    android:layout_marginEnd="16dp"
+    android:orientation="vertical">
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/color_grey_line"/>
+        android:background="@color/color_grey_line" />
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal">
 
         <TextView
+            style="@style/text_content_bold"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/text_content_bold"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:layout_gravity="center"
-            android:text="@string/position"/>
+            android:text="@string/position" />
 
         <TextView
+            style="@style/text_content_bold"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/text_content_bold"
+            android:layout_gravity="center"
             android:layout_weight="4"
             android:gravity="center"
-            android:layout_gravity="center"
-            android:text="@string/team_name"/>
+            android:text="@string/team_name" />
 
         <TextView
+            style="@style/text_content_bold"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/text_content_bold"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:layout_gravity="center"
-            android:text="@string/games_played"/>
+            android:text="@string/games_played" />
 
         <TextView
+            style="@style/text_content_bold"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/text_content_bold"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:layout_gravity="center"
-            android:text="@string/game_won"/>
+            android:text="@string/game_won" />
 
         <TextView
+            style="@style/text_content_bold"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/text_content_bold"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:layout_gravity="center"
-            android:text="@string/game_tied"/>
+            android:text="@string/game_tied" />
 
         <TextView
+            style="@style/text_content_bold"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/text_content_bold"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:layout_gravity="center"
-            android:text="@string/game_lost"/>
+            android:text="@string/game_lost" />
 
         <TextView
+            style="@style/text_content_bold"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/text_content_bold"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:layout_gravity="center"
-            android:text="@string/goal_scored"/>
+            android:text="@string/goal_scored" />
 
         <TextView
+            style="@style/text_content_bold"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/text_content_bold"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:layout_gravity="center"
-            android:text="@string/goal_conceded"/>
+            android:text="@string/goal_conceded" />
 
         <TextView
+            style="@style/text_content_bold"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/text_content_bold"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:layout_gravity="center"
-            android:text="@string/goal_difference"/>
+            android:text="@string/goal_difference" />
 
         <TextView
+            style="@style/text_content_bold"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/text_content_bold"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:layout_gravity="center"
-            android:text="@string/pts"/>
+            android:text="@string/pts" />
 
     </LinearLayout>
 

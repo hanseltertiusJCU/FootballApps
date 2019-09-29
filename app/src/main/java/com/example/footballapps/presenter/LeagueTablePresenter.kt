@@ -6,26 +6,26 @@ import com.example.footballapps.repository.LeagueTableRepository
 import com.example.footballapps.view.LeagueTableView
 
 class LeagueTablePresenter(
-    private val leagueTableView : LeagueTableView,
-    private val leagueTableRepository : LeagueTableRepository
+    private val leagueTableView: LeagueTableView,
+    private val leagueTableRepository: LeagueTableRepository
 ) {
-    fun getLeagueTableInfo(leagueId : String, leagueSeason : String){
+    fun getLeagueTableInfo(leagueId: String, leagueSeason: String) {
         leagueTableView.dataIsLoading()
 
         leagueTableRepository.getLeagueTable(
             leagueId,
             leagueSeason,
             object : LeagueTableRepositoryCallback<LeagueTableResponse?> {
-            override fun onDataLoaded(data: LeagueTableResponse?) {
-                leagueTableView.showLeagueTable(data!!)
+                override fun onDataLoaded(data: LeagueTableResponse?) {
+                    leagueTableView.showLeagueTable(data!!)
 
-                leagueTableView.dataLoadingFinished()
-            }
+                    leagueTableView.dataLoadingFinished()
+                }
 
-            override fun onDataError() {
-                leagueTableView.dataFailedToLoad()
-            }
+                override fun onDataError() {
+                    leagueTableView.dataFailedToLoad()
+                }
 
-        })
+            })
     }
 }

@@ -7,8 +7,8 @@ import retrofit2.http.Query
 
 interface PlayersService {
     @GET("lookup_all_players.php")
-    fun getPlayersResponse(@Query("id") idTeam : String) : Observable<PlayerResponse>
+    fun getPlayersResponse(@Query("id") idTeam: String): Observable<PlayerResponse>
 
     @GET("lookupplayer.php")
-    fun getPlayerDetailResponse(@Query("id") idPlayer : String) : Observable<PlayerResponse>
+    fun getPlayerDetailResponse(@Query("id") idPlayer: String): Observable<PlayerResponse>
 }

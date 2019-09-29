@@ -1,6 +1,5 @@
 package com.example.footballapps.repository
 
-import android.util.Log
 import com.example.footballapps.callback.MatchesRepositoryCallback
 import com.example.footballapps.client.RetrofitClient
 import com.example.footballapps.model.MatchItem
@@ -75,7 +74,7 @@ class MatchesRepository {
             })
     }
 
-    fun getTeamNextMatches(id : String, callback: MatchesRepositoryCallback<MatchResponse?>) {
+    fun getTeamNextMatches(id: String, callback: MatchesRepositoryCallback<MatchResponse?>) {
         RetrofitClient
             .createService(MatchService::class.java)
             .getTeamNextMatchesResponse(id)

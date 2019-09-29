@@ -3,12 +3,10 @@ package com.example.footballapps.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.util.TypedValue
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.footballapps.R
@@ -33,11 +31,11 @@ import org.jetbrains.anko.wrapContent
 class LeagueFragment : Fragment(), AnkoComponent<Context>, LeagueView {
 
 
-    private lateinit var recyclerViewLeagueList : RecyclerView
+    private lateinit var recyclerViewLeagueList: RecyclerView
 
-    private lateinit var leaguePresenter : LeaguePresenter
+    private lateinit var leaguePresenter: LeaguePresenter
 
-    private var leagueItems : MutableList<LeagueItem> = mutableListOf()
+    private var leagueItems: MutableList<LeagueItem> = mutableListOf()
 
     private val spanCount = 2
     private val includeEdge = true
@@ -51,19 +49,19 @@ class LeagueFragment : Fragment(), AnkoComponent<Context>, LeagueView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             initData()
         }
     }
 
-    private fun initData(){
+    private fun initData() {
         val leagueId = resources.getStringArray(R.array.league_id)
         val leagueName = resources.getStringArray(R.array.league_name)
         val leagueImage = resources.obtainTypedArray(R.array.league_image)
 
         leagueItems.clear()
 
-        for(i in leagueName.indices){
+        for (i in leagueName.indices) {
             leagueItems.add(LeagueItem(leagueId[i], leagueName[i], leagueImage.getResourceId(i, 0)))
         }
 
@@ -92,7 +90,13 @@ class LeagueFragment : Fragment(), AnkoComponent<Context>, LeagueView {
         recyclerViewLeagueList.adapter = LeagueRecyclerViewAdapter(leagueInfoList) {
             startActivity<LeagueDetailActivity>("leagueItem" to it)
         }
-        recyclerViewLeagueList.addItemDecoration(GridSpacingItemDecoration(spanCount = spanCount, space = dip(16), includeEdge = includeEdge))
+        recyclerViewLeagueList.addItemDecoration(
+            GridSpacingItemDecoration(
+                spanCount = spanCount,
+                space = dip(16),
+                includeEdge = includeEdge
+            )
+        )
     }
 
 

@@ -5,8 +5,11 @@ import com.example.footballapps.model.PlayerResponse
 import com.example.footballapps.repository.PlayersRepository
 import com.example.footballapps.view.PlayersView
 
-class PlayersPresenter(private val playersView: PlayersView, private val playersRepository: PlayersRepository){
-    fun getPlayersInfo(teamId : String){
+class PlayersPresenter(
+    private val playersView: PlayersView,
+    private val playersRepository: PlayersRepository
+) {
+    fun getPlayersInfo(teamId: String) {
         playersView.dataIsLoading()
 
         playersRepository.getPlayers(teamId, object : PlayersRepositoryCallback<PlayerResponse?> {

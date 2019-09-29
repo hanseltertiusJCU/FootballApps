@@ -3,21 +3,14 @@ package com.example.footballapps.fragment
 
 import android.app.SearchManager
 import android.content.Context
-import android.net.ConnectivityManager
-import android.net.Network
-import android.net.NetworkCapabilities
-import android.net.NetworkInfo
-import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.footballapps.R
 import com.example.footballapps.activity.MatchDetailActivity
 import com.example.footballapps.adapter.FavoriteMatchRecyclerViewAdapter
@@ -30,13 +23,11 @@ import com.example.footballapps.utils.visible
 import com.example.footballapps.view.FavoriteMatchView
 import org.jetbrains.anko.*
 import org.jetbrains.anko.constraint.layout.constraintLayout
-import org.jetbrains.anko.constraint.layout.matchConstraint
 import org.jetbrains.anko.recyclerview.v7.recyclerView
-import org.jetbrains.anko.support.v4.onRefresh
-import org.jetbrains.anko.support.v4.swipeRefreshLayout
 
 
-class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchView, FragmentLifecycle {
+class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchView,
+    FragmentLifecycle {
 
     private lateinit var favoriteMatchRecyclerView: RecyclerView
     private lateinit var favoriteMatchProgressBar: ProgressBar
@@ -53,7 +44,7 @@ class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchV
     private var isDataLoading = false
     private var isSearching = false
 
-    private var searchQuery : String = ""
+    private var searchQuery: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,7 +57,7 @@ class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchV
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             initData()
         }
 

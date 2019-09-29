@@ -9,20 +9,22 @@ class PlayerDetailPresenter(
     private val playerDetailView: PlayerDetailView,
     private val playerDetailRepository: PlayerDetailRepository
 ) {
-   fun getPlayerDetailInfo(playerId : String){
-       playerDetailView.dataIsLoading()
+    fun getPlayerDetailInfo(playerId: String) {
+        playerDetailView.dataIsLoading()
 
-       playerDetailRepository.getPlayerDetail(playerId, object : PlayerDetailRepositoryCallback<PlayerResponse?> {
-           override fun onDataLoaded(data: PlayerResponse?) {
-               playerDetailView.showPlayerDetailData(data!!)
+        playerDetailRepository.getPlayerDetail(
+            playerId,
+            object : PlayerDetailRepositoryCallback<PlayerResponse?> {
+                override fun onDataLoaded(data: PlayerResponse?) {
+                    playerDetailView.showPlayerDetailData(data!!)
 
-               playerDetailView.dataLoadingFinished()
-           }
+                    playerDetailView.dataLoadingFinished()
+                }
 
-           override fun onDataError() {
-               playerDetailView.dataFailedToLoad()
-           }
+                override fun onDataError() {
+                    playerDetailView.dataFailedToLoad()
+                }
 
-       })
-   }
+            })
+    }
 }

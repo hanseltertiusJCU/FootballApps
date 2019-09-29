@@ -13,10 +13,10 @@ interface MatchService {
     fun getLeagueLastMatchesResponse(@Query("id") idLeague: String): Observable<MatchResponse>
 
     @GET("eventsnext.php")
-    fun getTeamNextMatchesResponse(@Query("id") idTeam : String) : Observable<MatchResponse>
+    fun getTeamNextMatchesResponse(@Query("id") idTeam: String): Observable<MatchResponse>
 
     @GET("eventslast.php")
-    fun getTeamLastMatchesResponse(@Query("id") idTeam: String) : Observable<MatchResponse>
+    fun getTeamLastMatchesResponse(@Query("id") idTeam: String): Observable<MatchResponse>
 
     @GET("lookupevent.php?")
     fun getMatchDetailResponse(@Query("id") idEvent: String): Observable<MatchResponse>

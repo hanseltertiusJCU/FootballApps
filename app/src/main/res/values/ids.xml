@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- League Detail -->
-    <item name="iv_league_detail_image" type="id" />
-    <item name="tv_league_detail_name" type="id" />
     <item name="tv_league_detail_formed_year" type="id" />
     <item name="tv_league_detail_country" type="id" />
     <item name="tv_desc_title" type="id" />
@@ -19,7 +17,7 @@
 
     <!-- Favorite team fragment -->
     <item name="favorite_team_parent_layout" type="id" />
-    <item name="rv_favorite_team" type="id"/>
+    <item name="rv_favorite_team" type="id" />
 
     <!-- League List -->
     <item name="rv_league_list" type="id" />
@@ -32,7 +30,6 @@
 
     <!-- League Table -->
     <item name="league_table_parent_layout" type="id" />
-    <item name="season_title" type="id" />
     <item name="rv_league_table" type="id" />
     <item name="league_table_spinner" type="id" />
     <item name="league_table_layout" type="id" />
@@ -48,19 +45,12 @@
     <!-- Team Detail -->
     <item name="container_layout_team_detail" type="id" />
     <item name="team_detail_layout" type="id" />
-    <item name="iv_team_detail_image" type="id" />
     <item name="tv_team_jersey" type="id" />
-    <item name="tv_team_detail_name" type="id" />
-    <item name="tv_team_detail_formed_year" type="id" />
-    <item name="tv_team_detail_country" type="id" />
     <item name="tv_league_title" type="id" />
     <item name="tv_team_detail_league" type="id" />
     <item name="tv_stadium_title" type="id" />
-    <item name="tv_stadium_name_title" type="id" />
     <item name="tv_team_stadium_name" type="id" />
-    <item name="tv_stadium_located_in_title" type="id" />
     <item name="tv_team_stadium_location" type="id" />
-    <item name="tv_stadium_capacity_title" type="id" />
     <item name="tv_team_stadium_capacity" type="id" />
     <item name="tv_stadium_description_title" type="id" />
     <item name="tv_stadium_description" type="id" />

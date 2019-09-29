@@ -5,7 +5,6 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -41,7 +40,8 @@ class TeamRecyclerViewAdapter(
                     lparams(width = matchParent, height = wrapContent)
 
                     verticalLayout {
-                        backgroundResource = attr(R.attr.selectableItemBackgroundBorderless).resourceId
+                        backgroundResource =
+                            attr(R.attr.selectableItemBackgroundBorderless).resourceId
 
                         imageView {
                             id = R.id.team_badge
@@ -75,7 +75,10 @@ class TeamRecyclerViewAdapter(
 
         fun bindItem(team: TeamItem, listener: (TeamItem) -> Unit) {
 
-            team.teamBadge.let { Picasso.get().load(it).placeholder(R.drawable.team_badge_placeholder).fit().into(teamBadge) }
+            team.teamBadge.let {
+                Picasso.get().load(it).placeholder(R.drawable.team_badge_placeholder).fit()
+                    .into(teamBadge)
+            }
 
             teamName.text = team.teamName
             itemView.setOnClickListener { listener(team) }

@@ -49,18 +49,24 @@ class FavoriteMatchRecyclerViewAdapter(
             itemView.league_item_name.text = favoriteMatchItem.leagueName ?: StringBuilder(
                 "League ${formatValue(favoriteMatchItem.leagueName)}"
             )
-            itemView.league_item_match_week.text = StringBuilder("Week ${formatValue(favoriteMatchItem.leagueMatchWeek)}")
+            itemView.league_item_match_week.text =
+                StringBuilder("Week ${formatValue(favoriteMatchItem.leagueMatchWeek)}")
 
-            val arrayLocalTimeDt = convertDateTimeToLocalTimeZone(formatDate(favoriteMatchItem.dateEvent), formatTime(favoriteMatchItem.timeEvent))
+            val arrayLocalTimeDt = convertDateTimeToLocalTimeZone(
+                formatDate(favoriteMatchItem.dateEvent),
+                formatTime(favoriteMatchItem.timeEvent)
+            )
 
             itemView.league_item_event_date.text = arrayLocalTimeDt[0]
             itemView.league_item_event_time.text = arrayLocalTimeDt[1]
 
             itemView.league_item_home_team_name.text = formatValue(favoriteMatchItem.homeTeamName)
 
-            itemView.league_item_home_team_score.text = formatValueData(favoriteMatchItem.homeTeamScore)
+            itemView.league_item_home_team_score.text =
+                formatValueData(favoriteMatchItem.homeTeamScore)
 
-            itemView.league_item_away_team_score.text = formatValueData(favoriteMatchItem.awayTeamScore)
+            itemView.league_item_away_team_score.text =
+                formatValueData(favoriteMatchItem.awayTeamScore)
 
             itemView.league_item_away_team_name.text = formatValue(favoriteMatchItem.awayTeamName)
 
@@ -69,16 +75,16 @@ class FavoriteMatchRecyclerViewAdapter(
             }
         }
 
-        private fun formatValueData(valueData : String?) : String{
-            return if(valueData != null && valueData.trim().isNotEmpty()){
+        private fun formatValueData(valueData: String?): String {
+            return if (valueData != null && valueData.trim().isNotEmpty()) {
                 valueData
             } else {
                 valueNone
             }
         }
 
-        private fun formatValue(stringValue : String?) : String {
-            return if(stringValue != null && stringValue.trim().isNotEmpty()) {
+        private fun formatValue(stringValue: String?): String {
+            return if (stringValue != null && stringValue.trim().isNotEmpty()) {
                 stringValue
             } else {
                 valueUnknown

@@ -18,13 +18,13 @@ import org.mockito.MockitoAnnotations
 class LeagueTablePresenterTest {
 
     @Mock
-    private lateinit var leagueTableView : LeagueTableView
+    private lateinit var leagueTableView: LeagueTableView
 
     @Mock
     private lateinit var leagueTableRepository: LeagueTableRepository
 
     @Mock
-    private lateinit var leagueTableResponse : LeagueTableResponse
+    private lateinit var leagueTableResponse: LeagueTableResponse
 
     private lateinit var leagueTablePresenter: LeagueTablePresenter
 

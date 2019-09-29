@@ -2,12 +2,11 @@ package com.example.footballapps.fragment
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
-
 import com.example.footballapps.R
 import com.example.footballapps.activity.MainActivity
 import com.example.footballapps.adapter.ViewPagerAdapter
@@ -17,13 +16,13 @@ import kotlinx.android.synthetic.main.fragment_favorite.*
 
 class FavoriteFragment : Fragment() {
 
-    lateinit var favoriteViewPagerAdapter : ViewPagerAdapter
+    lateinit var favoriteViewPagerAdapter: ViewPagerAdapter
     var currentPosition = 0
 
     private val favoriteMatchesFragment = FavoriteMatchFragment()
     private val favoriteTeamsFragment = FavoriteTeamFragment()
 
-    private lateinit var mainActivity : MainActivity
+    private lateinit var mainActivity: MainActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,8 +44,7 @@ class FavoriteFragment : Fragment() {
     }
 
 
-
-    private fun setupViewPager(viewPager : ViewPager) {
+    private fun setupViewPager(viewPager: ViewPager) {
         favoriteViewPagerAdapter = ViewPagerAdapter(childFragmentManager)
         favoriteViewPagerAdapter.addFragment(favoriteMatchesFragment, "Matches")
         favoriteViewPagerAdapter.addFragment(favoriteTeamsFragment, "Teams")
@@ -55,10 +53,15 @@ class FavoriteFragment : Fragment() {
         setListener()
     }
 
-    private fun setListener(){
-        view_pager_favorite_fragment.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tab_layout_favorite_fragment))
+    private fun setListener() {
+        view_pager_favorite_fragment.addOnPageChangeListener(
+            TabLayout.TabLayoutOnPageChangeListener(
+                tab_layout_favorite_fragment
+            )
+        )
 
-        tab_layout_favorite_fragment.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        tab_layout_favorite_fragment.addOnTabSelectedListener(object :
+            TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {}
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
@@ -68,7 +71,8 @@ class FavoriteFragment : Fragment() {
 
                 val newPosition = tab.position
 
-                val fragmentToHide = favoriteViewPagerAdapter.getItem(currentPosition) as FragmentLifecycle
+                val fragmentToHide =
+                    favoriteViewPagerAdapter.getItem(currentPosition) as FragmentLifecycle
                 fragmentToHide.onPauseFragment()
 
                 currentPosition = newPosition
@@ -81,13 +85,12 @@ class FavoriteFragment : Fragment() {
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
-        if(hidden){
-            val fragmentToHide = favoriteViewPagerAdapter.getItem(currentPosition) as FragmentLifecycle
+        if (hidden) {
+            val fragmentToHide =
+                favoriteViewPagerAdapter.getItem(currentPosition) as FragmentLifecycle
             fragmentToHide.onPauseFragment()
         }
     }
-
-
 
 
 }

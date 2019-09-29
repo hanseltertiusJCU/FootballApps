@@ -37,28 +37,28 @@ import org.jetbrains.anko.support.v4.*
 
 class LeagueMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
 
-    private lateinit var leagueMatchesRecyclerView : RecyclerView
-    private lateinit var leagueMatchesProgressBar : ProgressBar
+    private lateinit var leagueMatchesRecyclerView: RecyclerView
+    private lateinit var leagueMatchesProgressBar: ProgressBar
     private lateinit var leagueMatchesSwipeRefreshLayout: SwipeRefreshLayout
-    private lateinit var leagueMatchesSpinner : Spinner
-    private lateinit var leagueMatchesErrorText : TextView
+    private lateinit var leagueMatchesSpinner: Spinner
+    private lateinit var leagueMatchesErrorText: TextView
 
-    private lateinit var leagueMatchesPresenter : MatchPresenter
+    private lateinit var leagueMatchesPresenter: MatchPresenter
 
-    private var leagueMatches : MutableList<MatchItem> = mutableListOf()
-    private lateinit var leagueMatchesRvAdapter : MatchRecyclerViewAdapter
+    private var leagueMatches: MutableList<MatchItem> = mutableListOf()
+    private lateinit var leagueMatchesRvAdapter: MatchRecyclerViewAdapter
 
-    private lateinit var leagueId : String
+    private lateinit var leagueId: String
 
     private var currentPosition = 0
 
-    private var leagueMatchSearchItem : MenuItem? = null
-    private var leagueMatchSearchView : SearchView? = null
+    private var leagueMatchSearchItem: MenuItem? = null
+    private var leagueMatchSearchView: SearchView? = null
 
     private var isDataLoading = false
     private var isSearching = false
 
-    private var searchQuery : String = ""
+    private var searchQuery: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -84,7 +84,7 @@ class LeagueMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
 
                         leagueMatchesSpinner = spinner {
                             id = R.id.league_match_spinner
-                        }.lparams{
+                        }.lparams {
                             width = matchParent
                             height = wrapContent
                             margin = dip(16)
@@ -103,14 +103,14 @@ class LeagueMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
                             verticalBias = 0f
                         }
 
-                        leagueMatchesProgressBar = progressBar().lparams{
+                        leagueMatchesProgressBar = progressBar().lparams {
                             topToTop = R.id.league_match_parent_layout
                             leftToLeft = R.id.league_match_parent_layout
                             rightToRight = R.id.league_match_parent_layout
                             bottomToBottom = R.id.league_match_parent_layout
                         }
 
-                        leagueMatchesErrorText = themedTextView(R.style.text_content).lparams{
+                        leagueMatchesErrorText = themedTextView(R.style.text_content).lparams {
                             topToTop = R.id.league_match_parent_layout
                             leftToLeft = R.id.league_match_parent_layout
                             rightToRight = R.id.league_match_parent_layout
@@ -130,11 +130,15 @@ class LeagueMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
         initData()
     }
 
-    private fun initData(){
+    private fun initData() {
         leagueId = arguments?.getString("leagueId") ?: "4328"
 
         val matchesCategoryList = resources.getStringArray(R.array.matches_category)
-        val leagueMatchesSpinnerAdapter = ArrayAdapter(activity!!.applicationContext, android.R.layout.simple_spinner_dropdown_item, matchesCategoryList)
+        val leagueMatchesSpinnerAdapter = ArrayAdapter(
+            activity!!.applicationContext,
+            android.R.layout.simple_spinner_dropdown_item,
+            matchesCategoryList
+        )
 
         leagueMatchesSpinner.adapter = leagueMatchesSpinnerAdapter
 
@@ -151,7 +155,12 @@ class LeagueMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
         leagueMatchesSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
 
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 currentPosition = position
                 EspressoIdlingResource.increment()
                 when (position) {
@@ -164,7 +173,7 @@ class LeagueMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
 
         leagueMatchesSwipeRefreshLayout.onRefresh {
             EspressoIdlingResource.increment()
-            if(isSearching){
+            if (isSearching) {
                 leagueMatchesPresenter.getSearchMatchInfo(searchQuery)
             } else {
                 when (currentPosition) {
@@ -216,7 +225,7 @@ class LeagueMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
     }
 
     override fun dataLoadingFinished() {
-        if(!EspressoIdlingResource.idlingResource.isIdleNow) {
+        if (!EspressoIdlingResource.idlingResource.isIdleNow) {
             EspressoIdlingResource.decrement()
         }
         leagueMatchesSwipeRefreshLayout.isRefreshing = false
@@ -228,7 +237,7 @@ class LeagueMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
     }
 
     override fun dataFailedToLoad() {
-        if(!EspressoIdlingResource.idlingResource.isIdleNow) {
+        if (!EspressoIdlingResource.idlingResource.isIdleNow) {
             EspressoIdlingResource.decrement()
         }
 
@@ -251,14 +260,14 @@ class LeagueMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
     override fun showMatchesData(matchResponse: MatchResponse) {
         leagueMatches.clear()
 
-        if(isSearching){
+        if (isSearching) {
             val searchResultLeagueMatchesList = matchResponse.searchResultEvents
-            if(searchResultLeagueMatchesList != null){
+            if (searchResultLeagueMatchesList != null) {
                 leagueMatches.addAll(searchResultLeagueMatchesList)
             }
         } else {
             val leagueMatchesList = matchResponse.events
-            if(leagueMatchesList != null){
+            if (leagueMatchesList != null) {
                 leagueMatches.addAll(leagueMatchesList)
             }
         }
@@ -275,14 +284,20 @@ class LeagueMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
 
         leagueMatchSearchItem = menu.findItem(R.id.action_search)
 
-        val leagueMatchSearchManager : SearchManager = context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val leagueMatchSearchManager: SearchManager =
+            context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
 
-        if(leagueMatchSearchItem != null){
+        if (leagueMatchSearchItem != null) {
             leagueMatchSearchView = leagueMatchSearchItem?.actionView as SearchView
 
-            leagueMatchSearchView?.setSearchableInfo(leagueMatchSearchManager.getSearchableInfo(activity?.componentName))
+            leagueMatchSearchView?.setSearchableInfo(
+                leagueMatchSearchManager.getSearchableInfo(
+                    activity?.componentName
+                )
+            )
 
-            leagueMatchSearchItem?.setOnActionExpandListener(object  : MenuItem.OnActionExpandListener {
+            leagueMatchSearchItem?.setOnActionExpandListener(object :
+                MenuItem.OnActionExpandListener {
                 override fun onMenuItemActionExpand(menuItem: MenuItem?): Boolean {
                     isSearching = true
                     leagueMatchesSpinner.gone()
@@ -307,7 +322,7 @@ class LeagueMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
 
             leagueMatchSearchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
-                    if(!isDataLoading){
+                    if (!isDataLoading) {
                         searchQuery = query
                         EspressoIdlingResource.increment()
                         leagueMatchesPresenter.getSearchMatchInfo(searchQuery)

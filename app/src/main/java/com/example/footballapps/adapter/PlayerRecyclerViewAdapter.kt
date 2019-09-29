@@ -43,22 +43,23 @@ class PlayerRecyclerViewAdapter
         fun bindItem(playerItem: PlayerItem, clickListener: (PlayerItem) -> Unit) {
 
             Picasso.get().load(playerItem.playerPhoto)
-                .placeholder(R.drawable.ic_player_picture_placeholder)
+                .placeholder(R.drawable.profile_picture_placeholder)
                 .into(itemView.iv_player_photo)
 
             itemView.tv_player_name.text = playerItem.playerName ?: valueUnknown
             itemView.tv_player_nationality.text =
                 playerItem.playerNationality ?: valueUnknown
             itemView.tv_player_position.text = playerItem.playerPosition ?: valueUnknown
-            itemView.tv_player_number.text = StringBuilder("#${formatValueData(playerItem.playerShirtNumber)}")
+            itemView.tv_player_number.text =
+                StringBuilder("#${formatValueData(playerItem.playerShirtNumber)}")
 
             itemView.setOnClickListener {
                 clickListener(playerItem)
             }
         }
 
-        private fun formatValueData(valueData : String?) : String{
-            return if(valueData != null && valueData.trim().isNotEmpty()){
+        private fun formatValueData(valueData: String?): String {
+            return if (valueData != null && valueData.trim().isNotEmpty()) {
                 valueData
             } else {
                 valueNone

@@ -3,7 +3,6 @@ package com.example.footballapps.presenter
 import com.example.footballapps.callback.PlayerDetailRepositoryCallback
 import com.example.footballapps.model.PlayerResponse
 import com.example.footballapps.repository.PlayerDetailRepository
-import com.example.footballapps.repository.PlayersRepository
 import com.example.footballapps.view.PlayerDetailView
 import com.nhaarman.mockito_kotlin.argumentCaptor
 import com.nhaarman.mockito_kotlin.eq
@@ -11,8 +10,6 @@ import com.nhaarman.mockito_kotlin.inOrder
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Before
 import org.junit.Test
-
-import org.junit.Assert.*
 import org.mockito.Mock
 import org.mockito.Mockito.times
 import org.mockito.MockitoAnnotations
@@ -57,9 +54,8 @@ class PlayerDetailPresenterTest {
     }
 
 
-
     @Test
-    fun getFailedPlayerDetailInfoTest(){
+    fun getFailedPlayerDetailInfoTest() {
         val id = ""
 
         playerDetailPresenter.getPlayerDetailInfo(id)

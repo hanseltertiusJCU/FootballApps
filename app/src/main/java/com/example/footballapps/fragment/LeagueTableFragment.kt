@@ -38,23 +38,23 @@ import org.jetbrains.anko.support.v4.nestedScrollView
 import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 
-class LeagueTableFragment : Fragment(), LeagueTableView{
+class LeagueTableFragment : Fragment(), LeagueTableView {
 
-    private lateinit var leagueTableRecyclerView : RecyclerView
-    private lateinit var leagueTableProgressBar : ProgressBar
-    private lateinit var leagueTableSwipeRefreshLayout : SwipeRefreshLayout
-    private lateinit var leagueTableErrorText : TextView
-    private lateinit var leagueTableLayout : LinearLayout
-    private lateinit var leagueTableSpinner : Spinner
+    private lateinit var leagueTableRecyclerView: RecyclerView
+    private lateinit var leagueTableProgressBar: ProgressBar
+    private lateinit var leagueTableSwipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var leagueTableErrorText: TextView
+    private lateinit var leagueTableLayout: LinearLayout
+    private lateinit var leagueTableSpinner: Spinner
 
     private lateinit var leagueTablePresenter: LeagueTablePresenter
 
-    private var teamsInLeagueTableList : MutableList<TeamInTableItem> = mutableListOf()
-    private lateinit var leagueTableRvAdapter : LeagueTableRecyclerViewAdapter
+    private var teamsInLeagueTableList: MutableList<TeamInTableItem> = mutableListOf()
+    private lateinit var leagueTableRvAdapter: LeagueTableRecyclerViewAdapter
 
-    private lateinit var leagueId : String
+    private lateinit var leagueId: String
 
-    private lateinit var seasonValue : String
+    private lateinit var seasonValue: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -95,7 +95,7 @@ class LeagueTableFragment : Fragment(), LeagueTableView{
                     }
 
 
-                }.lparams{
+                }.lparams {
                     width = matchConstraint
                     height = matchConstraint
                     topToBottom = R.id.league_table_spinner
@@ -105,14 +105,14 @@ class LeagueTableFragment : Fragment(), LeagueTableView{
                     verticalBias = 0f
                 }
 
-                leagueTableProgressBar = progressBar().lparams{
+                leagueTableProgressBar = progressBar().lparams {
                     topToTop = R.id.league_table_parent_layout
                     leftToLeft = R.id.league_table_parent_layout
                     rightToRight = R.id.league_table_parent_layout
                     bottomToBottom = R.id.league_table_parent_layout
                 }
 
-                leagueTableErrorText = themedTextView(R.style.text_content).lparams{
+                leagueTableErrorText = themedTextView(R.style.text_content).lparams {
                     topToTop = R.id.league_table_parent_layout
                     leftToLeft = R.id.league_table_parent_layout
                     rightToRight = R.id.league_table_parent_layout
@@ -142,18 +142,27 @@ class LeagueTableFragment : Fragment(), LeagueTableView{
 
         val seasonOptions = mutableListOf<SeasonOption>()
 
-        for(i in seasonValueList.indices){
+        for (i in seasonValueList.indices) {
             seasonOptions.add(SeasonOption(seasonValueList[i], seasonTextList[i]))
         }
 
-        val spinnerAdapter = ArrayAdapter(activity!!.applicationContext, android.R.layout.simple_spinner_dropdown_item, seasonOptions)
+        val spinnerAdapter = ArrayAdapter(
+            activity!!.applicationContext,
+            android.R.layout.simple_spinner_dropdown_item,
+            seasonOptions
+        )
 
         leagueTableSpinner.adapter = spinnerAdapter
 
         leagueTableSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
 
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 val selectedLeagueOption = parent!!.selectedItem as SeasonOption
 
                 seasonValue = selectedLeagueOption.season
@@ -178,7 +187,7 @@ class LeagueTableFragment : Fragment(), LeagueTableView{
     }
 
     override fun dataLoadingFinished() {
-        if(!EspressoIdlingResource.idlingResource.isIdleNow){
+        if (!EspressoIdlingResource.idlingResource.isIdleNow) {
             EspressoIdlingResource.decrement()
         }
 
@@ -189,7 +198,7 @@ class LeagueTableFragment : Fragment(), LeagueTableView{
     }
 
     override fun dataFailedToLoad() {
-        if(!EspressoIdlingResource.idlingResource.isIdleNow){
+        if (!EspressoIdlingResource.idlingResource.isIdleNow) {
             EspressoIdlingResource.decrement()
         }
 
@@ -199,7 +208,7 @@ class LeagueTableFragment : Fragment(), LeagueTableView{
         leagueTableLayout.invisible()
 
         val isNetworkConnected = checkNetworkConnection()
-        if(isNetworkConnected){
+        if (isNetworkConnected) {
             leagueTableErrorText.text = resources.getString(R.string.no_data_to_show)
         } else {
             leagueTableErrorText.text = resources.getString(R.string.no_internet_connection)
@@ -209,7 +218,7 @@ class LeagueTableFragment : Fragment(), LeagueTableView{
     override fun showLeagueTable(leagueTableResponse: LeagueTableResponse) {
         teamsInLeagueTableList.clear()
         val leagueTableTeams = leagueTableResponse.leagueTable
-        if(leagueTableTeams != null){
+        if (leagueTableTeams != null) {
             teamsInLeagueTableList.addAll(leagueTableTeams)
         }
         Log.d(" table size", teamsInLeagueTableList.size.toString())

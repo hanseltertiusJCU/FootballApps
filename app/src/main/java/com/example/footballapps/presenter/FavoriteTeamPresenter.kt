@@ -2,8 +2,6 @@ package com.example.footballapps.presenter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import com.example.footballapps.R
-import com.example.footballapps.application.FootballApps
 import com.example.footballapps.favorite.FavoriteTeamItem
 import com.example.footballapps.helper.database
 import com.example.footballapps.view.FavoriteTeamView
@@ -11,15 +9,19 @@ import org.jetbrains.anko.db.SqlOrderDirection
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.select
 
-class FavoriteTeamPresenter(private val favoriteTeamView : FavoriteTeamView, private val context: Context) {
+class FavoriteTeamPresenter(
+    private val favoriteTeamView: FavoriteTeamView,
+    private val context: Context
+) {
 
-    fun getFavoriteTeamInfo(){
+    fun getFavoriteTeamInfo() {
         favoriteTeamView.dataIsLoading()
 
         context.database.use {
-            val favoriteTeam = select(FavoriteTeamItem.TABLE_FAVORITE_TEAM).orderBy("ID_", SqlOrderDirection.DESC)
+            val favoriteTeam =
+                select(FavoriteTeamItem.TABLE_FAVORITE_TEAM).orderBy("ID_", SqlOrderDirection.DESC)
             val favoriteTeamList = favoriteTeam.parseList(classParser<FavoriteTeamItem>())
-            if(favoriteTeamList.isNotEmpty()){
+            if (favoriteTeamList.isNotEmpty()) {
                 favoriteTeamView.showTeamData(favoriteTeamList)
 
                 favoriteTeamView.dataLoadingFinished()
@@ -29,14 +31,17 @@ class FavoriteTeamPresenter(private val favoriteTeamView : FavoriteTeamView, pri
         }
     }
 
-    fun getFavoriteTeamInfoSearchResult(query : String){
+    fun getFavoriteTeamInfoSearchResult(query: String) {
         favoriteTeamView.dataIsLoading()
 
         val capitalizedQuery = getCapitalizedWord(query)
         context.database.use {
-            val favoriteTeamSearchResult = select(FavoriteTeamItem.TABLE_FAVORITE_TEAM).whereArgs("TEAM_NAME LIKE '%$capitalizedQuery%'").orderBy("ID_", SqlOrderDirection.DESC)
-            val favoriteTeamList = favoriteTeamSearchResult.parseList(classParser<FavoriteTeamItem>())
-            if(favoriteTeamList.isNotEmpty()){
+            val favoriteTeamSearchResult =
+                select(FavoriteTeamItem.TABLE_FAVORITE_TEAM).whereArgs("TEAM_NAME LIKE '%$capitalizedQuery%'")
+                    .orderBy("ID_", SqlOrderDirection.DESC)
+            val favoriteTeamList =
+                favoriteTeamSearchResult.parseList(classParser<FavoriteTeamItem>())
+            if (favoriteTeamList.isNotEmpty()) {
                 favoriteTeamView.showTeamData(favoriteTeamList)
 
                 favoriteTeamView.dataLoadingFinished()
@@ -53,9 +58,6 @@ class FavoriteTeamPresenter(private val favoriteTeamView : FavoriteTeamView, pri
         val splitQuery = inputString.split(space)
         return splitQuery.joinToString(space) { it.capitalize() }
     }
-
-
-
 
 
 }

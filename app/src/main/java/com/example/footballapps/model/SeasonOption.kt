@@ -1,8 +1,8 @@
 package com.example.footballapps.model
 
-data class SeasonOption(val season : String, val seasonString : String) {
+data class SeasonOption(val season: String, val seasonString: String) {
 
-    override fun toString() : String {
+    override fun toString(): String {
         return seasonString
     }
 

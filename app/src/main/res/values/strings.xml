@@ -98,11 +98,6 @@
     <string name="value_none">-</string>
 
     <!-- Unknown match data -->
-    <string name="match_week_unknown">Week Unknown</string>
-    <string name="spectators_unknown">Spectators : Unknown</string>
-    <string name="home_team_unknown">Unknown Home Team Name</string>
-    <string name="away_team_unknown">Unknown Away Team Name</string>
-    <string name="league_unknown">Unknown League</string>
     <string name="date_unknown">Unknown Date</string>
     <string name="time_unknown">Unknown Time</string>
 
@@ -172,15 +167,10 @@
     <string name="player_position">Player Position</string>
 
     <!-- Unknown player data -->
-    <string name="player_name_unknown">Name Unknown</string>
-    <string name="player_nationality_unknown">Nationality Unknown</string>
-    <string name="player_position_unknown">Position Unknown</string>
-    <string name="player_number_unknown">#-</string>
 
     <!-- Player detail data Item -->
     <string name="player_fanart">Player Fanart</string>
     <string name="player_photo">Player Photo</string>
-    <string name="player_birth_date">Player Birth Date</string>
     <string name="height_m">Height (m)</string>
     <string name="player_height">Player Height</string>
     <string name="weight_kg">Weight (kg)</string>
@@ -198,7 +188,6 @@
     <!-- Team in Player Detail Section -->
     <string name="team_date_signed">Team Date Signed</string>
     <string name="team_number">Team Number</string>
-    <string name="team_position">Team Position</string>
     <string name="team_wages">Team Wages</string>
     <string name="team_transfer_fee">Team Transfer Fee</string>
 

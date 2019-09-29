@@ -5,8 +5,11 @@ import com.example.footballapps.model.TeamResponse
 import com.example.footballapps.repository.TeamDetailRepository
 import com.example.footballapps.view.TeamDetailView
 
-class TeamDetailPresenter(private val teamDetailView: TeamDetailView, private val teamDetailRepository: TeamDetailRepository) {
-    fun getTeamDetailInfo(teamId : String) {
+class TeamDetailPresenter(
+    private val teamDetailView: TeamDetailView,
+    private val teamDetailRepository: TeamDetailRepository
+) {
+    fun getTeamDetailInfo(teamId: String) {
         teamDetailView.dataIsLoading()
 
         teamDetailRepository.getTeamDetail(teamId, object :

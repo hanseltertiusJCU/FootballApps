@@ -11,9 +11,11 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
@@ -23,7 +25,6 @@ import com.example.footballapps.model.LeagueDetailResponse
 import com.example.footballapps.presenter.LeagueDetailPresenter
 import com.example.footballapps.repository.LeagueDetailRepository
 import com.example.footballapps.utils.gone
-import com.example.footballapps.utils.invisible
 import com.example.footballapps.utils.visible
 import com.example.footballapps.view.LeagueDetailView
 import org.jetbrains.anko.*
@@ -91,7 +92,8 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
                             }
 
                             view {
-                                background = ContextCompat.getDrawable(context, R.color.color_grey_line)
+                                background =
+                                    ContextCompat.getDrawable(context, R.color.color_grey_line)
                             }.lparams {
                                 width = matchParent
                                 height = dip(1)
@@ -113,7 +115,8 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
                             }
 
                             view {
-                                background = ContextCompat.getDrawable(context, R.color.color_grey_line)
+                                background =
+                                    ContextCompat.getDrawable(context, R.color.color_grey_line)
                             }.lparams {
                                 width = matchParent
                                 height = dip(1)
@@ -144,12 +147,13 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
                             bottomToBottom = R.id.container_layout_league_detail
                         }
 
-                        leagueDetailInfoErrorDataText = themedTextView(R.style.text_content).lparams {
-                            topToTop = R.id.container_layout_league_detail
-                            startToStart = R.id.container_layout_league_detail
-                            endToEnd = R.id.container_layout_league_detail
-                            bottomToBottom = R.id.container_layout_league_detail
-                        }
+                        leagueDetailInfoErrorDataText =
+                            themedTextView(R.style.text_content).lparams {
+                                topToTop = R.id.container_layout_league_detail
+                                startToStart = R.id.container_layout_league_detail
+                                endToEnd = R.id.container_layout_league_detail
+                                bottomToBottom = R.id.container_layout_league_detail
+                            }
 
 
                     }.lparams(width = matchParent, height = matchParent)
@@ -164,7 +168,7 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
 
     }
 
-    private fun initData(){
+    private fun initData() {
         leagueId = arguments?.getString("leagueId") ?: "4328"
 
         leagueDetailPresenter = LeagueDetailPresenter(this, LeagueDetailRepository())
@@ -185,7 +189,7 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
     }
 
     override fun dataLoadingFinished() {
-        if(!EspressoIdlingResource.idlingResource.isIdleNow) {
+        if (!EspressoIdlingResource.idlingResource.isIdleNow) {
             EspressoIdlingResource.decrement()
         }
         leagueDetailInfoSwipeRefreshLayout.isRefreshing = false
@@ -195,7 +199,7 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
     }
 
     override fun dataFailedToLoad() {
-        if(!EspressoIdlingResource.idlingResource.isIdleNow) {
+        if (!EspressoIdlingResource.idlingResource.isIdleNow) {
             EspressoIdlingResource.decrement()
         }
         leagueDetailInfoSwipeRefreshLayout.isRefreshing = false
@@ -207,7 +211,8 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
         if (isNetworkConnected) {
             leagueDetailInfoErrorDataText.text = resources.getString(R.string.no_data_to_show)
         } else {
-            leagueDetailInfoErrorDataText.text = resources.getString(R.string.no_internet_connection)
+            leagueDetailInfoErrorDataText.text =
+                resources.getString(R.string.no_internet_connection)
         }
     }
 
@@ -225,7 +230,8 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
 
             tvLeagueDetailFormedYear.text =
                 StringBuilder("Formed Year : ${leagueDetailItem.leagueFormedYear}")
-            tvLeagueDetailCountry.text = StringBuilder("Country : ${leagueDetailItem.leagueCountry}")
+            tvLeagueDetailCountry.text =
+                StringBuilder("Country : ${leagueDetailItem.leagueCountry}")
         }
     }
 

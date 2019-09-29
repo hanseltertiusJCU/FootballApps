@@ -12,7 +12,7 @@ import io.reactivex.schedulers.Schedulers
 
 class TeamsRepository {
 
-    fun getTeams(id : String, callback : TeamsRepositoryCallback<TeamResponse?>) {
+    fun getTeams(id: String, callback: TeamsRepositoryCallback<TeamResponse?>) {
         RetrofitClient
             .createService(TeamService::class.java)
             .getTeamsResponse(id)
@@ -25,8 +25,8 @@ class TeamsRepository {
 
                 override fun onNext(teamResponse: TeamResponse) {
                     val teamsList = teamResponse.teams
-                    if(teamsList != null){
-                        if(teamsList.isNotEmpty()){
+                    if (teamsList != null) {
+                        if (teamsList.isNotEmpty()) {
                             callback.onDataLoaded(teamResponse)
                         } else {
                             callback.onDataError()
@@ -43,7 +43,7 @@ class TeamsRepository {
             })
     }
 
-    fun getSearchResultTeams(query : String, callback: TeamsRepositoryCallback<TeamResponse?>) {
+    fun getSearchResultTeams(query: String, callback: TeamsRepositoryCallback<TeamResponse?>) {
         RetrofitClient
             .createService(TeamService::class.java)
             .getSearchResultTeamsResponse(query)
@@ -58,7 +58,7 @@ class TeamsRepository {
                     val searchResultTeamsList = teamResponse.teams
                     val filteredSearchResultTeamsList = mutableListOf<TeamItem>()
 
-                    if(searchResultTeamsList != null) {
+                    if (searchResultTeamsList != null) {
                         for (team in searchResultTeamsList) {
                             if (team.sportType.equals("Soccer")) {
                                 filteredSearchResultTeamsList.add(team)
@@ -67,7 +67,7 @@ class TeamsRepository {
                         teamResponse.teams = filteredSearchResultTeamsList
                     }
 
-                    if(filteredSearchResultTeamsList.isNotEmpty()){
+                    if (filteredSearchResultTeamsList.isNotEmpty()) {
                         callback.onDataLoaded(teamResponse)
                     } else {
                         callback.onDataError()

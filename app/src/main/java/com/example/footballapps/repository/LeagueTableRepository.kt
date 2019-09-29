@@ -11,7 +11,11 @@ import io.reactivex.schedulers.Schedulers
 
 class LeagueTableRepository {
 
-    fun getLeagueTable(id: String, season: String, callback : LeagueTableRepositoryCallback<LeagueTableResponse?>){
+    fun getLeagueTable(
+        id: String,
+        season: String,
+        callback: LeagueTableRepositoryCallback<LeagueTableResponse?>
+    ) {
         RetrofitClient
             .createService(LeagueTableService::class.java)
             .getLeagueTableResponse(id, season)
@@ -24,8 +28,8 @@ class LeagueTableRepository {
 
                 override fun onNext(leagueTableResponse: LeagueTableResponse) {
                     val leagueTable = leagueTableResponse.leagueTable
-                    if(leagueTable != null){
-                        if(leagueTable.isNotEmpty()){
+                    if (leagueTable != null) {
+                        if (leagueTable.isNotEmpty()) {
                             callback.onDataLoaded(leagueTableResponse)
                         } else {
                             callback.onDataError()
