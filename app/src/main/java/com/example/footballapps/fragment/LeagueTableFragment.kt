@@ -72,10 +72,6 @@ class LeagueTableFragment : Fragment(), LeagueTableView{
                     width = matchParent
                     height = wrapContent
                     margin = dip(16)
-                    topToTop = R.id.league_table_parent_layout
-                    leftToLeft = R.id.league_table_parent_layout
-                    rightToRight = R.id.league_table_parent_layout
-                    horizontalBias = 0f
                 }
 
                 leagueTableSwipeRefreshLayout = swipeRefreshLayout {

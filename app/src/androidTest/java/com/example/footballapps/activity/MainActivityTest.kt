@@ -38,6 +38,8 @@ class MainActivityTest {
         IdlingRegistry.getInstance().register(EspressoIdlingResource.idlingResource)
     }
 
+    // todo : kemungkinan bakal pisah jadi berbagai scenario karena test 1 aja ud sulit
+
     @Test
     fun testAppBehaviour() {
         // todo: this is league list

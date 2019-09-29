@@ -7,6 +7,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
+import com.bumptech.glide.Glide
 import com.example.footballapps.R
 import com.example.footballapps.adapter.ViewPagerAdapter
 import com.example.footballapps.favorite.FavoriteTeamItem
@@ -16,6 +17,7 @@ import com.example.footballapps.fragment.TeamPlayersFragment
 import com.example.footballapps.helper.database
 import com.example.footballapps.lifecycle.FragmentLifecycle
 import com.example.footballapps.model.TeamItem
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_team_detail.*
 import org.jetbrains.anko.db.classParser
@@ -23,9 +25,11 @@ import org.jetbrains.anko.db.delete
 import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
 import org.jetbrains.anko.design.snackbar
+import java.lang.StringBuilder
+import kotlin.math.abs
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-class TeamDetailActivity : AppCompatActivity() {
+class TeamDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
 
     private lateinit var teamName: String
     private lateinit var teamId: String
@@ -46,6 +50,11 @@ class TeamDetailActivity : AppCompatActivity() {
 
     var favoriteMenuItem : MenuItem? = null
 
+    // todo : isshow jadi isexpanded saja
+    private var isShow = true
+    private var scrollRange = -1
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_team_detail)
@@ -58,14 +67,23 @@ class TeamDetailActivity : AppCompatActivity() {
         teamItem = intent.getParcelableExtra("teamItem")
         favTeamItem = intent.getParcelableExtra("favoriteTeamItem")
 
+        // todo : mungkin pake beberapa variable untuk placeholder, team nya pake arsenal, trus jadiin functionnya
         when {
             teamItem != null -> {
                 teamName = teamItem?.teamName ?: ""
                 teamId = teamItem?.teamId ?: ""
+                Glide.with(applicationContext).load(teamItem?.teamBadge).placeholder(R.drawable.team_badge_placeholder).into(iv_team_detail_logo)
+                tv_team_detail_title.text = teamItem?.teamName
+                tv_team_detail_established.text = StringBuilder("est. ${teamItem?.teamFormedYear}")
+                tv_team_detail_origin.text = StringBuilder("Based in ${teamItem?.teamCountry}")
             }
             favTeamItem != null -> {
                 teamName = favTeamItem?.teamName ?: ""
                 teamId = favTeamItem?.idTeam ?: ""
+                Glide.with(applicationContext).load(favTeamItem?.teamBadgeUrl).placeholder(R.drawable.team_badge_placeholder).into(iv_team_detail_logo)
+                tv_team_detail_title.text = favTeamItem?.teamName
+                tv_team_detail_established.text = StringBuilder("est. ${favTeamItem?.teamFormedYear}")
+                tv_team_detail_origin.text = StringBuilder("Based in ${favTeamItem?.teamCountry}")
             }
             else -> {
                 teamName = ""
@@ -87,6 +105,29 @@ class TeamDetailActivity : AppCompatActivity() {
         tab_layout_team_detail.setupWithViewPager(view_pager_team_detail)
 
         checkFavoriteTeamState()
+
+    }
+
+    override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
+
+        if(scrollRange == -1){
+            scrollRange = appBarLayout.totalScrollRange
+        }
+
+        when {
+            scrollRange + verticalOffset == 0 -> {
+                collapsing_toolbar_layout_team_detail.title = teamName
+                isShow = true
+            }
+            isShow -> {
+                collapsing_toolbar_layout_team_detail.title = " "
+                isShow = false
+            }
+            abs(verticalOffset) == appBarLayout.totalScrollRange -> iv_team_detail_logo.contentDescription = getString(
+                            R.string.team_detail_logo_collapsed)
+            verticalOffset == 0 -> iv_team_detail_logo.contentDescription = getString(R.string.team_detail_logo_expanded)
+            else -> iv_team_detail_logo.contentDescription = getString(R.string.team_detail_logo_collapsing)
+        }
 
     }
 
@@ -129,10 +170,19 @@ class TeamDetailActivity : AppCompatActivity() {
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        team_detail_app_bar_layout.addOnOffsetChangedListener(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        team_detail_app_bar_layout.removeOnOffsetChangedListener(this)
+    }
+
     private fun setToolbarBehavior() {
         setSupportActionBar(toolbar_team_detail)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = teamName
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -150,6 +200,7 @@ class TeamDetailActivity : AppCompatActivity() {
                 true
             }
             R.id.action_add_to_favorite -> {
+                // todo : ga usah pake fav team item null or team item null
                 if (favTeamItem != null || teamItem != null) {
                     changeFavoriteTeamState()
                 }
@@ -161,6 +212,7 @@ class TeamDetailActivity : AppCompatActivity() {
 
     private fun addTeamToFavoriteTeams() {
         try {
+            // todo : tinggal pake variable saja daripada pake fav team item ataupun team item
             when {
                 favTeamItem != null -> {
                     database.use {
@@ -168,7 +220,9 @@ class TeamDetailActivity : AppCompatActivity() {
                             FavoriteTeamItem.TABLE_FAVORITE_TEAM,
                             FavoriteTeamItem.TEAM_ID to favTeamItem?.idTeam,
                             FavoriteTeamItem.TEAM_NAME to favTeamItem?.teamName,
-                            FavoriteTeamItem.TEAM_BADGE_URL to favTeamItem?.teamBadgeUrl
+                            FavoriteTeamItem.TEAM_BADGE_URL to favTeamItem?.teamBadgeUrl,
+                            FavoriteTeamItem.TEAM_FORMED_YEAR to favTeamItem?.teamFormedYear,
+                            FavoriteTeamItem.TEAM_COUNTRY to favTeamItem?.teamCountry
                         )
                     }
                 }
@@ -178,7 +232,9 @@ class TeamDetailActivity : AppCompatActivity() {
                             FavoriteTeamItem.TABLE_FAVORITE_TEAM,
                             FavoriteTeamItem.TEAM_ID to teamItem?.teamId,
                             FavoriteTeamItem.TEAM_NAME to teamItem?.teamName,
-                            FavoriteTeamItem.TEAM_BADGE_URL to teamItem?.teamBadge
+                            FavoriteTeamItem.TEAM_BADGE_URL to teamItem?.teamBadge,
+                            FavoriteTeamItem.TEAM_FORMED_YEAR to teamItem?.teamFormedYear,
+                            FavoriteTeamItem.TEAM_COUNTRY to teamItem?.teamCountry
                         )
                     }
                 }

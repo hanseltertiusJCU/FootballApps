@@ -187,6 +187,14 @@
     <string name="player_weight">Player Weight</string>
     <string name="team_info">Team Info</string>
 
+    <!-- Team Detail -->
+    <string name="team_detail">Team Detail</string>
+
+    <!-- Team Detail Content Description -->
+    <string name="team_detail_logo_collapsed">Team Detail Logo Collapsed</string>
+    <string name="team_detail_logo_expanded">Team Detail Logo Expanded</string>
+    <string name="team_detail_logo_collapsing">Team Detail Logo Collapsing</string>
+
     <!-- Team in Player Detail Section -->
     <string name="team_date_signed">Team Date Signed</string>
     <string name="team_number">Team Number</string>
@@ -205,6 +213,11 @@
     <!-- Description in Player Detail Section -->
     <string name="player_description_section">Description</string>
     <string name="player_description">Player Description</string>
+
+    <!-- Player Detail Content Description -->
+    <string name="player_fanart_expanded">Player Fanart Expanded</string>
+    <string name="player_fanart_collapsed">Player Fanart Collapsed</string>
+    <string name="player_fanart_collapsing">Player Fanart Collapsing</string>
 
 
     <!-- Snackbar Action -->

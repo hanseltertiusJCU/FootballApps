@@ -57,11 +57,19 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
         return UI {
             leagueDetailInfoSwipeRefreshLayout = swipeRefreshLayout {
 
+                layoutParams = ViewGroup.LayoutParams(matchParent, matchParent)
+
                 setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
 
                 leagueDetailInfoNestedScrollView = nestedScrollView {
+
+                    lparams(width = matchParent, height = matchParent)
+                    isFillViewport = true
+
                     constraintLayout {
                         id = R.id.container_layout_league_detail
+
+                        lparams(width = matchParent, height = matchParent)
 
                         leagueDetailInfoLayout = verticalLayout {
                             id = R.id.league_detail_layout
@@ -69,8 +77,6 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
 
                             themedTextView("Info : ", R.style.text_section) {
                                 id = R.id.tv_desc_title
-                            }.lparams {
-                                topMargin = dip(8)
                             }
 
                             tvLeagueDetailFormedYear = themedTextView(R.style.text_content) {
@@ -147,7 +153,7 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
                         }
 
 
-                    }
+                    }.lparams(width = matchParent, height = matchParent)
                 }
             }
         }.view
@@ -176,7 +182,7 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
     override fun dataIsLoading() {
         leagueDetailInfoProgressBar.visible()
         leagueDetailInfoErrorDataText.gone()
-        leagueDetailInfoLayout.invisible()
+        leagueDetailInfoLayout.gone()
     }
 
     override fun dataLoadingFinished() {
@@ -196,7 +202,7 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
         leagueDetailInfoSwipeRefreshLayout.isRefreshing = false
         leagueDetailInfoProgressBar.gone()
         leagueDetailInfoErrorDataText.visible()
-        leagueDetailInfoLayout.invisible()
+        leagueDetailInfoLayout.gone()
 
         val isNetworkConnected = checkNetworkConnection()
         if (isNetworkConnected) {
@@ -220,7 +226,7 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
 
             tvLeagueDetailFormedYear.text =
                 StringBuilder("Formed Year : ${leagueDetailItem.leagueFormedYear}")
-            tvLeagueDetailCountry.text = StringBuilder("Based in ${leagueDetailItem.leagueCountry}")
+            tvLeagueDetailCountry.text = StringBuilder("Country : ${leagueDetailItem.leagueCountry}")
         }
     }
 

@@ -43,7 +43,9 @@ class MyDatabaseOpenHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, "Favorit
             FavoriteTeamItem.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
             FavoriteTeamItem.TEAM_ID to TEXT + UNIQUE,
             FavoriteTeamItem.TEAM_NAME to TEXT,
-            FavoriteTeamItem.TEAM_BADGE_URL to TEXT
+            FavoriteTeamItem.TEAM_BADGE_URL to TEXT,
+            FavoriteTeamItem.TEAM_FORMED_YEAR to TEXT,
+            FavoriteTeamItem.TEAM_COUNTRY to TEXT
         )
     }
 

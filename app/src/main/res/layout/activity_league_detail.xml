@@ -44,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_gravity="center_horizontal"
-                    style="@style/text_content_white"/>
+                    style="@style/text_section_white"/>
 
 
             </LinearLayout>

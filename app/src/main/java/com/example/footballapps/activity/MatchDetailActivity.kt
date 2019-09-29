@@ -63,6 +63,8 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
         initData()
     }
 
+    // todo : tinggal pake varaiable yang berguna untuk menampung placeholder saja :), tar matchnya itu pake liverpool vs southampton perhaps
+
     private fun initData() {
         val intent = intent
 

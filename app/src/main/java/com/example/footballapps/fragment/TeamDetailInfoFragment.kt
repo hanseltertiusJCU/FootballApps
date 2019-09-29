@@ -8,7 +8,6 @@ import android.net.NetworkCapabilities
 import android.net.NetworkInfo
 import android.os.Build
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -16,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.core.widget.NestedScrollView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.example.footballapps.R
@@ -30,6 +30,7 @@ import com.example.footballapps.view.TeamDetailView
 import org.jetbrains.anko.*
 import org.jetbrains.anko.constraint.layout.constraintLayout
 import org.jetbrains.anko.support.v4.UI
+import org.jetbrains.anko.support.v4.nestedScrollView
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 import java.lang.StringBuilder
 
@@ -49,7 +50,7 @@ class TeamDetailInfoFragment : Fragment(), TeamDetailView {
 
     private lateinit var teamDetailPresenter: TeamDetailPresenter
 
-    private lateinit var teamDetailInfoScrollView : ScrollView
+    private lateinit var teamDetailInfoNestedScrollView : NestedScrollView
     private lateinit var teamDetailInfoSwipeRefreshLayout: SwipeRefreshLayout
     private lateinit var teamDetailInfoLayout : LinearLayout
     private lateinit var teamDetailInfoErrorDataText : TextView
@@ -62,13 +63,20 @@ class TeamDetailInfoFragment : Fragment(), TeamDetailView {
         savedInstanceState: Bundle?
     ): View? {
         return UI {
-            constraintLayout {
-                id = R.id.container_layout_team_detail
-                teamDetailInfoSwipeRefreshLayout = swipeRefreshLayout {
+            teamDetailInfoSwipeRefreshLayout = swipeRefreshLayout {
 
-                    setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
+                layoutParams = ViewGroup.LayoutParams(matchParent, matchParent)
 
-                    teamDetailInfoScrollView = scrollView {
+                setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
+
+                teamDetailInfoNestedScrollView = nestedScrollView {
+
+                    lparams(width = matchParent, height = matchParent)
+                    isFillViewport = true
+
+                    constraintLayout {
+                        id = R.id.container_layout_team_detail
+
                         teamDetailInfoLayout = verticalLayout {
                             id = R.id.team_detail_layout
                             padding = dip(16)
@@ -216,26 +224,26 @@ class TeamDetailInfoFragment : Fragment(), TeamDetailView {
                                 topMargin = dip(8)
                             }
 
-
                         }
-                    }
 
-                }
+                        teamDetailInfoProgressBar = progressBar().lparams {
+                            width = dip(48)
+                            height = dip(48)
+                            topToTop = R.id.container_layout_team_detail
+                            startToStart = R.id.container_layout_team_detail
+                            endToEnd = R.id.container_layout_team_detail
+                            bottomToBottom = R.id.container_layout_team_detail
+                        }
 
-                teamDetailInfoProgressBar = progressBar().lparams {
-                    width = dip(48)
-                    height = dip(48)
-                    topToTop = R.id.container_layout_team_detail
-                    startToStart = R.id.container_layout_team_detail
-                    endToEnd = R.id.container_layout_team_detail
-                    bottomToBottom = R.id.container_layout_team_detail
-                }
+                        teamDetailInfoErrorDataText = themedTextView(R.style.text_content).lparams {
+                            topToTop = R.id.container_layout_team_detail
+                            startToStart = R.id.container_layout_team_detail
+                            endToEnd = R.id.container_layout_team_detail
+                            bottomToBottom = R.id.container_layout_team_detail
+                        }
 
-                teamDetailInfoErrorDataText = themedTextView(R.style.text_content).lparams {
-                    topToTop = R.id.container_layout_team_detail
-                    startToStart = R.id.container_layout_team_detail
-                    endToEnd = R.id.container_layout_team_detail
-                    bottomToBottom = R.id.container_layout_team_detail
+
+                    }.lparams(width = matchParent, height = matchParent)
                 }
 
             }
@@ -265,7 +273,7 @@ class TeamDetailInfoFragment : Fragment(), TeamDetailView {
     override fun dataIsLoading() {
         teamDetailInfoProgressBar.visible()
         teamDetailInfoErrorDataText.gone()
-        teamDetailInfoLayout.invisible()
+        teamDetailInfoLayout.gone()
     }
 
     override fun dataLoadingFinished() {
@@ -285,7 +293,7 @@ class TeamDetailInfoFragment : Fragment(), TeamDetailView {
         teamDetailInfoSwipeRefreshLayout.isRefreshing = false
         teamDetailInfoProgressBar.gone()
         teamDetailInfoErrorDataText.visible()
-        teamDetailInfoLayout.invisible()
+        teamDetailInfoLayout.gone()
 
         val isNetworkConnected = checkNetworkConnection()
         if (isNetworkConnected) {

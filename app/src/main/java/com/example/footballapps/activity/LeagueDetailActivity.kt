@@ -50,7 +50,7 @@ class LeagueDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
     private fun initData() {
         val intent = intent
-        leagueItem = intent.getParcelableExtra<LeagueItem>("leagueItem")
+        leagueItem = intent.getParcelableExtra("leagueItem")
 
         when {
             leagueItem != null -> {
@@ -77,6 +77,7 @@ class LeagueDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
         tab_layout_league_detail.setupWithViewPager(view_pager_league_detail)
 
+        // todo : league imagenya tinggal pake variable biar aman maybe, sbnrnya tinggal pake premier league image biar gampang
         Glide.with(applicationContext)
             .load(leagueItem?.leagueImage)
             .placeholder(R.drawable.empty_league_image_info)
@@ -92,6 +93,7 @@ class LeagueDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             scrollRange = appBarLayout.totalScrollRange
         }
 
+        // todo : when nya jadi 1 tempat saja.
         when {
             scrollRange + verticalOffset == 0 -> {
                 collapsing_toolbar_layout_league_detail.title = leagueItem?.leagueName
@@ -101,9 +103,6 @@ class LeagueDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 collapsing_toolbar_layout_league_detail.title = " "
                 isShow = false
             }
-        }
-
-        when {
             abs(verticalOffset) == appBarLayout.totalScrollRange -> iv_league_detail_logo.contentDescription = getString(R.string.league_detail_logo_collapsed)
             verticalOffset == 0 -> iv_league_detail_logo.contentDescription = getString(R.string.league_detail_logo_expanded)
             else -> iv_league_detail_logo.contentDescription = getString(R.string.league_detail_logo_collapsing)

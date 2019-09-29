@@ -13,14 +13,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.example.footballapps.R
-import com.example.footballapps.adapter.MatchRecyclerViewAdapter
 import com.example.footballapps.espresso.EspressoIdlingResource
 import com.example.footballapps.model.PlayerItem
 import com.example.footballapps.model.PlayerResponse
 import com.example.footballapps.presenter.PlayerDetailPresenter
 import com.example.footballapps.repository.PlayerDetailRepository
 import com.example.footballapps.utils.gone
-import com.example.footballapps.utils.invisible
 import com.example.footballapps.utils.visible
 import com.example.footballapps.view.PlayerDetailView
 import com.google.android.material.appbar.AppBarLayout
@@ -33,13 +31,16 @@ import kotlinx.android.synthetic.main.layout_player_detail_team_info.*
 import java.text.SimpleDateFormat
 import java.util.*
 import java.lang.StringBuilder
+import kotlin.math.abs
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView {
+class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView, AppBarLayout.OnOffsetChangedListener {
 
     private lateinit var playerItem: PlayerItem
 
     private lateinit var playerDetailPresenter: PlayerDetailPresenter
+
+    // todo : variable untuk player id, player fanart dan juga player name
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +52,7 @@ class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView {
     private fun initData() {
         val intent = intent
         playerItem = intent.getParcelableExtra("playerItem")
+        // todo : mungkin pake placeholder untuk menampung player id and some shit
 
         Glide.with(applicationContext)
             .load(playerItem.playerFanArt)
@@ -79,6 +81,27 @@ class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView {
 
     }
 
+    override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
+
+        when {
+            abs(verticalOffset) == appBarLayout.totalScrollRange -> iv_player_fanart.contentDescription = getString(
+                            R.string.player_fanart_expanded)
+            verticalOffset == 0 -> iv_player_fanart.contentDescription = getString(R.string.player_fanart_collapsed)
+            else -> iv_player_fanart.contentDescription = getString(R.string.player_fanart_collapsing)
+        }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        player_detail_app_bar_layout.addOnOffsetChangedListener(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        player_detail_app_bar_layout.removeOnOffsetChangedListener(this)
+    }
+
     private fun setToolbarBehavior() {
         setSupportActionBar(toolbar_detail_player)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -88,7 +111,7 @@ class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView {
     override fun dataIsLoading() {
         progress_bar_player_detail.visible()
         player_detail_error_data_text.gone()
-        layout_player_detail_data.invisible()
+        layout_player_detail_data.gone()
     }
 
     override fun dataLoadingFinished() {
@@ -108,7 +131,7 @@ class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView {
         player_detail_swipe_refresh_layout.isRefreshing = false
         progress_bar_player_detail.gone()
         player_detail_error_data_text.visible()
-        layout_player_detail_data.invisible()
+        layout_player_detail_data.gone()
 
         val isNetworkConnected = checkNetworkConnection()
         if (isNetworkConnected) {
