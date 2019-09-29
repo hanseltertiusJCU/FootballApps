@@ -47,6 +47,7 @@ class FavoriteTeamRecyclerViewAdapter (private val favoriteTeamItemList : List<F
                             id = R.id.favorite_team_badge
                             scaleType = ImageView.ScaleType.CENTER_CROP
                         }.lparams{
+                            topMargin = dip(8)
                             width = dip(128)
                             height = dip(128)
                             gravity = Gravity.CENTER_HORIZONTAL

@@ -58,6 +58,8 @@ class FavoriteTeamFragment : Fragment(), AnkoComponent<Context>, FavoriteTeamVie
     private val spanCount = 2
     private val includeEdge = true
 
+    private var searchQuery : String = ""
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -145,7 +147,7 @@ class FavoriteTeamFragment : Fragment(), AnkoComponent<Context>, FavoriteTeamVie
     override fun onResume() {
         super.onResume()
         if(isSearching){
-            getFavoriteDataFromQuery(favoriteTeamSearchView?.query.toString())
+            getFavoriteDataFromQuery(searchQuery)
         } else {
             getFavoriteData()
         }
@@ -171,6 +173,7 @@ class FavoriteTeamFragment : Fragment(), AnkoComponent<Context>, FavoriteTeamVie
 
                 override fun onMenuItemActionCollapse(menuItem: MenuItem?): Boolean {
                     isSearching = false
+                    searchQuery = ""
                     getFavoriteData()
                     return true
                 }
@@ -178,9 +181,10 @@ class FavoriteTeamFragment : Fragment(), AnkoComponent<Context>, FavoriteTeamVie
             })
 
             favoriteTeamSearchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
+                override fun onQueryTextSubmit(query: String): Boolean {
                     if(!isDataLoading){
-                        getFavoriteDataFromQuery(query!!)
+                        searchQuery = query
+                        getFavoriteDataFromQuery(searchQuery)
                     }
                     return true
                 }

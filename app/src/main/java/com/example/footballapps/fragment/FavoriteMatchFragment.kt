@@ -53,6 +53,8 @@ class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchV
     private var isDataLoading = false
     private var isSearching = false
 
+    private var searchQuery : String = ""
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -86,7 +88,7 @@ class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchV
     override fun onResume() {
         super.onResume()
         if (isSearching) {
-            getFavoriteDataFromQuery(favoriteMatchSearchView?.query.toString())
+            getFavoriteDataFromQuery(searchQuery)
         } else {
             getFavoriteData()
         }
@@ -187,12 +189,13 @@ class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchV
                 MenuItem.OnActionExpandListener {
                 override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
                     isSearching = true
-                    getFavoriteDataFromQuery(favoriteMatchSearchView?.query.toString())
+                    getFavoriteDataFromQuery(searchQuery)
                     return true
                 }
 
                 override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
                     isSearching = false
+                    searchQuery = ""
                     getFavoriteData()
                     return true
                 }
@@ -201,9 +204,10 @@ class FavoriteMatchFragment : Fragment(), AnkoComponent<Context>, FavoriteMatchV
 
             favoriteMatchSearchView?.setOnQueryTextListener(object :
                 SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
+                override fun onQueryTextSubmit(query: String): Boolean {
                     if (!isDataLoading) {
-                        getFavoriteDataFromQuery(query!!)
+                        searchQuery = query
+                        getFavoriteDataFromQuery(query)
                     }
                     return true
                 }

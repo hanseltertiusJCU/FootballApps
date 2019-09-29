@@ -81,6 +81,7 @@ class LeagueRecyclerViewAdapter(
                         scaleType = ImageView.ScaleType.CENTER_CROP
                         contentDescription = R.string.league_image.toString()
                     }.lparams {
+                        topMargin = dip(8)
                         width = dip(128)
                         height = dip(128)
                         gravity = Gravity.CENTER_HORIZONTAL

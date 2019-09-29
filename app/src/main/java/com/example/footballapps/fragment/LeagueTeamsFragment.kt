@@ -64,6 +64,8 @@ class LeagueTeamsFragment : Fragment(), TeamsView, FragmentLifecycle{
     private val spanCount = 2
     private val includeEdge = true
 
+    private var searchQuery : String = ""
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -146,7 +148,7 @@ class LeagueTeamsFragment : Fragment(), TeamsView, FragmentLifecycle{
         leagueTeamsSwipeRefreshLayout.onRefresh {
             EspressoIdlingResource.increment()
             if(isSearching){
-                leagueTeamsPresenter.getSearchTeamsInfo(leagueTeamSearchView?.query.toString())
+                leagueTeamsPresenter.getSearchTeamsInfo(searchQuery)
             } else {
                 leagueTeamsPresenter.getTeamsInfo(leagueId)
             }
@@ -257,12 +259,13 @@ class LeagueTeamsFragment : Fragment(), TeamsView, FragmentLifecycle{
                 override fun onMenuItemActionExpand(menuItem: MenuItem?): Boolean {
                     isSearching = true
                     EspressoIdlingResource.increment()
-                    leagueTeamsPresenter.getSearchTeamsInfo(leagueTeamSearchView?.query.toString())
+                    leagueTeamsPresenter.getSearchTeamsInfo(searchQuery)
                     return true
                 }
 
                 override fun onMenuItemActionCollapse(menuItem: MenuItem?): Boolean {
                     isSearching = false
+                    searchQuery = ""
                     EspressoIdlingResource.increment()
                     leagueTeamsPresenter.getTeamsInfo(leagueId)
                     return true
@@ -271,10 +274,11 @@ class LeagueTeamsFragment : Fragment(), TeamsView, FragmentLifecycle{
             })
 
             leagueTeamSearchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
+                override fun onQueryTextSubmit(query: String): Boolean {
                     if(!isDataLoading){
+                        searchQuery = query
                         EspressoIdlingResource.increment()
-                        leagueTeamsPresenter.getSearchTeamsInfo(query!!)
+                        leagueTeamsPresenter.getSearchTeamsInfo(searchQuery)
                     }
                     return true
                 }

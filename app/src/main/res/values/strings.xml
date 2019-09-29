@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FootballApps</string>
+    <string name="app_name">Football Apps</string>
 
     <!-- League -->
     <string name="league_image">League Image</string>

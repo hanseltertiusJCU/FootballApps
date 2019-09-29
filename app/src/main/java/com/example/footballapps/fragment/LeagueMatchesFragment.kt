@@ -58,6 +58,8 @@ class LeagueMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
     private var isDataLoading = false
     private var isSearching = false
 
+    private var searchQuery : String = ""
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -163,7 +165,7 @@ class LeagueMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
         leagueMatchesSwipeRefreshLayout.onRefresh {
             EspressoIdlingResource.increment()
             if(isSearching){
-                leagueMatchesPresenter.getSearchMatchInfo(leagueMatchSearchView?.query.toString())
+                leagueMatchesPresenter.getSearchMatchInfo(searchQuery)
             } else {
                 when (currentPosition) {
                     1 -> leagueMatchesPresenter.getNextMatchInfo(leagueId)
@@ -285,13 +287,14 @@ class LeagueMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
                     isSearching = true
                     leagueMatchesSpinner.gone()
                     EspressoIdlingResource.increment()
-                    leagueMatchesPresenter.getSearchMatchInfo(leagueMatchSearchView?.query.toString())
+                    leagueMatchesPresenter.getSearchMatchInfo(searchQuery)
                     return true
                 }
 
                 override fun onMenuItemActionCollapse(menuItem: MenuItem?): Boolean {
                     isSearching = false
                     leagueMatchesSpinner.visible()
+                    searchQuery = ""
                     EspressoIdlingResource.increment()
                     when (currentPosition) {
                         1 -> leagueMatchesPresenter.getNextMatchInfo(leagueId)
@@ -303,10 +306,11 @@ class LeagueMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
             })
 
             leagueMatchSearchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
+                override fun onQueryTextSubmit(query: String): Boolean {
                     if(!isDataLoading){
+                        searchQuery = query
                         EspressoIdlingResource.increment()
-                        leagueMatchesPresenter.getSearchMatchInfo(query!!)
+                        leagueMatchesPresenter.getSearchMatchInfo(searchQuery)
                     }
                     return true
                 }

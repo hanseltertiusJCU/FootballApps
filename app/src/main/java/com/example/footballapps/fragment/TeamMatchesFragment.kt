@@ -60,8 +60,9 @@ class TeamMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
     private var isDataLoading = false
     private var isSearching = false
 
-    // todo : tinggal pake query variable
     private lateinit var teamDetailActivity: TeamDetailActivity
+
+    private var searchQuery : String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -178,7 +179,7 @@ class TeamMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
         teamMatchesSwipeRefreshLayout.onRefresh {
             EspressoIdlingResource.increment()
             if (isSearching) {
-                teamMatchesPresenter.getSearchMatchInfo(teamMatchSearchView?.query.toString())
+                teamMatchesPresenter.getSearchMatchInfo(searchQuery)
             } else {
                 when (currentPosition) {
                     1 -> teamMatchesPresenter.getTeamNextMatchInfo(teamId)
@@ -283,13 +284,14 @@ class TeamMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
                     teamMatchesSpinner.gone()
                     EspressoIdlingResource.increment()
                     teamDetailActivity.favoriteMenuItem?.isVisible = false
-                    teamMatchesPresenter.getSearchMatchInfo(teamMatchSearchView?.query.toString())
+                    teamMatchesPresenter.getSearchMatchInfo(searchQuery)
                     return true
                 }
 
                 override fun onMenuItemActionCollapse(menuItem: MenuItem?): Boolean {
                     isSearching = false
                     teamMatchesSpinner.visible()
+                    searchQuery = ""
                     EspressoIdlingResource.increment()
                     when (currentPosition) {
                         1 -> teamMatchesPresenter.getTeamNextMatchInfo(teamId)
@@ -302,10 +304,11 @@ class TeamMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
             })
 
             teamMatchSearchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
+                override fun onQueryTextSubmit(query: String): Boolean {
                     if (!isDataLoading) {
+                        searchQuery = query
                         EspressoIdlingResource.increment()
-                        teamMatchesPresenter.getSearchMatchInfo(query!!)
+                        teamMatchesPresenter.getSearchMatchInfo(query)
                     }
                     return true
                 }

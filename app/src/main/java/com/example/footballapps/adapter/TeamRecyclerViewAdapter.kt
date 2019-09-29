@@ -49,6 +49,7 @@ class TeamRecyclerViewAdapter(
                         }.lparams {
                             width = dip(128)
                             height = dip(128)
+                            topMargin = dip(8)
                             gravity = Gravity.CENTER_HORIZONTAL
                         }
 
