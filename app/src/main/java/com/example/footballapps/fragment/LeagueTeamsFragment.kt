@@ -72,40 +72,48 @@ class LeagueTeamsFragment : Fragment(), TeamsView, FragmentLifecycle{
     ): View? {
         setHasOptionsMenu(true)
         return UI {
-            constraintLayout {
-                id = R.id.league_teams_parent_layout
-                lparams(width = matchParent, height = matchParent)
 
-                leagueTeamsSwipeRefreshLayout = swipeRefreshLayout {
-                    setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
+            leagueTeamsSwipeRefreshLayout = swipeRefreshLayout {
 
-                    leagueTeamsRecyclerView = recyclerView {
-                        id = R.id.rv_league_teams
-                        lparams(width = matchParent, height = wrapContent)
+                layoutParams = ViewGroup.LayoutParams(matchParent, matchParent)
+
+                setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
+
+                nestedScrollView {
+                    lparams(width = matchParent, height = matchParent)
+                    isFillViewport = true
+
+                    constraintLayout {
+                        id = R.id.league_teams_parent_layout
+                        lparams(width = matchParent, height = matchParent)
+
+                        leagueTeamsRecyclerView = recyclerView {
+                            id = R.id.rv_league_teams
+                        }.lparams{
+                            width = matchConstraint
+                            height = matchConstraint
+                            topToTop = R.id.league_teams_parent_layout
+                            leftToLeft = R.id.league_teams_parent_layout
+                            rightToRight = R.id.league_teams_parent_layout
+                            bottomToBottom = R.id.league_teams_parent_layout
+                            verticalBias = 0f
+                        }
+
+                        leagueTeamsProgressBar = progressBar().lparams{
+                            topToTop = R.id.league_teams_parent_layout
+                            leftToLeft = R.id.league_teams_parent_layout
+                            rightToRight = R.id.league_teams_parent_layout
+                            bottomToBottom = R.id.league_teams_parent_layout
+                        }
+
+                        leagueTeamsErrorText = themedTextView(R.style.text_content).lparams{
+                            topToTop = R.id.league_teams_parent_layout
+                            leftToLeft = R.id.league_teams_parent_layout
+                            rightToRight = R.id.league_teams_parent_layout
+                            bottomToBottom = R.id.league_teams_parent_layout
+                        }
+
                     }
-
-                }.lparams{
-                    width = matchConstraint
-                    height = matchConstraint
-                    topToTop = R.id.league_teams_parent_layout
-                    leftToLeft = R.id.league_teams_parent_layout
-                    rightToRight = R.id.league_teams_parent_layout
-                    bottomToBottom = R.id.league_teams_parent_layout
-                    verticalBias = 0f
-                }
-
-                leagueTeamsProgressBar = progressBar().lparams{
-                    topToTop = R.id.league_teams_parent_layout
-                    leftToLeft = R.id.league_teams_parent_layout
-                    rightToRight = R.id.league_teams_parent_layout
-                    bottomToBottom = R.id.league_teams_parent_layout
-                }
-
-                leagueTeamsErrorText = themedTextView(R.style.text_content).lparams{
-                    topToTop = R.id.league_teams_parent_layout
-                    leftToLeft = R.id.league_teams_parent_layout
-                    rightToRight = R.id.league_teams_parent_layout
-                    bottomToBottom = R.id.league_teams_parent_layout
                 }
 
             }

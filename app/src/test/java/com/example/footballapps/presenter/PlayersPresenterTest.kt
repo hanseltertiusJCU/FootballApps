@@ -39,7 +39,7 @@ class PlayersPresenterTest {
     @Test
     fun getPlayersInfoTest() {
 
-        val id = "34145444"
+        val id = "133604"
 
         playersPresenter.getPlayersInfo(id)
 

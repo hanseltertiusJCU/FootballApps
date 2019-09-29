@@ -10,18 +10,17 @@ import android.net.NetworkInfo
 import android.os.Build
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import android.widget.*
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.footballapps.R
 import com.example.footballapps.activity.MatchDetailActivity
-import com.example.footballapps.adapter.MatchRecyclerViewAdapter
-import com.example.footballapps.adapter.TeamRecyclerViewAdapter
-import androidx.appcompat.widget.SearchView
 import com.example.footballapps.activity.TeamDetailActivity
+import com.example.footballapps.adapter.MatchRecyclerViewAdapter
 import com.example.footballapps.espresso.EspressoIdlingResource
 import com.example.footballapps.lifecycle.FragmentLifecycle
 import com.example.footballapps.model.MatchItem
@@ -36,87 +35,93 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.constraint.layout.constraintLayout
 import org.jetbrains.anko.constraint.layout.matchConstraint
 import org.jetbrains.anko.recyclerview.v7.recyclerView
-import org.jetbrains.anko.support.v4.UI
-import org.jetbrains.anko.support.v4.onRefresh
-import org.jetbrains.anko.support.v4.startActivity
-import org.jetbrains.anko.support.v4.swipeRefreshLayout
+import org.jetbrains.anko.support.v4.*
 
 class TeamMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
 
-    private lateinit var teamMatchesRecyclerView : RecyclerView
-    private lateinit var teamMatchesProgressBar : ProgressBar
+    private lateinit var teamMatchesRecyclerView: RecyclerView
+    private lateinit var teamMatchesProgressBar: ProgressBar
     private lateinit var teamMatchesSwipeRefreshLayout: SwipeRefreshLayout
-    private lateinit var teamMatchesSpinner : Spinner
-    private lateinit var teamMatchesErrorText : TextView
+    private lateinit var teamMatchesSpinner: Spinner
+    private lateinit var teamMatchesErrorText: TextView
 
-    private lateinit var teamMatchesPresenter : MatchPresenter
+    private lateinit var teamMatchesPresenter: MatchPresenter
 
-    private var teamMatches : MutableList<MatchItem> = mutableListOf()
-    private lateinit var teamMatchesRvAdapter : MatchRecyclerViewAdapter
+    private var teamMatches: MutableList<MatchItem> = mutableListOf()
+    private lateinit var teamMatchesRvAdapter: MatchRecyclerViewAdapter
 
-    private lateinit var teamId : String
+    private lateinit var teamId: String
 
     private var currentPosition = 0
 
-    private var teamMatchSearchItem : MenuItem? = null
-    private var teamMatchSearchView : SearchView? = null
+    private var teamMatchSearchItem: MenuItem? = null
+    private var teamMatchSearchView: SearchView? = null
 
     private var isDataLoading = false
     private var isSearching = false
 
     // todo : tinggal pake query variable
-    private lateinit var teamDetailActivity : TeamDetailActivity
+    private lateinit var teamDetailActivity: TeamDetailActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
-        return UI{
-            constraintLayout {
-                id = R.id.team_matches_parent_layout
+        return UI {
+            teamMatchesSwipeRefreshLayout = swipeRefreshLayout {
 
-                teamMatchesSpinner = spinner {
-                    id = R.id.team_match_spinner
-                }.lparams{
-                    width = matchParent
-                    height = wrapContent
-                    margin = dip(16)
-                }
+                layoutParams = ViewGroup.LayoutParams(matchParent, matchParent)
 
-                teamMatchesSwipeRefreshLayout = swipeRefreshLayout {
+                setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
 
-                    setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
+                nestedScrollView {
 
-                    teamMatchesRecyclerView = recyclerView {
-                        id = R.id.rv_team_match
-                        lparams(width = matchParent, height = wrapContent)
-                        layoutManager = LinearLayoutManager(context)
+                    lparams(width = matchParent, height = matchParent)
+                    isFillViewport = true
+
+                    constraintLayout {
+                        id = R.id.team_matches_parent_layout
+                        lparams(width = matchParent, height = matchParent)
+
+                        teamMatchesSpinner = spinner {
+                            id = R.id.team_match_spinner
+                        }.lparams {
+                            width = matchParent
+                            height = wrapContent
+                            margin = dip(16)
+                        }
+
+                        teamMatchesRecyclerView = recyclerView {
+                            id = R.id.rv_team_match
+                            layoutManager = LinearLayoutManager(context)
+                        }.lparams {
+                            width = matchConstraint
+                            height = matchConstraint
+                            topToBottom = R.id.team_match_spinner
+                            leftToLeft = R.id.team_matches_parent_layout
+                            rightToRight = R.id.team_matches_parent_layout
+                            bottomToBottom = R.id.team_matches_parent_layout
+                            verticalBias = 0f
+                        }
+
+                        teamMatchesProgressBar = progressBar().lparams {
+                            topToTop = R.id.team_matches_parent_layout
+                            leftToLeft = R.id.team_matches_parent_layout
+                            rightToRight = R.id.team_matches_parent_layout
+                            bottomToBottom = R.id.team_matches_parent_layout
+                        }
+
+                        teamMatchesErrorText = themedTextView(R.style.text_content).lparams {
+                            topToTop = R.id.team_matches_parent_layout
+                            leftToLeft = R.id.team_matches_parent_layout
+                            rightToRight = R.id.team_matches_parent_layout
+                            bottomToBottom = R.id.team_matches_parent_layout
+                        }
+
                     }
-
-                }.lparams {
-                    width = matchConstraint
-                    height = matchConstraint
-                    topToBottom = R.id.team_match_spinner
-                    leftToLeft = R.id.team_matches_parent_layout
-                    rightToRight = R.id.team_matches_parent_layout
-                    bottomToBottom = R.id.team_matches_parent_layout
-                    verticalBias = 0f
                 }
 
-                teamMatchesProgressBar = progressBar().lparams{
-                    topToTop = R.id.team_matches_parent_layout
-                    leftToLeft = R.id.team_matches_parent_layout
-                    rightToRight = R.id.team_matches_parent_layout
-                    bottomToBottom = R.id.team_matches_parent_layout
-                }
-
-                teamMatchesErrorText = themedTextView(R.style.text_content).lparams{
-                    topToTop = R.id.team_matches_parent_layout
-                    leftToLeft = R.id.team_matches_parent_layout
-                    rightToRight = R.id.team_matches_parent_layout
-                    bottomToBottom = R.id.team_matches_parent_layout
-                }
             }
         }.view
     }
@@ -126,18 +131,22 @@ class TeamMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
         initData()
     }
 
-    private fun initData(){
+    private fun initData() {
 
         teamDetailActivity = activity as TeamDetailActivity
 
         teamId = arguments?.getString("teamId") ?: "133604"
 
         val matchesCategoryList = resources.getStringArray(R.array.matches_category)
-        val teamMatchesSpinnerAdapter = ArrayAdapter(activity!!.applicationContext, android.R.layout.simple_spinner_dropdown_item, matchesCategoryList)
+        val teamMatchesSpinnerAdapter = ArrayAdapter(
+            activity!!.applicationContext,
+            android.R.layout.simple_spinner_dropdown_item,
+            matchesCategoryList
+        )
 
         teamMatchesSpinner.adapter = teamMatchesSpinnerAdapter
 
-        teamMatchesRvAdapter = MatchRecyclerViewAdapter(context!!, teamMatches){
+        teamMatchesRvAdapter = MatchRecyclerViewAdapter(context!!, teamMatches) {
             startActivity<MatchDetailActivity>(
                 "matchItem" to it
             )
@@ -150,10 +159,15 @@ class TeamMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
         teamMatchesSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
 
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 currentPosition = position
                 EspressoIdlingResource.increment()
-                when (position){
+                when (position) {
                     1 -> teamMatchesPresenter.getTeamNextMatchInfo(teamId)
                     else -> teamMatchesPresenter.getTeamLastMatchInfo(teamId)
                 }
@@ -163,10 +177,10 @@ class TeamMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
 
         teamMatchesSwipeRefreshLayout.onRefresh {
             EspressoIdlingResource.increment()
-            if(isSearching){
+            if (isSearching) {
                 teamMatchesPresenter.getSearchMatchInfo(teamMatchSearchView?.query.toString())
             } else {
-                when (currentPosition){
+                when (currentPosition) {
                     1 -> teamMatchesPresenter.getTeamNextMatchInfo(teamId)
                     else -> teamMatchesPresenter.getTeamLastMatchInfo(teamId)
                 }
@@ -186,7 +200,7 @@ class TeamMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
     }
 
     override fun dataLoadingFinished() {
-        if(!EspressoIdlingResource.idlingResource.isIdleNow) {
+        if (!EspressoIdlingResource.idlingResource.isIdleNow) {
             EspressoIdlingResource.decrement()
         }
         teamMatchesSwipeRefreshLayout.isRefreshing = false
@@ -198,7 +212,7 @@ class TeamMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
     }
 
     override fun dataFailedToLoad() {
-        if(!EspressoIdlingResource.idlingResource.isIdleNow) {
+        if (!EspressoIdlingResource.idlingResource.isIdleNow) {
             EspressoIdlingResource.decrement()
         }
         teamMatchesSwipeRefreshLayout.isRefreshing = false
@@ -219,22 +233,22 @@ class TeamMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
     override fun showMatchesData(matchResponse: MatchResponse) {
         teamMatches.clear()
 
-        if(isSearching){
+        if (isSearching) {
             val searchResultTeamMatchesList = matchResponse.searchResultEvents
-            if(searchResultTeamMatchesList != null){
+            if (searchResultTeamMatchesList != null) {
                 teamMatches.addAll(searchResultTeamMatchesList)
             }
         } else {
             when (currentPosition) {
                 1 -> {
                     val teamMatchesList = matchResponse.events
-                    if(teamMatchesList != null){
+                    if (teamMatchesList != null) {
                         teamMatches.addAll(teamMatchesList)
                     }
                 }
                 else -> {
                     val teamMatchesList = matchResponse.results
-                    if(teamMatchesList != null){
+                    if (teamMatchesList != null) {
                         teamMatches.addAll(teamMatchesList)
                     }
                 }
@@ -254,14 +268,16 @@ class TeamMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
 
         teamMatchSearchItem = menu.findItem(R.id.action_search)
 
-        val teamMatchSearchManager : SearchManager = context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val teamMatchSearchManager: SearchManager =
+            context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
 
-        if(teamMatchSearchItem != null){
+        if (teamMatchSearchItem != null) {
             teamMatchSearchView = teamMatchSearchItem?.actionView as SearchView
 
             teamMatchSearchView?.setSearchableInfo(teamMatchSearchManager.getSearchableInfo(activity?.componentName))
 
-            teamMatchSearchItem?.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            teamMatchSearchItem?.setOnActionExpandListener(object :
+                MenuItem.OnActionExpandListener {
                 override fun onMenuItemActionExpand(menuItem: MenuItem?): Boolean {
                     isSearching = true
                     teamMatchesSpinner.gone()
@@ -275,7 +291,7 @@ class TeamMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
                     isSearching = false
                     teamMatchesSpinner.visible()
                     EspressoIdlingResource.increment()
-                    when (currentPosition){
+                    when (currentPosition) {
                         1 -> teamMatchesPresenter.getTeamNextMatchInfo(teamId)
                         else -> teamMatchesPresenter.getTeamLastMatchInfo(teamId)
                     }
@@ -287,7 +303,7 @@ class TeamMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
 
             teamMatchSearchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    if(!isDataLoading){
+                    if (!isDataLoading) {
                         EspressoIdlingResource.increment()
                         teamMatchesPresenter.getSearchMatchInfo(query!!)
                     }

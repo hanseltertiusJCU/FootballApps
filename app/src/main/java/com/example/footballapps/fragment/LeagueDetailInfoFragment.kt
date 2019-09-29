@@ -41,7 +41,6 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
 
     private lateinit var leagueDetailPresenter: LeagueDetailPresenter
 
-    private lateinit var leagueDetailInfoNestedScrollView: NestedScrollView
     private lateinit var leagueDetailInfoSwipeRefreshLayout: SwipeRefreshLayout
     private lateinit var leagueDetailInfoLayout: LinearLayout
     private lateinit var leagueDetailInfoErrorDataText: TextView
@@ -61,7 +60,7 @@ class LeagueDetailInfoFragment : Fragment(), LeagueDetailView {
 
                 setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
 
-                leagueDetailInfoNestedScrollView = nestedScrollView {
+                nestedScrollView {
 
                     lparams(width = matchParent, height = matchParent)
                     isFillViewport = true

@@ -36,11 +36,13 @@ import kotlin.math.abs
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView, AppBarLayout.OnOffsetChangedListener {
 
-    private lateinit var playerItem: PlayerItem
+    private var playerItem: PlayerItem? = null
 
     private lateinit var playerDetailPresenter: PlayerDetailPresenter
 
-    // todo : variable untuk player id, player fanart dan juga player name
+    private lateinit var playerId : String
+    private lateinit var playerFanArt : String
+    private lateinit var playerName : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,10 +54,19 @@ class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView, AppBarLayout
     private fun initData() {
         val intent = intent
         playerItem = intent.getParcelableExtra("playerItem")
-        // todo : mungkin pake placeholder untuk menampung player id and some shit
+
+        if(playerItem != null){
+            playerId = playerItem?.playerId ?: "34145444"
+            playerName = playerItem?.playerName ?: "Ainsley Maitland-Niles"
+            playerFanArt = playerItem?.playerFanArt ?: "https://www.thesportsdb.com/images/media/player/thumb/3775d71510853007.jpg"
+        } else {
+            playerId = "34145444"
+            playerName = "Ainsley Maitland-Niles"
+            playerFanArt = "https://www.thesportsdb.com/images/media/player/thumb/3775d71510853007.jpg"
+        }
 
         Glide.with(applicationContext)
-            .load(playerItem.playerFanArt)
+            .load(playerFanArt)
             .placeholder(R.drawable.ic_player_picture_placeholder)
             .into(iv_player_fanart)
 
@@ -64,11 +75,11 @@ class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView, AppBarLayout
         playerDetailPresenter = PlayerDetailPresenter(this, PlayerDetailRepository())
 
         EspressoIdlingResource.increment()
-        playerDetailPresenter.getPlayerDetailInfo(playerItem.playerId!!)
+        playerDetailPresenter.getPlayerDetailInfo(playerId)
 
         player_detail_swipe_refresh_layout.setOnRefreshListener {
             EspressoIdlingResource.increment()
-            playerDetailPresenter.getPlayerDetailInfo(playerItem.playerId!!)
+            playerDetailPresenter.getPlayerDetailInfo(playerId)
         }
 
         player_detail_swipe_refresh_layout.setColorSchemeColors(
@@ -84,9 +95,8 @@ class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView, AppBarLayout
     override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
 
         when {
-            abs(verticalOffset) == appBarLayout.totalScrollRange -> iv_player_fanart.contentDescription = getString(
-                            R.string.player_fanart_expanded)
-            verticalOffset == 0 -> iv_player_fanart.contentDescription = getString(R.string.player_fanart_collapsed)
+            abs(verticalOffset) == appBarLayout.totalScrollRange -> iv_player_fanart.contentDescription = getString(R.string.player_fanart_collapsed)
+            verticalOffset == 0 -> iv_player_fanart.contentDescription = getString(R.string.player_fanart_expanded)
             else -> iv_player_fanart.contentDescription = getString(R.string.player_fanart_collapsing)
         }
 
@@ -105,7 +115,7 @@ class PlayerDetailActivity : AppCompatActivity(), PlayerDetailView, AppBarLayout
     private fun setToolbarBehavior() {
         setSupportActionBar(toolbar_detail_player)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = playerItem.playerName
+        supportActionBar?.title = playerName
     }
 
     override fun dataIsLoading() {

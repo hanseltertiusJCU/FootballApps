@@ -65,51 +65,59 @@ class LeagueMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
     ): View? {
         setHasOptionsMenu(true)
         return UI {
-            // todo : perlu di bikin nested scrollview kali
-            constraintLayout {
-                id = R.id.league_match_parent_layout
-                lparams(width = matchParent, height = matchParent)
+            leagueMatchesSwipeRefreshLayout = swipeRefreshLayout {
 
-                leagueMatchesSpinner = spinner {
-                    id = R.id.league_match_spinner
-                }.lparams{
-                    width = matchParent
-                    height = wrapContent
-                    margin = dip(16)
-                }
+                layoutParams = ViewGroup.LayoutParams(matchParent, matchParent)
 
-                leagueMatchesSwipeRefreshLayout = swipeRefreshLayout {
+                setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
 
-                    setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
+                nestedScrollView {
 
-                    leagueMatchesRecyclerView = recyclerView {
-                        id = R.id.rv_league_match
-                        lparams(width = matchParent, height = wrapContent)
-                        layoutManager = LinearLayoutManager(context)
+                    lparams(width = matchParent, height = matchParent)
+                    isFillViewport = true
+
+                    constraintLayout {
+                        id = R.id.league_match_parent_layout
+                        lparams(width = matchParent, height = matchParent)
+
+                        leagueMatchesSpinner = spinner {
+                            id = R.id.league_match_spinner
+                        }.lparams{
+                            width = matchParent
+                            height = wrapContent
+                            margin = dip(16)
+                        }
+
+                        leagueMatchesRecyclerView = recyclerView {
+                            id = R.id.rv_league_match
+                            layoutManager = LinearLayoutManager(context)
+                        }.lparams {
+                            width = matchConstraint
+                            height = matchConstraint
+                            topToBottom = R.id.league_match_spinner
+                            leftToLeft = R.id.league_match_parent_layout
+                            rightToRight = R.id.league_match_parent_layout
+                            bottomToBottom = R.id.league_match_parent_layout
+                            verticalBias = 0f
+                        }
+
+                        leagueMatchesProgressBar = progressBar().lparams{
+                            topToTop = R.id.league_match_parent_layout
+                            leftToLeft = R.id.league_match_parent_layout
+                            rightToRight = R.id.league_match_parent_layout
+                            bottomToBottom = R.id.league_match_parent_layout
+                        }
+
+                        leagueMatchesErrorText = themedTextView(R.style.text_content).lparams{
+                            topToTop = R.id.league_match_parent_layout
+                            leftToLeft = R.id.league_match_parent_layout
+                            rightToRight = R.id.league_match_parent_layout
+                            bottomToBottom = R.id.league_match_parent_layout
+                        }
+
+
                     }
 
-                }.lparams {
-                    width = matchConstraint
-                    height = matchConstraint
-                    topToBottom = R.id.league_match_spinner
-                    leftToLeft = R.id.league_match_parent_layout
-                    rightToRight = R.id.league_match_parent_layout
-                    bottomToBottom = R.id.league_match_parent_layout
-                    verticalBias = 0f
-                }
-
-                leagueMatchesProgressBar = progressBar().lparams{
-                    topToTop = R.id.league_match_parent_layout
-                    leftToLeft = R.id.league_match_parent_layout
-                    rightToRight = R.id.league_match_parent_layout
-                    bottomToBottom = R.id.league_match_parent_layout
-                }
-
-                leagueMatchesErrorText = themedTextView(R.style.text_content).lparams{
-                    topToTop = R.id.league_match_parent_layout
-                    leftToLeft = R.id.league_match_parent_layout
-                    rightToRight = R.id.league_match_parent_layout
-                    bottomToBottom = R.id.league_match_parent_layout
                 }
             }
         }.view

@@ -1,6 +1,12 @@
 package com.example.footballapps.fragment
 
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkInfo
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -32,6 +38,7 @@ import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.progressBar
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.UI
+import org.jetbrains.anko.support.v4.nestedScrollView
 import org.jetbrains.anko.support.v4.startActivity
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 import org.jetbrains.anko.themedTextView
@@ -56,40 +63,50 @@ class TeamPlayersFragment : Fragment(), PlayersView {
         savedInstanceState: Bundle?
     ): View? {
         return UI {
-            constraintLayout {
-                id = R.id.team_players_parent_layout
-                lparams(width = matchParent, height = matchParent)
 
-                teamPlayersSwipeRefreshLayout = swipeRefreshLayout {
-                    setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
+            teamPlayersSwipeRefreshLayout = swipeRefreshLayout {
 
-                    teamPlayersRecyclerView = recyclerView {
-                        id = R.id.rv_team_players
-                        lparams(width = matchParent, height = wrapContent)
-                        layoutManager = LinearLayoutManager(context)
+                layoutParams = ViewGroup.LayoutParams(matchParent, matchParent)
+
+                setColorSchemeColors(ContextCompat.getColor(context, R.color.colorAccent))
+
+                nestedScrollView {
+
+                    lparams(width = matchParent, height = matchParent)
+                    isFillViewport = true
+
+                    constraintLayout {
+                        id = R.id.team_players_parent_layout
+                        lparams(width = matchParent, height = matchParent)
+
+                        teamPlayersRecyclerView = recyclerView {
+                            id = R.id.rv_team_players
+                            layoutManager = LinearLayoutManager(context)
+                        }.lparams {
+                            width = matchConstraint
+                            height = matchConstraint
+                            topToTop = R.id.team_players_parent_layout
+                            leftToLeft = R.id.team_players_parent_layout
+                            rightToRight = R.id.team_players_parent_layout
+                            bottomToBottom = R.id.team_players_parent_layout
+                            verticalBias = 0f
+                        }
+
+                        teamPlayersProgressBar = progressBar().lparams{
+                            topToTop = R.id.team_players_parent_layout
+                            leftToLeft = R.id.team_players_parent_layout
+                            rightToRight = R.id.team_players_parent_layout
+                            bottomToBottom = R.id.team_players_parent_layout
+                        }
+
+                        teamPlayersErrorText = themedTextView(R.style.text_content).lparams {
+                            topToTop = R.id.team_players_parent_layout
+                            leftToLeft = R.id.team_players_parent_layout
+                            rightToRight = R.id.team_players_parent_layout
+                            bottomToBottom = R.id.team_players_parent_layout
+                        }
+
                     }
-                }.lparams {
-                    width = matchConstraint
-                    height = matchConstraint
-                    topToTop = R.id.team_players_parent_layout
-                    leftToLeft = R.id.team_players_parent_layout
-                    rightToRight = R.id.team_players_parent_layout
-                    bottomToBottom = R.id.team_players_parent_layout
-                    verticalBias = 0f
-                }
-
-                teamPlayersProgressBar = progressBar().lparams{
-                    topToTop = R.id.team_players_parent_layout
-                    leftToLeft = R.id.team_players_parent_layout
-                    rightToRight = R.id.team_players_parent_layout
-                    bottomToBottom = R.id.team_players_parent_layout
-                }
-
-                teamPlayersErrorText = themedTextView(R.style.text_content).lparams {
-                    topToTop = R.id.team_players_parent_layout
-                    leftToLeft = R.id.team_players_parent_layout
-                    rightToRight = R.id.team_players_parent_layout
-                    bottomToBottom = R.id.team_players_parent_layout
                 }
 
             }
@@ -145,6 +162,13 @@ class TeamPlayersFragment : Fragment(), PlayersView {
         teamPlayersProgressBar.gone()
         teamPlayersErrorText.visible()
         teamPlayersRecyclerView.invisible()
+
+        val isNetworkConnected = checkNetworkConnection()
+        if(isNetworkConnected){
+            teamPlayersErrorText.text = resources.getString(R.string.no_data_to_show)
+        } else {
+            teamPlayersErrorText.text = resources.getString(R.string.no_internet_connection)
+        }
     }
 
     override fun showPlayersData(playerResponse: PlayerResponse) {
@@ -154,6 +178,37 @@ class TeamPlayersFragment : Fragment(), PlayersView {
             teamPlayers.addAll(playersList)
         }
         teamPlayersRvAdapter.notifyDataSetChanged()
+    }
+
+    @Suppress("DEPRECATION")
+    private fun checkNetworkConnection(): Boolean {
+
+        val connectivityManager: ConnectivityManager? =
+            context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (connectivityManager != null) {
+            if (Build.VERSION.SDK_INT < 23) {
+                val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
+
+                if (networkInfo != null) {
+                    return (networkInfo.isConnected && (networkInfo.type == ConnectivityManager.TYPE_WIFI || networkInfo.type == ConnectivityManager.TYPE_MOBILE || networkInfo.type == ConnectivityManager.TYPE_VPN))
+                }
+
+            } else {
+                val network: Network? = connectivityManager.activeNetwork
+
+                if (network != null) {
+                    val networkCapabilities: NetworkCapabilities =
+                        connectivityManager.getNetworkCapabilities(network)!!
+
+
+                    return (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                            || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                            || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN))
+                }
+            }
+        }
+        return false
     }
 
 

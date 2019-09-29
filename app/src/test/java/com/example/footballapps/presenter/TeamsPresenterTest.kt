@@ -39,7 +39,7 @@ class TeamsPresenterTest {
     @Test
     fun getTeamsInfoTest() {
 
-        val id = "133604"
+        val id = "4328"
 
         teamsPresenter.getTeamsInfo(id)
 
@@ -99,7 +99,7 @@ class TeamsPresenterTest {
     @Test
     fun getFailedSearchTeamsInfoTest() {
 
-        val query = ""
+        val query = "abracadabra"
 
         teamsPresenter.getSearchTeamsInfo(query)
 
