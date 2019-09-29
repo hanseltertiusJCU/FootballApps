@@ -33,6 +33,9 @@ class TeamDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
 
     private lateinit var teamName: String
     private lateinit var teamId: String
+    private lateinit var teamBadgeUrl : String
+    private lateinit var teamFormedYear : String
+    private lateinit var teamCountry : String
 
     private lateinit var teamDetailViewPagerAdapter: ViewPagerAdapter
 
@@ -50,7 +53,6 @@ class TeamDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
 
     var favoriteMenuItem : MenuItem? = null
 
-    // todo : isshow jadi isexpanded saja
     private var isShow = true
     private var scrollRange = -1
 
@@ -67,29 +69,34 @@ class TeamDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
         teamItem = intent.getParcelableExtra("teamItem")
         favTeamItem = intent.getParcelableExtra("favoriteTeamItem")
 
-        // todo : mungkin pake beberapa variable untuk placeholder, team nya pake arsenal, trus jadiin functionnya
         when {
             teamItem != null -> {
-                teamName = teamItem?.teamName ?: ""
-                teamId = teamItem?.teamId ?: ""
-                Glide.with(applicationContext).load(teamItem?.teamBadge).placeholder(R.drawable.team_badge_placeholder).into(iv_team_detail_logo)
-                tv_team_detail_title.text = teamItem?.teamName
-                tv_team_detail_established.text = StringBuilder("est. ${teamItem?.teamFormedYear}")
-                tv_team_detail_origin.text = StringBuilder("Based in ${teamItem?.teamCountry}")
+                teamName = teamItem?.teamName ?: "Arsenal"
+                teamId = teamItem?.teamId ?: "133604"
+                teamBadgeUrl = teamItem?.teamBadge ?: "https://www.thesportsdb.com/images/media/team/badge/a1af2i1557005128.png"
+                teamFormedYear = teamItem?.teamFormedYear ?: "1892"
+                teamCountry = teamItem?.teamCountry ?: "England"
             }
             favTeamItem != null -> {
-                teamName = favTeamItem?.teamName ?: ""
-                teamId = favTeamItem?.idTeam ?: ""
-                Glide.with(applicationContext).load(favTeamItem?.teamBadgeUrl).placeholder(R.drawable.team_badge_placeholder).into(iv_team_detail_logo)
-                tv_team_detail_title.text = favTeamItem?.teamName
-                tv_team_detail_established.text = StringBuilder("est. ${favTeamItem?.teamFormedYear}")
-                tv_team_detail_origin.text = StringBuilder("Based in ${favTeamItem?.teamCountry}")
+                teamName = favTeamItem?.teamName ?: "Arsenal"
+                teamId = favTeamItem?.idTeam ?: "133604"
+                teamBadgeUrl = favTeamItem?.teamBadgeUrl ?: "https://www.thesportsdb.com/images/media/team/badge/a1af2i1557005128.png"
+                teamFormedYear = favTeamItem?.teamFormedYear ?: "1892"
+                teamCountry = favTeamItem?.teamCountry ?: "England"
             }
             else -> {
-                teamName = ""
-                teamId = ""
+                teamName = "Arsenal"
+                teamId = "133604"
+                teamBadgeUrl = "https://www.thesportsdb.com/images/media/team/badge/a1af2i1557005128.png"
+                teamFormedYear = "1892"
+                teamCountry = "England"
             }
         }
+
+        Glide.with(applicationContext).load(teamBadgeUrl).placeholder(R.drawable.team_badge_placeholder).into(iv_team_detail_logo)
+        tv_team_detail_title.text = teamName
+        tv_team_detail_established.text = StringBuilder("est. $teamFormedYear")
+        tv_team_detail_origin.text = StringBuilder("Based in $teamCountry")
 
         setToolbarBehavior()
 
@@ -200,10 +207,7 @@ class TeamDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
                 true
             }
             R.id.action_add_to_favorite -> {
-                // todo : ga usah pake fav team item null or team item null
-                if (favTeamItem != null || teamItem != null) {
-                    changeFavoriteTeamState()
-                }
+                changeFavoriteTeamState()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -212,32 +216,15 @@ class TeamDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedList
 
     private fun addTeamToFavoriteTeams() {
         try {
-            // todo : tinggal pake variable saja daripada pake fav team item ataupun team item
-            when {
-                favTeamItem != null -> {
-                    database.use {
-                        insert(
-                            FavoriteTeamItem.TABLE_FAVORITE_TEAM,
-                            FavoriteTeamItem.TEAM_ID to favTeamItem?.idTeam,
-                            FavoriteTeamItem.TEAM_NAME to favTeamItem?.teamName,
-                            FavoriteTeamItem.TEAM_BADGE_URL to favTeamItem?.teamBadgeUrl,
-                            FavoriteTeamItem.TEAM_FORMED_YEAR to favTeamItem?.teamFormedYear,
-                            FavoriteTeamItem.TEAM_COUNTRY to favTeamItem?.teamCountry
-                        )
-                    }
-                }
-                teamItem != null -> {
-                    database.use {
-                        insert(
-                            FavoriteTeamItem.TABLE_FAVORITE_TEAM,
-                            FavoriteTeamItem.TEAM_ID to teamItem?.teamId,
-                            FavoriteTeamItem.TEAM_NAME to teamItem?.teamName,
-                            FavoriteTeamItem.TEAM_BADGE_URL to teamItem?.teamBadge,
-                            FavoriteTeamItem.TEAM_FORMED_YEAR to teamItem?.teamFormedYear,
-                            FavoriteTeamItem.TEAM_COUNTRY to teamItem?.teamCountry
-                        )
-                    }
-                }
+            database.use {
+                insert(
+                    FavoriteTeamItem.TABLE_FAVORITE_TEAM,
+                    FavoriteTeamItem.TEAM_ID to teamId,
+                    FavoriteTeamItem.TEAM_NAME to teamName,
+                    FavoriteTeamItem.TEAM_BADGE_URL to teamBadgeUrl,
+                    FavoriteTeamItem.TEAM_FORMED_YEAR to teamFormedYear,
+                    FavoriteTeamItem.TEAM_COUNTRY to teamCountry
+                )
             }
             team_detail_coordinator_layout.snackbar("Add a team into favorites").setAction(getString(R.string.undo)){changeFavoriteTeamState()}.show()
         } catch (e: SQLiteConstraintException) {

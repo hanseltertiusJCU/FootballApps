@@ -36,16 +36,12 @@ import java.lang.StringBuilder
 
 class TeamDetailInfoFragment : Fragment(), TeamDetailView {
 
-    private lateinit var tvTeamDetailInfoName : TextView
-    private lateinit var tvTeamDetailInfoFormedYear : TextView
-    private lateinit var tvTeamDetailInfoCountry : TextView
     private lateinit var tvTeamDetailInfoLeague : TextView
     private lateinit var tvTeamDetailInfoStadiumName : TextView
     private lateinit var tvTeamDetailInfoStadiumLocation : TextView
     private lateinit var tvTeamDetailInfoStadiumCapacity : TextView
     private lateinit var tvTeamDetailInfoStadiumDescription : TextView
     private lateinit var tvTeamDetailInfoDescription : TextView
-    private lateinit var ivTeamDetailInfoBadge : ImageView
     private lateinit var ivTeamDetailJersey : ImageView
 
     private lateinit var teamDetailPresenter: TeamDetailPresenter
@@ -80,31 +76,16 @@ class TeamDetailInfoFragment : Fragment(), TeamDetailView {
                         teamDetailInfoLayout = verticalLayout {
                             id = R.id.team_detail_layout
                             padding = dip(16)
-                            ivTeamDetailInfoBadge = imageView {
-                                id = R.id.iv_team_detail_image
+
+                            themedTextView("Jersey : ", R.style.text_section){
+                                id = R.id.tv_team_description_title
+                            }
+
+                            ivTeamDetailJersey = imageView{
+                                id = R.id.tv_team_jersey
                             }.lparams{
                                 width = dip(128)
                                 height = dip(128)
-                                gravity = Gravity.CENTER_HORIZONTAL
-                            }
-
-                            tvTeamDetailInfoName = themedTextView(R.style.text_title){
-                                id = R.id.tv_team_detail_name
-                            }.lparams {
-                                gravity = Gravity.CENTER_HORIZONTAL
-                                topMargin = dip(8)
-                            }
-
-                            tvTeamDetailInfoFormedYear = themedTextView(R.style.text_content){
-                                id = R.id.tv_team_detail_formed_year
-                            }.lparams {
-                                gravity = Gravity.CENTER_HORIZONTAL
-                                topMargin = dip(8)
-                            }
-
-                            tvTeamDetailInfoCountry = themedTextView(R.style.text_content){
-                                id = R.id.tv_team_detail_country
-                            }.lparams {
                                 gravity = Gravity.CENTER_HORIZONTAL
                                 topMargin = dip(8)
                             }
@@ -178,29 +159,6 @@ class TeamDetailInfoFragment : Fragment(), TeamDetailView {
                             tvTeamDetailInfoStadiumDescription = themedTextView(R.style.text_content){
                                 id = R.id.tv_stadium_description
                             }.lparams{
-                                topMargin = dip(8)
-                            }
-
-                            view {
-                                background = ContextCompat.getDrawable(context, R.color.color_grey_line)
-                            }.lparams {
-                                width = matchParent
-                                height = dip(1)
-                                topMargin = dip(8)
-                            }
-
-                            themedTextView("Team Jersey : ", R.style.text_section){
-                                id = R.id.tv_team_description_title
-                            }.lparams{
-                                topMargin = dip(8)
-                            }
-
-                            ivTeamDetailJersey = imageView{
-                                id = R.id.tv_team_jersey
-                            }.lparams{
-                                width = dip(128)
-                                height = dip(128)
-                                gravity = Gravity.CENTER_HORIZONTAL
                                 topMargin = dip(8)
                             }
 
@@ -310,18 +268,9 @@ class TeamDetailInfoFragment : Fragment(), TeamDetailView {
             val teamItem = teamItemList.first()
 
             Glide.with(context!!)
-                .load(teamItem.teamBadge)
-                .placeholder(R.drawable.team_badge_placeholder)
-                .into(ivTeamDetailInfoBadge)
-
-            Glide.with(context!!)
                 .load(teamItem.teamJersey)
                 .placeholder(R.drawable.jersey_placeholder)
                 .into(ivTeamDetailJersey)
-
-            tvTeamDetailInfoName.text = teamItem.teamName
-            tvTeamDetailInfoFormedYear.text = StringBuilder("est. ${teamItem.teamFormedYear}")
-            tvTeamDetailInfoCountry.text = StringBuilder("Based in ${teamItem.teamCountry}")
 
             tvTeamDetailInfoLeague.text = teamItem.teamLeague
 

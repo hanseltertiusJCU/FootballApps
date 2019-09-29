@@ -26,6 +26,7 @@ class LeagueDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
     private lateinit var leagueName: String
     private lateinit var leagueId: String
+    private var leagueImage: Int = -1
 
 
     lateinit var leagueDetailViewPagerAdapter: ViewPagerAdapter
@@ -56,10 +57,12 @@ class LeagueDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             leagueItem != null -> {
                 leagueName = leagueItem?.leagueName ?: "English Premier League"
                 leagueId = leagueItem?.leagueId ?: "4328"
+                leagueImage = leagueItem?.leagueImage ?: R.drawable.english_premier_league
             }
             else -> {
                 leagueName = "English Premier League"
                 leagueId = "4328"
+                leagueImage = R.drawable.english_premier_league
             }
         }
 
@@ -77,13 +80,12 @@ class LeagueDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
         tab_layout_league_detail.setupWithViewPager(view_pager_league_detail)
 
-        // todo : league imagenya tinggal pake variable biar aman maybe, sbnrnya tinggal pake premier league image biar gampang
         Glide.with(applicationContext)
-            .load(leagueItem?.leagueImage)
+            .load(leagueImage)
             .placeholder(R.drawable.empty_league_image_info)
             .into(iv_league_detail_logo)
 
-        tv_league_detail_title.text = leagueItem?.leagueName
+        tv_league_detail_title.text = leagueName
 
     }
 
@@ -93,7 +95,6 @@ class LeagueDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             scrollRange = appBarLayout.totalScrollRange
         }
 
-        // todo : when nya jadi 1 tempat saja.
         when {
             scrollRange + verticalOffset == 0 -> {
                 collapsing_toolbar_layout_league_detail.title = leagueItem?.leagueName

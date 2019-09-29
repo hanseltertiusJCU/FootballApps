@@ -35,6 +35,7 @@
     <item name="season_title" type="id" />
     <item name="rv_league_table" type="id" />
     <item name="league_table_spinner" type="id" />
+    <item name="league_table_layout" type="id" />
 
     <!-- League Matches -->
     <item name="league_match_parent_layout" type="id" />

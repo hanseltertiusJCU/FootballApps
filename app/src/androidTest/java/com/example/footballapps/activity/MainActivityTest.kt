@@ -54,7 +54,7 @@ class MainActivityTest {
 
         onView(withId(R.id.league_detail_layout)).check(matches(isDisplayed()))
         onView(withId(R.id.view_pager_league_detail)).perform(swipeLeft())
-        onView(withId(R.id.rv_league_table)).check(matches(isDisplayed()))
+        onView(withId(R.id.league_table_layout)).check(matches(isDisplayed()))
         Thread.sleep(500)
         onView(withId(R.id.view_pager_league_detail)).perform(swipeLeft())
         onView(withId(R.id.rv_league_teams)).check(matches(isDisplayed()))

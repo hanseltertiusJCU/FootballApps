@@ -47,6 +47,14 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
     private lateinit var eventName: String
     private lateinit var homeTeamId: String
     private lateinit var awayTeamId: String
+    private lateinit var dateEvent : String
+    private lateinit var timeEvent : String
+    private lateinit var leagueName : String
+    private lateinit var leagueMatchWeek : String
+    private lateinit var homeTeamName : String
+    private lateinit var awayTeamName : String
+    private lateinit var homeTeamScore : String
+    private lateinit var awayTeamScore : String
 
     private var matchItem: MatchItem? = null
     private var favMatchItem: FavoriteMatchItem? = null
@@ -63,8 +71,6 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
         initData()
     }
 
-    // todo : tinggal pake varaiable yang berguna untuk menampung placeholder saja :), tar matchnya itu pake liverpool vs southampton perhaps
-
     private fun initData() {
         val intent = intent
 
@@ -73,22 +79,46 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
 
         when {
             matchItem != null -> {
-                eventId = matchItem?.idEvent ?: ""
-                eventName = matchItem?.strEvent ?: ""
-                homeTeamId = matchItem?.homeTeamId ?: ""
-                awayTeamId = matchItem?.awayTeamId ?: ""
+                eventId = matchItem?.idEvent ?: "602162"
+                eventName = matchItem?.strEvent ?: "Arsenal v Tottenham"
+                homeTeamId = matchItem?.homeTeamId ?: "133604"
+                awayTeamId = matchItem?.awayTeamId ?: "133616"
+                dateEvent = matchItem?.dateEvent ?: "2019-09-01"
+                timeEvent = matchItem?.timeEvent ?: "15:30:00+00:00"
+                leagueName = matchItem?.leagueName ?: "English Premier League"
+                leagueMatchWeek = matchItem?.leagueMatchWeek ?: "4"
+                homeTeamName = matchItem?.homeTeamName ?: "Arsenal"
+                awayTeamName = matchItem?.awayTeamName ?: "Tottenham"
+                homeTeamScore = matchItem?.homeTeamScore ?: "2"
+                awayTeamScore = matchItem?.awayTeamScore ?: "2"
             }
             favMatchItem != null -> {
-                eventId = favMatchItem?.idEvent ?: ""
-                eventName = favMatchItem?.strEvent ?: ""
-                homeTeamId = favMatchItem?.homeTeamId ?: ""
-                awayTeamId = favMatchItem?.awayTeamId ?: ""
+                eventId = favMatchItem?.idEvent ?: "602162"
+                eventName = favMatchItem?.strEvent ?: "Arsenal v Tottenham"
+                homeTeamId = favMatchItem?.homeTeamId ?: "133604"
+                awayTeamId = favMatchItem?.awayTeamId ?: "133616"
+                dateEvent = favMatchItem?.dateEvent ?: "2019-09-01"
+                timeEvent = favMatchItem?.timeEvent ?: "15:30:00+00:00"
+                leagueName = favMatchItem?.leagueName ?: "English Premier League"
+                leagueMatchWeek = favMatchItem?.leagueMatchWeek ?: "4"
+                homeTeamName = favMatchItem?.homeTeamName ?: "Arsenal"
+                awayTeamName = favMatchItem?.awayTeamName ?: "Tottenham"
+                homeTeamScore = favMatchItem?.homeTeamScore ?: "2"
+                awayTeamScore = favMatchItem?.awayTeamScore ?: "2"
             }
             else -> {
-                eventId = ""
-                eventName = ""
-                homeTeamId = ""
-                awayTeamId = ""
+                eventId = "602162"
+                eventName = "Arsenal v Tottenham"
+                homeTeamId = "133604"
+                awayTeamId = "133616"
+                dateEvent = "2019-09-01"
+                timeEvent = "15:30:00+00:00"
+                leagueName = "English Premier League"
+                leagueMatchWeek = "4"
+                homeTeamName = "Arsenal"
+                awayTeamName = "Tottenham"
+                homeTeamScore = "2"
+                awayTeamScore = "2"
             }
         }
 
@@ -351,9 +381,7 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
                 true
             }
             R.id.action_add_to_favorite -> {
-                if (favMatchItem != null || matchItem != null) {
-                    changeFavoriteMatchState()
-                }
+                changeFavoriteMatchState()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -363,45 +391,22 @@ class MatchDetailActivity : AppCompatActivity(), MatchDetailView {
 
     private fun addMatchToFavoriteMatches() {
         try {
-            when {
-                favMatchItem != null -> {
-                    database.use {
-                        insert(
-                            FavoriteMatchItem.TABLE_FAVORITE_MATCH,
-                            FavoriteMatchItem.EVENT_ID to favMatchItem?.idEvent,
-                            FavoriteMatchItem.EVENT_NAME to favMatchItem?.strEvent,
-                            FavoriteMatchItem.EVENT_DATE to favMatchItem?.dateEvent,
-                            FavoriteMatchItem.EVENT_TIME to favMatchItem?.timeEvent,
-                            FavoriteMatchItem.LEAGUE_NAME to favMatchItem?.leagueName,
-                            FavoriteMatchItem.LEAGUE_MATCH_WEEK to favMatchItem?.leagueMatchWeek,
-                            FavoriteMatchItem.HOME_TEAM_ID to favMatchItem?.homeTeamId,
-                            FavoriteMatchItem.AWAY_TEAM_ID to favMatchItem?.awayTeamId,
-                            FavoriteMatchItem.HOME_TEAM_NAME to favMatchItem?.homeTeamName,
-                            FavoriteMatchItem.AWAY_TEAM_NAME to favMatchItem?.awayTeamName,
-                            FavoriteMatchItem.HOME_TEAM_SCORE to favMatchItem?.homeTeamScore,
-                            FavoriteMatchItem.AWAY_TEAM_SCORE to favMatchItem?.awayTeamScore
-                        )
-                    }
-                }
-                matchItem != null -> {
-                    database.use {
-                        insert(
-                            FavoriteMatchItem.TABLE_FAVORITE_MATCH,
-                            FavoriteMatchItem.EVENT_ID to matchItem?.idEvent,
-                            FavoriteMatchItem.EVENT_NAME to matchItem?.strEvent,
-                            FavoriteMatchItem.EVENT_DATE to matchItem?.dateEvent,
-                            FavoriteMatchItem.EVENT_TIME to matchItem?.timeEvent,
-                            FavoriteMatchItem.LEAGUE_NAME to matchItem?.leagueName,
-                            FavoriteMatchItem.LEAGUE_MATCH_WEEK to matchItem?.leagueMatchWeek,
-                            FavoriteMatchItem.HOME_TEAM_ID to matchItem?.homeTeamId,
-                            FavoriteMatchItem.AWAY_TEAM_ID to matchItem?.awayTeamId,
-                            FavoriteMatchItem.HOME_TEAM_NAME to matchItem?.homeTeamName,
-                            FavoriteMatchItem.AWAY_TEAM_NAME to matchItem?.awayTeamName,
-                            FavoriteMatchItem.HOME_TEAM_SCORE to matchItem?.homeTeamScore,
-                            FavoriteMatchItem.AWAY_TEAM_SCORE to matchItem?.awayTeamScore
-                        )
-                    }
-                }
+            database.use {
+                insert(
+                    FavoriteMatchItem.TABLE_FAVORITE_MATCH,
+                    FavoriteMatchItem.EVENT_ID to eventId,
+                    FavoriteMatchItem.EVENT_NAME to eventName,
+                    FavoriteMatchItem.EVENT_DATE to dateEvent,
+                    FavoriteMatchItem.EVENT_TIME to timeEvent,
+                    FavoriteMatchItem.LEAGUE_NAME to leagueName,
+                    FavoriteMatchItem.LEAGUE_MATCH_WEEK to leagueMatchWeek,
+                    FavoriteMatchItem.HOME_TEAM_ID to homeTeamId,
+                    FavoriteMatchItem.AWAY_TEAM_ID to awayTeamId,
+                    FavoriteMatchItem.HOME_TEAM_NAME to homeTeamName,
+                    FavoriteMatchItem.AWAY_TEAM_NAME to awayTeamName,
+                    FavoriteMatchItem.HOME_TEAM_SCORE to homeTeamScore,
+                    FavoriteMatchItem.AWAY_TEAM_SCORE to awayTeamScore
+                )
             }
             match_detail_swipe_refresh_layout.snackbar("Add an event into favorites").setAction(
                 getString(

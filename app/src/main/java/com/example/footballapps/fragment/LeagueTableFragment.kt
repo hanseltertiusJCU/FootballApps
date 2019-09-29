@@ -80,6 +80,7 @@ class LeagueTableFragment : Fragment(), LeagueTableView{
 
                     nestedScrollView {
                         leagueTableLayout = verticalLayout {
+                            id = R.id.league_table_layout
                             descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
                             include<LinearLayout>(R.layout.layout_league_table_title_column)
 

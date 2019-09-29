@@ -65,6 +65,7 @@ class LeagueMatchesFragment : Fragment(), MatchView, FragmentLifecycle {
     ): View? {
         setHasOptionsMenu(true)
         return UI {
+            // todo : perlu di bikin nested scrollview kali
             constraintLayout {
                 id = R.id.league_match_parent_layout
                 lparams(width = matchParent, height = matchParent)
